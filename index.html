@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Phindu Loans — Fast. Simple. Trusted.</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+  <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+  <style>
+    :root {
+      --gold: #C9A84C;
+      --gold-light: #E8C97A;
+      --gold-dark: #9B7B2F;
+      --deep: #0A0F1E;
+      --deep2: #111827;
+      --surface: #151D2E;
+      --surface2: #1E2A3F;
+      --text: #F0EDE6;
+      --text-muted: #9CA3AF;
+      --accent: #4F8EF7;
+      --success: #22C55E;
+      --error: #EF4444;
+      --radius: 12px;
+      --shadow: 0 20px 60px rgba(0,0,0,0.4);
+    }
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--deep);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    /* ── NAVBAR ── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1.2rem 5%;
+      background: rgba(10,15,30,0.85);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(201,168,76,0.15);
+    }
+
+    .logo {
+      display: flex; align-items: center; gap: 10px;
+      font-family: 'Playfair Display', serif;
+      font-size: 1.5rem; font-weight: 900;
+      color: var(--gold);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      width: 38px; height: 38px;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem;
+    }
+
+    .nav-links { display: flex; gap: 2rem; list-style: none; }
+    .nav-links a {
+      color: var(--text-muted); text-decoration: none;
+      font-size: 0.9rem; font-weight: 500;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--deep) !important;
+      padding: 0.55rem 1.4rem;
+      border-radius: 50px;
+      font-weight: 600 !important;
+    }
+    .nav-cta:hover { opacity: 0.9; color: var(--deep) !important; }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex; align-items: center;
+      padding: 8rem 5% 5rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-bg {
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(ellipse 70% 60% at 60% 40%, rgba(201,168,76,0.08) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 50% at 90% 80%, rgba(79,142,247,0.06) 0%, transparent 60%),
+        linear-gradient(180deg, var(--deep) 0%, var(--deep2) 100%);
+    }
+
+    .hero-grid {
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .hero-content {
+      position: relative; z-index: 1;
+      max-width: 680px;
+    }
+
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: rgba(201,168,76,0.12);
+      border: 1px solid rgba(201,168,76,0.3);
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      font-size: 0.8rem; font-weight: 500;
+      color: var(--gold-light);
+      margin-bottom: 1.8rem;
+      animation: fadeUp 0.8s ease both;
+    }
+
+    .badge-dot {
+      width: 6px; height: 6px;
+      background: var(--gold);
+      border-radius: 50%;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.5; transform: scale(1.4); }
+    }
+
+    h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2.8rem, 6vw, 5rem);
+      font-weight: 900;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+      animation: fadeUp 0.8s 0.1s ease both;
+    }
+
+    h1 .highlight {
+      background: linear-gradient(135deg, var(--gold-light), var(--gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero-desc {
+      font-size: 1.1rem; color: var(--text-muted);
+      line-height: 1.7; margin-bottom: 2.5rem;
+      max-width: 520px;
+      animation: fadeUp 0.8s 0.2s ease both;
+    }
+
+    .hero-actions {
+      display: flex; gap: 1rem; flex-wrap: wrap;
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--deep);
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      font-weight: 700; font-size: 1rem;
+      text-decoration: none; border: none; cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      box-shadow: 0 8px 32px rgba(201,168,76,0.3);
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.4); }
+
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      padding: 0.9rem 2.2rem;
+      border-radius: 50px;
+      font-weight: 600; font-size: 1rem;
+      text-decoration: none;
+      border: 1px solid rgba(240,237,230,0.2);
+      transition: border-color 0.2s, background 0.2s;
+      display: inline-flex; align-items: center; gap: 8px;
+    }
+    .btn-secondary:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
+
+    .hero-stats {
+      display: flex; gap: 3rem; margin-top: 4rem;
+      animation: fadeUp 0.8s 0.4s ease both;
+    }
+
+    .stat { text-align: left; }
+    .stat-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 2rem; font-weight: 700;
+      color: var(--gold);
+    }
+    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
+
+    .hero-visual {
+      position: absolute; right: 5%; top: 50%;
+      transform: translateY(-50%);
+      width: min(420px, 40vw);
+      animation: fadeUp 0.8s 0.3s ease both;
+    }
+
+    .card-float {
+      background: var(--surface);
+      border: 1px solid rgba(201,168,76,0.2);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      position: relative;
+    }
+
+    .card-float::before {
+      content: '';
+      position: absolute; inset: -1px;
+      border-radius: 20px;
+      background: linear-gradient(135deg, rgba(201,168,76,0.3), transparent, rgba(79,142,247,0.1));
+      z-index: -1;
+    }
+
+    .card-header {
+      display: flex; justify-content: space-between; align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    .card-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
+    .card-badge {
+      background: rgba(34,197,94,0.15);
+      color: var(--success);
+      font-size: 0.75rem; font-weight: 600;
+      padding: 0.2rem 0.7rem; border-radius: 50px;
+    }
+
+    .loan-amount {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.5rem; font-weight: 700;
+      color: var(--gold-light);
+      margin-bottom: 0.3rem;
+    }
+    .loan-period { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
+
+    .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
+    .progress-bar { background: rgba(255,255,255,0.08); height: 6px; border-radius: 3px; overflow: hidden; }
+    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold-light)); border-radius: 3px; width: 65%; animation: fillBar 1.5s 1s ease both; }
+
+    @keyframes fillBar { from { width: 0; } to { width: 65%; } }
+
+    .mini-stats { display: flex; gap: 1rem; margin-top: 1.5rem; }
+    .mini-stat { flex: 1; background: var(--surface2); border-radius: 10px; padding: 0.8rem; text-align: center; }
+    .mini-stat-val { font-weight: 700; font-size: 1rem; color: var(--text); }
+    .mini-stat-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
+
+    /* ── SECTIONS ── */
+    section { padding: 6rem 5%; }
+
+    .section-label {
+      font-size: 0.78rem; font-weight: 600;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 0.8rem;
+    }
+
+    h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .section-desc { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
+
+    /* ── LOAN TYPES ── */
+    #loans { background: var(--deep2); }
+
+    .loans-header { text-align: center; margin-bottom: 3.5rem; }
+    .loans-header .section-desc { margin: 0 auto; }
+
+    .loans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .loan-card {
+      background: var(--surface);
+      border: 1px solid rgba(255,255,255,0.07);
+      border-radius: var(--radius);
+      padding: 2rem 1.8rem;
+      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+      cursor: pointer;
+      position: relative;
+      overflow: hidden;
+    }
+    .loan-card::after {
+      content: '';
+      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
+      transform: scaleX(0); transform-origin: left;
+      transition: transform 0.3s;
+    }
+    .loan-card:hover { transform: translateY(-6px); border-color: rgba(201,168,76,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
+    .loan-card:hover::after { transform: scaleX(1); }
+
+    .loan-icon {
+      width: 52px; height: 52px; border-radius: 12px;
+      background: rgba(201,168,76,0.12);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.5rem; margin-bottom: 1.2rem;
+    }
+
+    .loan-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .loan-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem; }
+
+    .loan-meta { display: flex; gap: 1rem; }
+    .loan-meta span {
+      font-size: 0.78rem; font-weight: 600;
+      background: rgba(201,168,76,0.1);
+      color: var(--gold-light);
+      padding: 0.25rem 0.7rem; border-radius: 50px;
+    }
+
+    /* ── HOW IT WORKS ── */
+    .steps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem; margin-top: 3.5rem;
+      position: relative;
+    }
+
+    .step {
+      text-align: center; padding: 2rem 1.5rem;
+      background: var(--surface); border-radius: var(--radius);
+      border: 1px solid rgba(255,255,255,0.06);
+      position: relative;
+    }
+
+    .step-num {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--deep);
+      font-family: 'Playfair Display', serif;
+      font-weight: 700; font-size: 1.2rem;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.2rem;
+    }
+
+    .step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+    .step p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* ── APPLICATION FORM ── */
+    #apply {
+      background: var(--deep);
+      position: relative; overflow: hidden;
+    }
+
+    #apply::before {
+      content: '';
+      position: absolute; top: -200px; right: -200px;
+      width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .form-layout {
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 4rem; align-items: start;
+    }
+
+    .form-info h2 { margin-bottom: 1rem; }
+    .form-info .section-desc { margin-bottom: 2rem; }
+
+    .info-points { display: flex; flex-direction: column; gap: 1rem; }
+    .info-point {
+      display: flex; gap: 12px; align-items: flex-start;
+    }
+    .info-point-icon {
+      width: 36px; height: 36px; flex-shrink: 0;
+      background: rgba(201,168,76,0.12);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1rem;
+    }
+    .info-point-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
+    .info-point-text p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.5; }
+
+    /* FORM CARD */
+    .form-card {
+      background: var(--surface);
+      border: 1px solid rgba(201,168,76,0.15);
+      border-radius: 20px;
+      padding: 2.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .form-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.4rem; font-weight: 700;
+      margin-bottom: 0.3rem;
+    }
+    .form-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
+
+    .form-section-heading {
+      font-size: 0.75rem; font-weight: 600;
+      letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--gold); margin-bottom: 1rem; margin-top: 1.8rem;
+    }
+    .form-section-heading:first-of-type { margin-top: 0; }
+
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+
+    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
+    .field label { font-size: 0.83rem; font-weight: 500; color: var(--text-muted); }
+    .field label span { color: var(--gold); margin-left: 2px; }
+
+    .field input, .field select, .field textarea {
+      background: var(--surface2);
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 10px;
+      padding: 0.75rem 1rem;
+      color: var(--text);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 0.92rem;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+      width: 100%;
+    }
+
+    .field input::placeholder, .field textarea::placeholder { color: rgba(156,163,175,0.5); }
+    .field input:focus, .field select:focus, .field textarea:focus {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
+    }
+    .field input.error, .field select.error { border-color: var(--error); }
+
+    .field select option { background: var(--surface2); color: var(--text); }
+    .field textarea { resize: vertical; min-height: 80px; }
+
+    .field-error { font-size: 0.78rem; color: var(--error); margin-top: 2px; display: none; }
+    .field-error.show { display: block; }
+
+    .submit-btn {
+      width: 100%; margin-top: 1.5rem;
+      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+      color: var(--deep);
+      border: none; border-radius: 50px;
+      padding: 1rem;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
+      box-shadow: 0 8px 28px rgba(201,168,76,0.3);
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+    }
+    .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,168,76,0.4); }
+    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
+
+    .spinner {
+      width: 18px; height: 18px;
+      border: 2px solid rgba(10,15,30,0.3);
+      border-top-color: var(--deep);
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      display: none;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* SUCCESS / ERROR TOAST */
+    .toast {
+      position: fixed; bottom: 2rem; right: 2rem;
+      padding: 1rem 1.5rem;
+      border-radius: var(--radius);
+      font-size: 0.9rem; font-weight: 500;
+      z-index: 999; max-width: 380px;
+      transform: translateY(20px); opacity: 0;
+      transition: all 0.4s ease;
+      display: flex; align-items: center; gap: 10px;
+    }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .toast.success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
+    .toast.error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
+
+    /* ── FOOTER ── */
+    footer {
+      background: var(--deep2);
+      border-top: 1px solid rgba(255,255,255,0.06);
+      padding: 3rem 5%;
+      display: flex; flex-wrap: wrap; gap: 2rem;
+      align-items: center; justify-content: space-between;
+    }
+
+    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); font-weight: 700; }
+    .footer-copy { font-size: 0.82rem; color: var(--text-muted); }
+    .footer-links { display: flex; gap: 1.5rem; }
+    .footer-links a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; }
+    .footer-links a:hover { color: var(--gold); }
+
+    /* ── ANIMATIONS ── */
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .fade-up {
+      opacity: 0; transform: translateY(30px);
+      transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+    .fade-up.visible { opacity: 1; transform: translateY(0); }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      .hero-visual { display: none; }
+      .form-layout { grid-template-columns: 1fr; gap: 2rem; }
+      .form-row { grid-template-columns: 1fr; }
+      .hero-stats { gap: 2rem; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
+      .mini-stats { flex-direction: column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">₱</div>
+    Phindu
+  </a>
+  <ul class="nav-links">
+    <li><a href="#loans">Loan Types</a></li>
+    <li><a href="#how">How It Works</a></li>
+    <li><a href="#apply">Apply Now</a></li>
+    <li><a href="#apply" class="nav-cta">Get Started</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-grid"></div>
+  <div class="hero-content">
+    <div class="hero-badge">
+      <div class="badge-dot"></div>
+      Fast Approvals · Trusted by Thousands
+    </div>
+    <h1>Finance Your <span class="highlight">Dreams</span> With Phindu Loans</h1>
+    <p class="hero-desc">Quick, transparent, and flexible loans for every Malawian. Apply in minutes using your National ID — no lengthy paperwork, no hidden fees.</p>
+    <div class="hero-actions">
+      <a href="#apply" class="btn-primary">Apply Now →</a>
+      <a href="#loans" class="btn-secondary">View Loan Types</a>
+    </div>
+    <div class="hero-stats">
+      <div class="stat">
+        <div class="stat-number">5K+</div>
+        <div class="stat-label">Loans Disbursed</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">24h</div>
+        <div class="stat-label">Avg. Approval Time</div>
+      </div>
+      <div class="stat">
+        <div class="stat-number">98%</div>
+        <div class="stat-label">Customer Satisfaction</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="hero-visual">
+    <div class="card-float">
+      <div class="card-header">
+        <span class="card-label">Active Loan</span>
+        <span class="card-badge">✓ Approved</span>
+      </div>
+      <div class="loan-amount">MK 500,000</div>
+      <div class="loan-period">12 months · Personal Loan</div>
+      <div class="progress-label">
+        <span>Repayment Progress</span>
+        <span>65%</span>
+      </div>
+      <div class="progress-bar"><div class="progress-fill"></div></div>
+      <div class="mini-stats">
+        <div class="mini-stat">
+          <div class="mini-stat-val">MK 41,667</div>
+          <div class="mini-stat-lbl">Monthly</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-val">4.5%</div>
+          <div class="mini-stat-lbl">Interest</div>
+        </div>
+        <div class="mini-stat">
+          <div class="mini-stat-val">5 Left</div>
+          <div class="mini-stat-lbl">Payments</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── LOAN TYPES ── -->
+<section id="loans">
+  <div class="loans-header">
+    <div class="section-label">Our Products</div>
+    <h2>Loans For Every Need</h2>
+    <p class="section-desc">Whether it's personal, business, emergency, or education — we have the right loan product for you.</p>
+  </div>
+  <div class="loans-grid">
+    <div class="loan-card fade-up">
+      <div class="loan-icon">👤</div>
+      <h3>Personal Loan</h3>
+      <p>For personal expenses, home improvements, travel, or any personal need. Fast approval with minimal requirements.</p>
+      <div class="loan-meta"><span>Up to MK 2M</span><span>4.5% pa</span></div>
+    </div>
+    <div class="loan-card fade-up">
+      <div class="loan-icon">🏢</div>
+      <h3>Business Loan</h3>
+      <p>Grow your business with working capital, equipment financing, or expansion funds. Flexible repayment terms.</p>
+      <div class="loan-meta"><span>Up to MK 10M</span><span>6% pa</span></div>
+    </div>
+    <div class="loan-card fade-up">
+      <div class="loan-icon">🚨</div>
+      <h3>Emergency Loan</h3>
+      <p>Access urgent funds within hours during a financial emergency. Simplified process for quick disbursal.</p>
+      <div class="loan-meta"><span>Up to MK 500K</span><span>5% pa</span></div>
+    </div>
+    <div class="loan-card fade-up">
+      <div class="loan-icon">🎓</div>
+      <h3>Education Loan</h3>
+      <p>Invest in knowledge. Cover tuition, books, accommodation and other education costs with ease.</p>
+      <div class="loan-meta"><span>Up to MK 3M</span><span>3.5% pa</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── HOW IT WORKS ── -->
+<section id="how">
+  <div class="section-label">Process</div>
+  <h2>Simple 4-Step Process</h2>
+  <p class="section-desc">Getting a loan with Phindu has never been easier. Follow these steps to get funded.</p>
+  <div class="steps-grid">
+    <div class="step fade-up">
+      <div class="step-num">1</div>
+      <h3>Fill the Form</h3>
+      <p>Complete our online application form with your personal details and National ID number.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">2</div>
+      <h3>We Review</h3>
+      <p>Our team reviews your application and verifies your identity through your National ID.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">3</div>
+      <h3>Get Approval</h3>
+      <p>Receive your loan approval notification via phone or email within 24 hours.</p>
+    </div>
+    <div class="step fade-up">
+      <div class="step-num">4</div>
+      <h3>Receive Funds</h3>
+      <p>Approved funds are disbursed directly to your mobile wallet or bank account.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ── APPLICATION FORM ── -->
+<section id="apply">
+  <div class="form-layout">
+    <div class="form-info fade-up">
+      <div class="section-label">Apply Now</div>
+      <h2>Start Your Application</h2>
+      <p class="section-desc">Fill in the form and our team will get back to you within 24 hours. Your information is kept strictly confidential.</p>
+      <div class="info-points" style="margin-top: 2rem;">
+        <div class="info-point">
+          <div class="info-point-icon">🔒</div>
+          <div class="info-point-text">
+            <h4>Secure & Confidential</h4>
+            <p>Your personal and financial data is protected and never shared with third parties.</p>
+          </div>
+        </div>
+        <div class="info-point">
+          <div class="info-point-icon">⚡</div>
+          <div class="info-point-text">
+            <h4>Fast Response</h4>
+            <p>Our team reviews applications within 24 hours and contacts you promptly.</p>
+          </div>
+        </div>
+        <div class="info-point">
+          <div class="info-point-icon">📋</div>
+          <div class="info-point-text">
+            <h4>Minimal Requirements</h4>
+            <p>All you need is your National ID. No complex documents or guarantors required for most loans.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="form-card fade-up">
+      <div class="form-title">Loan Application Form</div>
+      <div class="form-subtitle">Fields marked <span style="color:var(--gold)">*</span> are required</div>
+
+      <form id="loanForm" novalidate>
+
+        <div class="form-section-heading">Personal Information</div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>First Name <span>*</span></label>
+            <input type="text" id="firstName" placeholder="e.g. Chisomo" />
+            <div class="field-error" id="err-firstName">Please enter your first name</div>
+          </div>
+          <div class="field">
+            <label>Last Name <span>*</span></label>
+            <input type="text" id="lastName" placeholder="e.g. Banda" />
+            <div class="field-error" id="err-lastName">Please enter your last name</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Phone Number <span>*</span></label>
+            <input type="tel" id="phone" placeholder="e.g. +265 999 123 456" />
+            <div class="field-error" id="err-phone">Enter a valid phone number</div>
+          </div>
+          <div class="field">
+            <label>Email Address</label>
+            <input type="email" id="email" placeholder="yourname@email.com" />
+          </div>
+        </div>
+
+        <div class="field">
+          <label>National ID Number <span>*</span></label>
+          <input type="text" id="nationalId" placeholder="e.g. MW-1234-5678-9012" style="letter-spacing:1px;" />
+          <div class="field-error" id="err-nationalId">Please enter your National ID number</div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Date of Birth <span>*</span></label>
+            <input type="date" id="dob" />
+            <div class="field-error" id="err-dob">Please select your date of birth</div>
+          </div>
+          <div class="field">
+            <label>Gender</label>
+            <select id="gender">
+              <option value="">Select gender</option>
+              <option>Male</option>
+              <option>Female</option>
+              <option>Prefer not to say</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Home Address <span>*</span></label>
+          <input type="text" id="address" placeholder="e.g. Area 25, Lilongwe" />
+          <div class="field-error" id="err-address">Please enter your address</div>
+        </div>
+
+        <div class="form-section-heading">Loan Details</div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Loan Type <span>*</span></label>
+            <select id="loanType">
+              <option value="">Select loan type</option>
+              <option>Personal Loan</option>
+              <option>Business Loan</option>
+              <option>Emergency Loan</option>
+              <option>Education Loan</option>
+            </select>
+            <div class="field-error" id="err-loanType">Please select a loan type</div>
+          </div>
+          <div class="field">
+            <label>Loan Amount (MK) <span>*</span></label>
+            <input type="number" id="loanAmount" placeholder="e.g. 200000" min="1000" />
+            <div class="field-error" id="err-loanAmount">Please enter the loan amount</div>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <div class="field">
+            <label>Repayment Period <span>*</span></label>
+            <select id="repayPeriod">
+              <option value="">Select period</option>
+              <option>3 months</option>
+              <option>6 months</option>
+              <option>12 months</option>
+              <option>18 months</option>
+              <option>24 months</option>
+              <option>36 months</option>
+            </select>
+            <div class="field-error" id="err-repayPeriod">Please select a repayment period</div>
+          </div>
+          <div class="field">
+            <label>Employment Status <span>*</span></label>
+            <select id="employment">
+              <option value="">Select status</option>
+              <option>Employed (Formal)</option>
+              <option>Self Employed</option>
+              <option>Business Owner</option>
+              <option>Student</option>
+              <option>Other</option>
+            </select>
+            <div class="field-error" id="err-employment">Please select employment status</div>
+          </div>
+        </div>
+
+        <div class="field">
+          <label>Monthly Income (MK) <span>*</span></label>
+          <input type="number" id="income" placeholder="e.g. 150000" />
+          <div class="field-error" id="err-income">Please enter your monthly income</div>
+        </div>
+
+        <div class="field">
+          <label>Purpose of Loan <span>*</span></label>
+          <textarea id="purpose" placeholder="Briefly describe why you need this loan..."></textarea>
+          <div class="field-error" id="err-purpose">Please describe the purpose</div>
+        </div>
+
+        <button type="submit" class="submit-btn" id="submitBtn">
+          <div class="spinner" id="spinner"></div>
+          <span id="btnText">Submit Application →</span>
+        </button>
+
+      </form>
+    </div>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-logo">Phindu Loans</div>
+  <div class="footer-copy">© 2025 Phindu Loans. All rights reserved. Malawi.</div>
+  <div class="footer-links">
+    <a href="#">Privacy Policy</a>
+    <a href="#">Terms & Conditions</a>
+    <a href="#">Contact Us</a>
+  </div>
+</footer>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+  // ── EmailJS Configuration ──────────────────────────────────
+  // STEP 1: Go to https://www.emailjs.com/ and create a free account
+  // STEP 2: Create an Email Service (Gmail, Outlook, etc.) — copy the Service ID
+  // STEP 3: Create an Email Template — copy the Template ID
+  //         In your template, use these variables:
+  //         {{applicant_name}}, {{national_id}}, {{phone}}, {{email}},
+  //         {{loan_type}}, {{loan_amount}}, {{repay_period}},
+  //         {{employment}}, {{income}}, {{purpose}}, {{address}}, {{dob}}, {{gender}}
+  // STEP 4: Copy your Public Key from Account > API Keys
+  // STEP 5: Replace the values below with your real credentials
+
+  const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";     // e.g. "user_abc123XYZ"
+  const EMAILJS_SERVICE_ID  = "service_zunei3e";     // e.g. "service_gmail"
+  const EMAILJS_TEMPLATE_ID = "template_4m5wthi";    // e.g. "template_loanapp"
+
+  emailjs.init(LqW2mAfvnN9B_leO1);
+
+  // ── Intersection Observer for animations ────────────────────
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
+
+  // ── Form validation ─────────────────────────────────────────
+  function validate() {
+    const required = [
+      'firstName','lastName','phone','nationalId','dob',
+      'address','loanType','loanAmount','repayPeriod','employment','income','purpose'
+    ];
+    let valid = true;
+    required.forEach(id => {
+      const el = document.getElementById(id);
+      const err = document.getElementById('err-' + id);
+      if (!el.value.trim()) {
+        el.classList.add('error');
+        if (err) err.classList.add('show');
+        valid = false;
+      } else {
+        el.classList.remove('error');
+        if (err) err.classList.remove('show');
+      }
+    });
+    return valid;
+  }
+
+  // ── Toast helper ─────────────────────────────────────────────
+  function showToast(msg, type) {
+    const t = document.getElementById('toast');
+    t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+    t.className = `toast ${type} show`;
+    setTimeout(() => t.classList.remove('show'), 5000);
+  }
+
+  // ── Form submit ───────────────────────────────────────────────
+  document.getElementById('loanForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    if (!validate()) return;
+
+    const btn = document.getElementById('submitBtn');
+    const spinner = document.getElementById('spinner');
+    const btnText = document.getElementById('btnText');
+
+    btn.disabled = true;
+    spinner.style.display = 'block';
+    btnText.textContent = 'Submitting...';
+
+    const params = {
+      applicant_name : `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
+      national_id    : document.getElementById('nationalId').value,
+      phone          : document.getElementById('phone').value,
+      email          : document.getElementById('email').value || 'Not provided',
+      dob            : document.getElementById('dob').value,
+      gender         : document.getElementById('gender').value || 'Not specified',
+      address        : document.getElementById('address').value,
+      loan_type      : document.getElementById('loanType').value,
+      loan_amount    : `MK ${Number(document.getElementById('loanAmount').value).toLocaleString()}`,
+      repay_period   : document.getElementById('repayPeriod').value,
+      employment     : document.getElementById('employment').value,
+      income         : `MK ${Number(document.getElementById('income').value).toLocaleString()}`,
+      purpose        : document.getElementById('purpose').value,
+      submitted_at   : new Date().toLocaleString('en-MW', { timeZone: 'Africa/Blantyre' }),
+    };
+
+    try {
+      // If EmailJS is not configured yet, simulate success
+      if (EMAILJS_PUBLIC_KEY === "LqW2mAfvnN9B_leO1") {
+        await new Promise(r => setTimeout(r, 1500)); // simulate delay
+        throw new Error("DEMO_MODE");
+      }
+
+      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+      showToast('Application submitted successfully! We will contact you within 24 hours.', 'success');
+      document.getElementById('loanForm').reset();
+    } catch (err) {
+      if (err.message === "DEMO_MODE") {
+        showToast('⚠️ Demo mode: EmailJS not configured yet. See setup instructions in the code.', 'error');
+      } else {
+        showToast('Failed to submit. Please try again or call us directly.', 'error');
+        console.error(err);
+      }
+    } finally {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Submit Application →';
+    }
+  });
+
+  // Clear errors on input
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      el.classList.remove('error');
+      const err = document.getElementById('err-' + el.id);
+      if (err) err.classList.remove('show');
+    });
+  });
+</script>
+
+</body>
+</html>
