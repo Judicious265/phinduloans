@@ -1046,4 +1046,11 @@ document.querySelectorAll('input,select,textarea').forEach(function(el) {
   });
 });
 
-// ── INIT ANIMATIONS ──────────────────────�
+// ── INIT ANIMATIONS ──────────────────────────────────────────
+var globalObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(function(el) { globalObs.observe(el); });
+</script>
+</body>
+</html>
