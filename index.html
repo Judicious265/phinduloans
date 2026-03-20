@@ -1,945 +1,750 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
+  <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Phindu Loans — Fast. Simple. Trusted.</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-
   <style>
     :root {
-      --gold: #C9A84C;
-      --gold-light: #E8C97A;
-      --gold-dark: #9B7B2F;
-      --deep: #0A0F1E;
-      --deep2: #111827;
-      --surface: #151D2E;
-      --surface2: #1E2A3F;
-      --text: #F0EDE6;
-      --text-muted: #9CA3AF;
-      --accent: #4F8EF7;
-      --success: #22C55E;
-      --error: #EF4444;
-      --radius: 12px;
-      --shadow: 0 20px 60px rgba(0,0,0,0.4);
+      --gold:#C9A84C; --gold-light:#E8C97A; --gold-dark:#9B7B2F;
+      --deep:#0A0F1E; --deep2:#111827; --surface:#151D2E; --surface2:#1E2A3F;
+      --text:#F0EDE6; --text-muted:#9CA3AF;
+      --success:#22C55E; --error:#EF4444; --warning:#F59E0B;
+      --radius:12px; --shadow:0 20px 60px rgba(0,0,0,0.4);
     }
-
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    html { scroll-behavior: smooth; }
-
-    body {
-      font-family: 'DM Sans', sans-serif;
-      background: var(--deep);
-      color: var(--text);
-      overflow-x: hidden;
-    }
-
-    /* ── NAVBAR ── */
-    nav {
-      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 1.2rem 5%;
-      background: rgba(10,15,30,0.85);
-      backdrop-filter: blur(18px);
-      border-bottom: 1px solid rgba(201,168,76,0.15);
-    }
-
-    .logo {
-      display: flex; align-items: center; gap: 10px;
-      font-family: 'Playfair Display', serif;
-      font-size: 1.5rem; font-weight: 900;
-      color: var(--gold);
-      text-decoration: none;
-    }
-
-    .logo-icon {
-      width: 38px; height: 38px;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.1rem;
-    }
-
-    .nav-links { display: flex; gap: 2rem; list-style: none; }
-    .nav-links a {
-      color: var(--text-muted); text-decoration: none;
-      font-size: 0.9rem; font-weight: 500;
-      transition: color 0.2s;
-    }
-    .nav-links a:hover { color: var(--gold); }
-
-    .nav-cta {
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: var(--deep) !important;
-      padding: 0.55rem 1.4rem;
-      border-radius: 50px;
-      font-weight: 600 !important;
-    }
-    .nav-cta:hover { opacity: 0.9; color: var(--deep) !important; }
-
-    /* ── HERO ── */
-    .hero {
-      min-height: 100vh;
-      display: flex; align-items: center;
-      padding: 8rem 5% 5rem;
-      position: relative;
-      overflow: hidden;
-    }
-
-    .hero-bg {
-      position: absolute; inset: 0;
-      background:
-        radial-gradient(ellipse 70% 60% at 60% 40%, rgba(201,168,76,0.08) 0%, transparent 70%),
-        radial-gradient(ellipse 50% 50% at 90% 80%, rgba(79,142,247,0.06) 0%, transparent 60%),
-        linear-gradient(180deg, var(--deep) 0%, var(--deep2) 100%);
-    }
-
-    .hero-grid {
-      position: absolute; inset: 0;
-      background-image:
-        linear-gradient(rgba(201,168,76,0.04) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201,168,76,0.04) 1px, transparent 1px);
-      background-size: 60px 60px;
-    }
-
-    .hero-content {
-      position: relative; z-index: 1;
-      max-width: 680px;
-    }
-
-    .hero-badge {
-      display: inline-flex; align-items: center; gap: 8px;
-      background: rgba(201,168,76,0.12);
-      border: 1px solid rgba(201,168,76,0.3);
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      font-size: 0.8rem; font-weight: 500;
-      color: var(--gold-light);
-      margin-bottom: 1.8rem;
-      animation: fadeUp 0.8s ease both;
-    }
-
-    .badge-dot {
-      width: 6px; height: 6px;
-      background: var(--gold);
-      border-radius: 50%;
-      animation: pulse 2s infinite;
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; transform: scale(1); }
-      50% { opacity: 0.5; transform: scale(1.4); }
-    }
-
-    h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2.8rem, 6vw, 5rem);
-      font-weight: 900;
-      line-height: 1.1;
-      margin-bottom: 1.5rem;
-      animation: fadeUp 0.8s 0.1s ease both;
-    }
-
-    h1 .highlight {
-      background: linear-gradient(135deg, var(--gold-light), var(--gold));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      background-clip: text;
-    }
-
-    .hero-desc {
-      font-size: 1.1rem; color: var(--text-muted);
-      line-height: 1.7; margin-bottom: 2.5rem;
-      max-width: 520px;
-      animation: fadeUp 0.8s 0.2s ease both;
-    }
-
-    .hero-actions {
-      display: flex; gap: 1rem; flex-wrap: wrap;
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-
-    .btn-primary {
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: var(--deep);
-      padding: 0.9rem 2.2rem;
-      border-radius: 50px;
-      font-weight: 700; font-size: 1rem;
-      text-decoration: none; border: none; cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s;
-      box-shadow: 0 8px 32px rgba(201,168,76,0.3);
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(201,168,76,0.4); }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      padding: 0.9rem 2.2rem;
-      border-radius: 50px;
-      font-weight: 600; font-size: 1rem;
-      text-decoration: none;
-      border: 1px solid rgba(240,237,230,0.2);
-      transition: border-color 0.2s, background 0.2s;
-      display: inline-flex; align-items: center; gap: 8px;
-    }
-    .btn-secondary:hover { border-color: var(--gold); background: rgba(201,168,76,0.06); }
-
-    .hero-stats {
-      display: flex; gap: 3rem; margin-top: 4rem;
-      animation: fadeUp 0.8s 0.4s ease both;
-    }
-
-    .stat { text-align: left; }
-    .stat-number {
-      font-family: 'Playfair Display', serif;
-      font-size: 2rem; font-weight: 700;
-      color: var(--gold);
-    }
-    .stat-label { font-size: 0.8rem; color: var(--text-muted); margin-top: 2px; }
-
-    .hero-visual {
-      position: absolute; right: 5%; top: 50%;
-      transform: translateY(-50%);
-      width: min(420px, 40vw);
-      animation: fadeUp 0.8s 0.3s ease both;
-    }
-
-    .card-float {
-      background: var(--surface);
-      border: 1px solid rgba(201,168,76,0.2);
-      border-radius: 20px;
-      padding: 2rem;
-      box-shadow: var(--shadow);
-      position: relative;
-    }
-
-    .card-float::before {
-      content: '';
-      position: absolute; inset: -1px;
-      border-radius: 20px;
-      background: linear-gradient(135deg, rgba(201,168,76,0.3), transparent, rgba(79,142,247,0.1));
-      z-index: -1;
-    }
-
-    .card-header {
-      display: flex; justify-content: space-between; align-items: center;
-      margin-bottom: 1.5rem;
-    }
-    .card-label { font-size: 0.8rem; color: var(--text-muted); font-weight: 500; }
-    .card-badge {
-      background: rgba(34,197,94,0.15);
-      color: var(--success);
-      font-size: 0.75rem; font-weight: 600;
-      padding: 0.2rem 0.7rem; border-radius: 50px;
-    }
-
-    .loan-amount {
-      font-family: 'Playfair Display', serif;
-      font-size: 2.5rem; font-weight: 700;
-      color: var(--gold-light);
-      margin-bottom: 0.3rem;
-    }
-    .loan-period { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 1.5rem; }
-
-    .progress-label { display: flex; justify-content: space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom: 0.5rem; }
-    .progress-bar { background: rgba(255,255,255,0.08); height: 6px; border-radius: 3px; overflow: hidden; }
-    .progress-fill { height: 100%; background: linear-gradient(90deg, var(--gold-dark), var(--gold-light)); border-radius: 3px; width: 65%; animation: fillBar 1.5s 1s ease both; }
-
-    @keyframes fillBar { from { width: 0; } to { width: 65%; } }
-
-    .mini-stats { display: flex; gap: 1rem; margin-top: 1.5rem; }
-    .mini-stat { flex: 1; background: var(--surface2); border-radius: 10px; padding: 0.8rem; text-align: center; }
-    .mini-stat-val { font-weight: 700; font-size: 1rem; color: var(--text); }
-    .mini-stat-lbl { font-size: 0.72rem; color: var(--text-muted); margin-top: 2px; }
-
-    /* ── SECTIONS ── */
-    section { padding: 6rem 5%; }
-
-    .section-label {
-      font-size: 0.78rem; font-weight: 600;
-      letter-spacing: 0.15em; text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 0.8rem;
-    }
-
-    h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: clamp(2rem, 4vw, 3rem);
-      font-weight: 700;
-      line-height: 1.2;
-      margin-bottom: 1rem;
-    }
-
-    .section-desc { color: var(--text-muted); font-size: 1.05rem; line-height: 1.7; max-width: 560px; }
-
-    /* ── LOAN TYPES ── */
-    #loans { background: var(--deep2); }
-
-    .loans-header { text-align: center; margin-bottom: 3.5rem; }
-    .loans-header .section-desc { margin: 0 auto; }
-
-    .loans-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 1.5rem;
-    }
-
-    .loan-card {
-      background: var(--surface);
-      border: 1px solid rgba(255,255,255,0.07);
-      border-radius: var(--radius);
-      padding: 2rem 1.8rem;
-      transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
-      cursor: pointer;
-      position: relative;
-      overflow: hidden;
-    }
-    .loan-card::after {
-      content: '';
-      position: absolute; bottom: 0; left: 0; right: 0; height: 3px;
-      background: linear-gradient(90deg, var(--gold-dark), var(--gold-light));
-      transform: scaleX(0); transform-origin: left;
-      transition: transform 0.3s;
-    }
-    .loan-card:hover { transform: translateY(-6px); border-color: rgba(201,168,76,0.3); box-shadow: 0 20px 50px rgba(0,0,0,0.3); }
-    .loan-card:hover::after { transform: scaleX(1); }
-
-    .loan-icon {
-      width: 52px; height: 52px; border-radius: 12px;
-      background: rgba(201,168,76,0.12);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1.5rem; margin-bottom: 1.2rem;
-    }
-
-    .loan-card h3 { font-size: 1.15rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .loan-card p { font-size: 0.88rem; color: var(--text-muted); line-height: 1.6; margin-bottom: 1.2rem; }
-
-    .loan-meta { display: flex; gap: 1rem; }
-    .loan-meta span {
-      font-size: 0.78rem; font-weight: 600;
-      background: rgba(201,168,76,0.1);
-      color: var(--gold-light);
-      padding: 0.25rem 0.7rem; border-radius: 50px;
-    }
-
-    /* ── HOW IT WORKS ── */
-    .steps-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 2rem; margin-top: 3.5rem;
-      position: relative;
-    }
-
-    .step {
-      text-align: center; padding: 2rem 1.5rem;
-      background: var(--surface); border-radius: var(--radius);
-      border: 1px solid rgba(255,255,255,0.06);
-      position: relative;
-    }
-
-    .step-num {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: var(--deep);
-      font-family: 'Playfair Display', serif;
-      font-weight: 700; font-size: 1.2rem;
-      display: flex; align-items: center; justify-content: center;
-      margin: 0 auto 1.2rem;
-    }
-
-    .step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
-    .step p { font-size: 0.85rem; color: var(--text-muted); line-height: 1.6; }
-
-    /* ── APPLICATION FORM ── */
-    #apply {
-      background: var(--deep);
-      position: relative; overflow: hidden;
-    }
-
-    #apply::before {
-      content: '';
-      position: absolute; top: -200px; right: -200px;
-      width: 600px; height: 600px;
-      background: radial-gradient(circle, rgba(201,168,76,0.06) 0%, transparent 70%);
-      pointer-events: none;
-    }
-
-    .form-layout {
-      display: grid;
-      grid-template-columns: 1fr 1.5fr;
-      gap: 4rem; align-items: start;
-    }
-
-    .form-info h2 { margin-bottom: 1rem; }
-    .form-info .section-desc { margin-bottom: 2rem; }
-
-    .info-points { display: flex; flex-direction: column; gap: 1rem; }
-    .info-point {
-      display: flex; gap: 12px; align-items: flex-start;
-    }
-    .info-point-icon {
-      width: 36px; height: 36px; flex-shrink: 0;
-      background: rgba(201,168,76,0.12);
-      border-radius: 8px;
-      display: flex; align-items: center; justify-content: center;
-      font-size: 1rem;
-    }
-    .info-point-text h4 { font-size: 0.95rem; font-weight: 600; margin-bottom: 0.2rem; }
-    .info-point-text p { font-size: 0.83rem; color: var(--text-muted); line-height: 1.5; }
-
-    /* FORM CARD */
-    .form-card {
-      background: var(--surface);
-      border: 1px solid rgba(201,168,76,0.15);
-      border-radius: 20px;
-      padding: 2.5rem;
-      box-shadow: var(--shadow);
-    }
-
-    .form-title {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.4rem; font-weight: 700;
-      margin-bottom: 0.3rem;
-    }
-    .form-subtitle { font-size: 0.85rem; color: var(--text-muted); margin-bottom: 2rem; }
-
-    .form-section-heading {
-      font-size: 0.75rem; font-weight: 600;
-      letter-spacing: 0.12em; text-transform: uppercase;
-      color: var(--gold); margin-bottom: 1rem; margin-top: 1.8rem;
-    }
-    .form-section-heading:first-of-type { margin-top: 0; }
-
-    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
-
-    .field { display: flex; flex-direction: column; gap: 6px; margin-bottom: 1rem; }
-    .field label { font-size: 0.83rem; font-weight: 500; color: var(--text-muted); }
-    .field label span { color: var(--gold); margin-left: 2px; }
-
-    .field input, .field select, .field textarea {
-      background: var(--surface2);
-      border: 1px solid rgba(255,255,255,0.1);
-      border-radius: 10px;
-      padding: 0.75rem 1rem;
-      color: var(--text);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 0.92rem;
-      transition: border-color 0.2s, box-shadow 0.2s;
-      outline: none;
-      width: 100%;
-    }
-
-    .field input::placeholder, .field textarea::placeholder { color: rgba(156,163,175,0.5); }
-    .field input:focus, .field select:focus, .field textarea:focus {
-      border-color: var(--gold);
-      box-shadow: 0 0 0 3px rgba(201,168,76,0.12);
-    }
-    .field input.error, .field select.error { border-color: var(--error); }
-
-    .field select option { background: var(--surface2); color: var(--text); }
-    .field textarea { resize: vertical; min-height: 80px; }
-
-    .field-error { font-size: 0.78rem; color: var(--error); margin-top: 2px; display: none; }
-    .field-error.show { display: block; }
-
-    .submit-btn {
-      width: 100%; margin-top: 1.5rem;
-      background: linear-gradient(135deg, var(--gold), var(--gold-dark));
-      color: var(--deep);
-      border: none; border-radius: 50px;
-      padding: 1rem;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 1rem; font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.2s, box-shadow 0.2s, opacity 0.2s;
-      box-shadow: 0 8px 28px rgba(201,168,76,0.3);
-      display: flex; align-items: center; justify-content: center; gap: 8px;
-    }
-    .submit-btn:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 12px 36px rgba(201,168,76,0.4); }
-    .submit-btn:disabled { opacity: 0.7; cursor: not-allowed; transform: none; }
-
-    .spinner {
-      width: 18px; height: 18px;
-      border: 2px solid rgba(10,15,30,0.3);
-      border-top-color: var(--deep);
-      border-radius: 50%;
-      animation: spin 0.7s linear infinite;
-      display: none;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-
-    /* SUCCESS / ERROR TOAST */
-    .toast {
-      position: fixed; bottom: 2rem; right: 2rem;
-      padding: 1rem 1.5rem;
-      border-radius: var(--radius);
-      font-size: 0.9rem; font-weight: 500;
-      z-index: 999; max-width: 380px;
-      transform: translateY(20px); opacity: 0;
-      transition: all 0.4s ease;
-      display: flex; align-items: center; gap: 10px;
-    }
-    .toast.show { transform: translateY(0); opacity: 1; }
-    .toast.success { background: rgba(34,197,94,0.15); border: 1px solid rgba(34,197,94,0.4); color: #86efac; }
-    .toast.error { background: rgba(239,68,68,0.15); border: 1px solid rgba(239,68,68,0.4); color: #fca5a5; }
-
-    /* ── FOOTER ── */
-    footer {
-      background: var(--deep2);
-      border-top: 1px solid rgba(255,255,255,0.06);
-      padding: 3rem 5%;
-      display: flex; flex-wrap: wrap; gap: 2rem;
-      align-items: center; justify-content: space-between;
-    }
-
-    .footer-logo { font-family: 'Playfair Display', serif; font-size: 1.3rem; color: var(--gold); font-weight: 700; }
-    .footer-copy { font-size: 0.82rem; color: var(--text-muted); }
-    .footer-links { display: flex; gap: 1.5rem; }
-    .footer-links a { font-size: 0.82rem; color: var(--text-muted); text-decoration: none; }
-    .footer-links a:hover { color: var(--gold); }
-
-    /* ── ANIMATIONS ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(30px); }
-      to { opacity: 1; transform: translateY(0); }
-    }
-
-    .fade-up {
-      opacity: 0; transform: translateY(30px);
-      transition: opacity 0.6s ease, transform 0.6s ease;
-    }
-    .fade-up.visible { opacity: 1; transform: translateY(0); }
-
-    /* ── RESPONSIVE ── */
-    @media (max-width: 900px) {
-      .hero-visual { display: none; }
-      .form-layout { grid-template-columns: 1fr; gap: 2rem; }
-      .form-row { grid-template-columns: 1fr; }
-      .hero-stats { gap: 2rem; }
-      .nav-links { display: none; }
-    }
-
-    @media (max-width: 600px) {
-      .hero-stats { flex-wrap: wrap; gap: 1.5rem; }
-      .mini-stats { flex-direction: column; }
-    }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{scroll-behavior:smooth;}
+    body{font-family:'DM Sans',sans-serif;background:var(--deep);color:var(--text);overflow-x:hidden;}
+
+    .page{display:none;min-height:100vh;padding-top:72px;}
+    .page.active{display:block;}
+
+    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(10,15,30,0.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,0.15);}
+    .logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold);text-decoration:none;cursor:pointer;}
+    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .nav-links{display:flex;gap:0.3rem;list-style:none;align-items:center;}
+    .nav-links a,.nav-links button{color:var(--text-muted);text-decoration:none;font-size:0.88rem;font-weight:500;padding:0.45rem 0.9rem;border-radius:8px;border:none;background:none;cursor:pointer;transition:color 0.2s,background 0.2s;font-family:'DM Sans',sans-serif;}
+    .nav-links a:hover,.nav-links button:hover{color:var(--text);background:rgba(255,255,255,0.06);}
+    .nav-links button.active{color:var(--gold);background:rgba(201,168,76,0.1);}
+    .nav-cta{background:linear-gradient(135deg,var(--gold),var(--gold-dark)) !important;color:var(--deep) !important;font-weight:700 !important;border-radius:50px !important;}
+    .nav-hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;padding:4px;}
+    .nav-mobile{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(10,15,30,0.98);border-bottom:1px solid rgba(201,168,76,0.15);padding:1rem 5%;flex-direction:column;gap:0.4rem;z-index:199;}
+    .nav-mobile.open{display:flex;}
+    .nav-mobile button{color:var(--text-muted);text-decoration:none;font-size:0.95rem;font-weight:500;padding:0.7rem 1rem;border-radius:8px;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;}
+
+    /* HERO */
+    .hero-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;padding:4rem 5% 5rem;position:relative;overflow:hidden;}
+    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(201,168,76,0.08) 0%,transparent 70%),linear-gradient(180deg,var(--deep) 0%,var(--deep2) 100%);}
+    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:60px 60px;}
+    .hero-content{position:relative;z-index:1;max-width:620px;}
+    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);padding:0.4rem 1rem;border-radius:50px;font-size:0.8rem;font-weight:500;color:var(--gold-light);margin-bottom:1.5rem;animation:fadeUp 0.8s ease both;}
+    .badge-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
+    @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
+    h1{font-family:'Playfair Display',serif;font-size:clamp(2.5rem,5vw,4.5rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem;animation:fadeUp 0.8s 0.1s ease both;}
+    h1 .highlight{background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+    .hero-desc{font-size:1.05rem;color:var(--text-muted);line-height:1.7;margin-bottom:2rem;max-width:500px;animation:fadeUp 0.8s 0.2s ease both;}
+    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
+    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);padding:0.85rem 2rem;border-radius:50px;font-weight:700;font-size:0.95rem;text-decoration:none;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(201,168,76,0.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;}
+    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,0.4);}
+    .btn-secondary{background:transparent;color:var(--text);padding:0.85rem 2rem;border-radius:50px;font-weight:600;font-size:0.95rem;text-decoration:none;border:1px solid rgba(240,237,230,0.2);transition:border-color 0.2s,background 0.2s;display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;cursor:pointer;}
+    .btn-secondary:hover{border-color:var(--gold);background:rgba(201,168,76,0.06);}
+    .hero-stats{display:flex;gap:2.5rem;margin-top:3.5rem;animation:fadeUp 0.8s 0.4s ease both;}
+    .stat-number{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold);}
+    .stat-label{font-size:0.78rem;color:var(--text-muted);margin-top:2px;}
+    .hero-visual{position:absolute;right:5%;top:50%;transform:translateY(-50%);width:min(380px,36vw);animation:fadeUp 0.8s 0.3s ease both;}
+    .card-float{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:1.8rem;box-shadow:var(--shadow);position:relative;}
+    .card-float::before{content:'';position:absolute;inset:-1px;border-radius:20px;background:linear-gradient(135deg,rgba(201,168,76,0.3),transparent);z-index:-1;}
+    .card-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1.2rem;}
+    .card-label{font-size:0.78rem;color:var(--text-muted);}
+    .card-badge{background:rgba(34,197,94,0.15);color:var(--success);font-size:0.73rem;font-weight:600;padding:0.2rem 0.7rem;border-radius:50px;}
+    .loan-amount-disp{font-family:'Playfair Display',serif;font-size:2.2rem;font-weight:700;color:var(--gold-light);margin-bottom:0.2rem;}
+    .loan-period-disp{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.2rem;}
+    .progress-label{display:flex;justify-content:space-between;font-size:0.78rem;color:var(--text-muted);margin-bottom:0.4rem;}
+    .progress-bar{background:rgba(255,255,255,0.08);height:5px;border-radius:3px;overflow:hidden;}
+    .progress-fill{height:100%;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));border-radius:3px;width:65%;animation:fillBar 1.5s 1s ease both;}
+    @keyframes fillBar{from{width:0}to{width:65%}}
+    .mini-stats{display:flex;gap:0.8rem;margin-top:1.2rem;}
+    .mini-stat{flex:1;background:var(--surface2);border-radius:8px;padding:0.7rem;text-align:center;}
+    .mini-stat-val{font-weight:700;font-size:0.88rem;}
+    .mini-stat-lbl{font-size:0.68rem;color:var(--text-muted);margin-top:1px;}
+
+    .section-label{font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.7rem;}
+    h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:0.8rem;}
+    .section-desc{color:var(--text-muted);font-size:1rem;line-height:1.7;max-width:540px;}
+    .page-section{padding:4rem 5%;}
+    .page-section.alt{background:var(--deep2);}
+
+    .loans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;}
+    .loan-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.8rem;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;cursor:pointer;position:relative;overflow:hidden;}
+    .loan-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
+    .loan-card:hover{transform:translateY(-5px);border-color:rgba(201,168,76,0.3);box-shadow:0 20px 50px rgba(0,0,0,0.3);}
+    .loan-card:hover::after{transform:scaleX(1);}
+    .loan-icon{width:48px;height:48px;border-radius:10px;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1rem;}
+    .loan-card h3{font-size:1.1rem;font-weight:600;margin-bottom:0.4rem;}
+    .loan-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
+    .loan-meta{display:flex;gap:0.7rem;}
+    .loan-meta span{font-size:0.75rem;font-weight:600;background:rgba(201,168,76,0.1);color:var(--gold-light);padding:0.22rem 0.65rem;border-radius:50px;}
+
+    .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:2.5rem;}
+    .step{text-align:center;padding:1.8rem 1.3rem;background:var(--surface);border-radius:var(--radius);border:1px solid rgba(255,255,255,0.06);}
+    .step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+    .step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.4rem;}
+    .step p{font-size:0.82rem;color:var(--text-muted);line-height:1.6;}
+
+    /* APPLY */
+    .apply-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:3.5rem;align-items:start;}
+    .form-info-points{display:flex;flex-direction:column;gap:1rem;margin-top:1.8rem;}
+    .info-point{display:flex;gap:10px;align-items:flex-start;}
+    .info-point-icon{width:34px;height:34px;flex-shrink:0;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
+    .info-point-text h4{font-size:0.9rem;font-weight:600;margin-bottom:0.15rem;}
+    .info-point-text p{font-size:0.8rem;color:var(--text-muted);line-height:1.5;}
+    .form-card{background:var(--surface);border:1px solid rgba(201,168,76,0.15);border-radius:20px;padding:2.2rem;box-shadow:var(--shadow);}
+    .form-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:0.2rem;}
+    .form-subtitle{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.8rem;}
+    .form-section-heading{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.9rem;margin-top:1.6rem;}
+    .form-section-heading:first-of-type{margin-top:0;}
+    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;}
+    .field{display:flex;flex-direction:column;gap:5px;margin-bottom:0.9rem;}
+    .field label{font-size:0.8rem;font-weight:500;color:var(--text-muted);}
+    .field label span{color:var(--gold);margin-left:2px;}
+    .field input,.field select,.field textarea{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;transition:border-color 0.2s,box-shadow 0.2s;outline:none;width:100%;}
+    .field input::placeholder,.field textarea::placeholder{color:rgba(156,163,175,0.4);}
+    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
+    .field input.error,.field select.error,.field textarea.error{border-color:var(--error);}
+    .field select option{background:var(--surface2);color:var(--text);}
+    .field textarea{resize:vertical;min-height:75px;}
+    .field-error{font-size:0.75rem;color:var(--error);margin-top:1px;display:none;}
+    .field-error.show{display:block;}
+    .collateral-note{font-size:0.75rem;color:var(--gold-light);margin-top:4px;background:rgba(201,168,76,0.08);padding:0.45rem 0.7rem;border-radius:6px;border-left:2px solid var(--gold);}
+    .submit-btn{width:100%;margin-top:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.95rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s;box-shadow:0 8px 28px rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;gap:8px;}
+    .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 36px rgba(201,168,76,0.4);}
+    .submit-btn:disabled{opacity:0.7;cursor:not-allowed;}
+    .spinner{width:16px;height:16px;border:2px solid rgba(10,15,30,0.3);border-top-color:var(--deep);border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+
+    /* CONTACT */
+    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
+    .contact-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.8rem;}
+    .contact-card h3{font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--gold);}
+    .contact-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:1rem;}
+    .contact-icon{width:36px;height:36px;flex-shrink:0;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .contact-item-text{font-size:0.88rem;line-height:1.6;}
+    .contact-item-text strong{display:block;font-weight:600;margin-bottom:2px;}
+    .contact-item-text a{color:var(--gold-light);text-decoration:none;}
+    .contact-item-text a:hover{text-decoration:underline;}
+    .map-box{background:var(--surface2);border-radius:var(--radius);height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed rgba(201,168,76,0.2);margin-top:1rem;}
+    .wa-btn-big{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:0.85rem 1.8rem;border-radius:50px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1.2rem;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 6px 20px rgba(37,211,102,0.3);}
+    .wa-btn-big:hover{transform:translateY(-2px);box-shadow:0 10px 28px rgba(37,211,102,0.4);}
+
+    /* DASHBOARD */
+    .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.8rem;flex-wrap:wrap;gap:1rem;}
+    .dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.8rem;}
+    .dash-stat{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.3rem;position:relative;overflow:hidden;}
+    .dash-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+    .dash-stat.total::before{background:var(--gold);}
+    .dash-stat.pending::before{background:var(--warning);}
+    .dash-stat.approved::before{background:var(--success);}
+    .dash-stat.rejected::before{background:var(--error);}
+    .dash-stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:2px;}
+    .dash-stat.total .dash-stat-num{color:var(--gold);}
+    .dash-stat.pending .dash-stat-num{color:var(--warning);}
+    .dash-stat.approved .dash-stat-num{color:var(--success);}
+    .dash-stat.rejected .dash-stat-num{color:var(--error);}
+    .dash-stat-label{font-size:0.78rem;color:var(--text-muted);}
+    .dash-controls{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.3rem;align-items:center;}
+    .dash-search{flex:1;min-width:180px;background:var(--surface);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.65rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;}
+    .dash-search:focus{border-color:var(--gold);}
+    .dash-filter{background:var(--surface);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.65rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;}
+    .dash-filter option{background:var(--surface2);}
+    .table-wrap{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);overflow:hidden;overflow-x:auto;}
+    .apps-table{width:100%;border-collapse:collapse;}
+    .apps-table th{font-size:0.73rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;padding:0.8rem 1rem;text-align:left;border-bottom:1px solid rgba(255,255,255,0.07);}
+    .apps-table td{padding:0.85rem 1rem;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
+    .apps-table tr:hover td{background:rgba(255,255,255,0.02);}
+    .status-badge{display:inline-flex;align-items:center;gap:5px;padding:0.22rem 0.7rem;border-radius:50px;font-size:0.73rem;font-weight:600;}
+    .status-badge.pending{background:rgba(245,158,11,0.15);color:var(--warning);}
+    .status-badge.approved{background:rgba(34,197,94,0.15);color:var(--success);}
+    .status-badge.rejected{background:rgba(239,68,68,0.15);color:var(--error);}
+    .status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+    .action-btn{background:none;border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:var(--text-muted);padding:0.28rem 0.6rem;font-size:0.73rem;cursor:pointer;transition:all 0.2s;font-family:'DM Sans',sans-serif;}
+    .action-btn:hover{border-color:var(--gold);color:var(--gold);}
+    .action-btn.approve:hover{border-color:var(--success);color:var(--success);}
+    .action-btn.reject:hover{border-color:var(--error);color:var(--error);}
+    .no-apps{text-align:center;padding:3rem;color:var(--text-muted);}
+    .dash-note{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:1rem 1.3rem;font-size:0.83rem;color:var(--gold-light);margin-bottom:1.5rem;display:flex;gap:10px;align-items:flex-start;}
+
+    /* MODAL */
+    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .modal-overlay.open{display:flex;}
+    .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2rem;max-width:600px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.3rem;cursor:pointer;}
+    .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.3rem;padding-right:2rem;}
+    .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
+    .modal-field{background:var(--surface2);border-radius:8px;padding:0.8rem;}
+    .modal-field-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;}
+    .modal-field-value{font-size:0.88rem;font-weight:500;}
+    .modal-field.full{grid-column:1/-1;}
+    .modal-actions{display:flex;gap:0.8rem;margin-top:1.2rem;justify-content:flex-end;}
+
+    /* WHATSAPP FLOAT */
+    .wa-float{position:fixed;bottom:1.8rem;right:1.8rem;z-index:300;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s,box-shadow 0.2s;}
+    .wa-float:hover{transform:scale(1.1);box-shadow:0 8px 30px rgba(37,211,102,0.5);}
+    .wa-tooltip{position:absolute;right:62px;background:var(--surface);color:var(--text);padding:0.35rem 0.85rem;border-radius:8px;font-size:0.78rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;border:1px solid rgba(255,255,255,0.1);}
+    .wa-float:hover .wa-tooltip{opacity:1;}
+
+    /* TOAST */
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);padding:0.85rem 1.4rem;border-radius:var(--radius);font-size:0.87rem;font-weight:500;z-index:999;opacity:0;transition:all 0.4s ease;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+    .toast.success{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;}
+    .toast.error{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;}
+
+    footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,0.06);padding:2rem 5%;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between;}
+    .footer-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:700;}
+    .footer-copy{font-size:0.8rem;color:var(--text-muted);}
+    .footer-links{display:flex;gap:1.2rem;}
+    .footer-links a,.footer-links button{font-size:0.8rem;color:var(--text-muted);text-decoration:none;background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
+    .footer-links a:hover,.footer-links button:hover{color:var(--gold);}
+
+    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+    .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
+    .fade-up.visible{opacity:1;transform:translateY(0);}
+
+    @media(max-width:960px){.hero-visual{display:none;}.apply-layout{grid-template-columns:1fr;gap:2rem;}.contact-grid{grid-template-columns:1fr;}.modal-grid{grid-template-columns:1fr;}}
+    @media(max-width:768px){.nav-links{display:none;}.nav-hamburger{display:block;}.form-row{grid-template-columns:1fr;}.hero-stats{gap:1.5rem;flex-wrap:wrap;}.dash-controls{flex-direction:column;}.apps-table th:nth-child(5),.apps-table td:nth-child(5){display:none;}}
+    @media(max-width:480px){.apps-table th:nth-child(3),.apps-table td:nth-child(3){display:none;}.mini-stats{flex-direction:column;}}
   </style>
 </head>
 <body>
 
-<!-- ── NAV ── -->
+<!-- NAV -->
 <nav>
-  <a href="#" class="logo">
-    <div class="logo-icon">₱</div>
-    Phindu
-  </a>
+  <div class="logo" onclick="showPage('home')">
+    <div class="logo-icon">₱</div>Phindu
+  </div>
   <ul class="nav-links">
-    <li><a href="#loans">Loan Types</a></li>
-    <li><a href="#how">How It Works</a></li>
-    <li><a href="#apply">Apply Now</a></li>
-    <li><a href="#apply" class="nav-cta">Get Started</a></li>
+    <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
+    <li><button onclick="showPage('loans')" id="nav-loans">Loan Types</button></li>
+    <li><button onclick="showPage('apply')" id="nav-apply">Apply</button></li>
+    <li><button onclick="showPage('contact')" id="nav-contact">Contact</button></li>
+    <li><button onclick="showPage('dashboard')" id="nav-dashboard">Dashboard</button></li>
+    <li><button onclick="showPage('apply')" class="nav-cta">Apply Now</button></li>
   </ul>
+  <button class="nav-hamburger" onclick="toggleMenu()">☰</button>
 </nav>
+<div class="nav-mobile" id="mobileMenu">
+  <button onclick="showPage('home');toggleMenu()">Home</button>
+  <button onclick="showPage('loans');toggleMenu()">Loan Types</button>
+  <button onclick="showPage('apply');toggleMenu()">Apply Now</button>
+  <button onclick="showPage('contact');toggleMenu()">Contact</button>
+  <button onclick="showPage('dashboard');toggleMenu()">Dashboard</button>
+</div>
 
-<!-- ── HERO ── -->
-<section class="hero">
-  <div class="hero-bg"></div>
-  <div class="hero-grid"></div>
-  <div class="hero-content">
-    <div class="hero-badge">
-      <div class="badge-dot"></div>
-      Fast Approvals · Trusted by Thousands
-    </div>
-    <h1>Finance Your <span class="highlight">Dreams</span> With Phindu Loans</h1>
-    <p class="hero-desc">Quick, transparent, and flexible loans for every Malawian. Apply in minutes using your National ID — no lengthy paperwork, no hidden fees.</p>
-    <div class="hero-actions">
-      <a href="#apply" class="btn-primary">Apply Now →</a>
-      <a href="#loans" class="btn-secondary">View Loan Types</a>
-    </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-number">5K+</div>
-        <div class="stat-label">Loans Disbursed</div>
+<!-- ════════ PAGE: HOME ════════ -->
+<div class="page active" id="page-home">
+  <div class="hero-wrap">
+    <div class="hero-bg"></div><div class="hero-grid"></div>
+    <div class="hero-content">
+      <div class="hero-badge"><div class="badge-dot"></div>Fast Approvals · Trusted in Malawi</div>
+      <h1>Finance Your <span class="highlight">Dreams</span> With Phindu Loans</h1>
+      <p class="hero-desc">Quick, transparent, and flexible loans for every Malawian. Apply in minutes using your National ID — no lengthy paperwork, no hidden fees.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('apply')">Apply Now →</button>
+        <button class="btn-secondary" onclick="showPage('loans')">View Loan Types</button>
       </div>
-      <div class="stat">
-        <div class="stat-number">24h</div>
-        <div class="stat-label">Avg. Approval Time</div>
-      </div>
-      <div class="stat">
-        <div class="stat-number">98%</div>
-        <div class="stat-label">Customer Satisfaction</div>
+      <div class="hero-stats">
+        <div><div class="stat-number">5K+</div><div class="stat-label">Loans Disbursed</div></div>
+        <div><div class="stat-number">24h</div><div class="stat-label">Avg. Approval</div></div>
+        <div><div class="stat-number">98%</div><div class="stat-label">Satisfaction</div></div>
       </div>
     </div>
-  </div>
-
-  <div class="hero-visual">
-    <div class="card-float">
-      <div class="card-header">
-        <span class="card-label">Active Loan</span>
-        <span class="card-badge">✓ Approved</span>
-      </div>
-      <div class="loan-amount">MK 500,000</div>
-      <div class="loan-period">12 months · Personal Loan</div>
-      <div class="progress-label">
-        <span>Repayment Progress</span>
-        <span>65%</span>
-      </div>
-      <div class="progress-bar"><div class="progress-fill"></div></div>
-      <div class="mini-stats">
-        <div class="mini-stat">
-          <div class="mini-stat-val">MK 41,667</div>
-          <div class="mini-stat-lbl">Monthly</div>
-        </div>
-        <div class="mini-stat">
-          <div class="mini-stat-val">4.5%</div>
-          <div class="mini-stat-lbl">Interest</div>
-        </div>
-        <div class="mini-stat">
-          <div class="mini-stat-val">5 Left</div>
-          <div class="mini-stat-lbl">Payments</div>
+    <div class="hero-visual">
+      <div class="card-float">
+        <div class="card-header"><span class="card-label">Active Loan</span><span class="card-badge">✓ Approved</span></div>
+        <div class="loan-amount-disp">MK 500,000</div>
+        <div class="loan-period-disp">12 months · Personal Loan</div>
+        <div class="progress-label"><span>Repayment Progress</span><span>65%</span></div>
+        <div class="progress-bar"><div class="progress-fill"></div></div>
+        <div class="mini-stats">
+          <div class="mini-stat"><div class="mini-stat-val">MK 41,667</div><div class="mini-stat-lbl">Monthly</div></div>
+          <div class="mini-stat"><div class="mini-stat-val">4.5%</div><div class="mini-stat-lbl">Interest</div></div>
+          <div class="mini-stat"><div class="mini-stat-val">5 Left</div><div class="mini-stat-lbl">Payments</div></div>
         </div>
       </div>
     </div>
   </div>
-</section>
+  <div class="page-section alt">
+    <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Our Products</div><h2>Loans For Every Need</h2></div>
+    <div class="loans-grid">
+      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">👤</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, or any need. Fast approval.</p><div class="loan-meta"><span>Up to MK 2M</span><span>4.5% pa</span></div></div>
+      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">🏢</div><h3>Business Loan</h3><p>Grow your business with working capital or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>6% pa</span></div></div>
+      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">🚨</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial emergency.</p><div class="loan-meta"><span>Up to MK 500K</span><span>5% pa</span></div></div>
+    </div>
+    <div style="text-align:center;margin-top:2rem;"><button class="btn-secondary" onclick="showPage('loans')">See Full Details →</button></div>
+  </div>
+  <div class="page-section">
+    <div class="section-label">Process</div><h2>Simple 4-Step Process</h2>
+    <div class="steps-grid">
+      <div class="step fade-up"><div class="step-num">1</div><h3>Fill the Form</h3><p>Complete the application with your details, National ID and collateral.</p></div>
+      <div class="step fade-up"><div class="step-num">2</div><h3>We Review</h3><p>Our team verifies your identity and collateral value.</p></div>
+      <div class="step fade-up"><div class="step-num">3</div><h3>Get Approval</h3><p>Receive approval within 24 hours via phone or email.</p></div>
+      <div class="step fade-up"><div class="step-num">4</div><h3>Receive Funds</h3><p>Funds disbursed to your mobile wallet or bank account.</p></div>
+    </div>
+  </div>
+  <footer>
+    <div class="footer-logo">Phindu Loans</div>
+    <div class="footer-copy">© 2026 Phindu Loans. All rights reserved. Lilongwe, Malawi.</div>
+    <div class="footer-links"><button onclick="showPage('contact')">Contact</button><button onclick="showPage('apply')">Apply</button></div>
+  </footer>
+</div>
 
-<!-- ── LOAN TYPES ── -->
-<section id="loans">
-  <div class="loans-header">
+<!-- ════════ PAGE: LOAN TYPES ════════ -->
+<div class="page" id="page-loans">
+  <div class="page-section">
     <div class="section-label">Our Products</div>
-    <h2>Loans For Every Need</h2>
-    <p class="section-desc">Whether it's personal, business, emergency, or education — we have the right loan product for you.</p>
-  </div>
-  <div class="loans-grid">
-    <div class="loan-card fade-up">
-      <div class="loan-icon">👤</div>
-      <h3>Personal Loan</h3>
-      <p>For personal expenses, home improvements, travel, or any personal need. Fast approval with minimal requirements.</p>
-      <div class="loan-meta"><span>Up to MK 2M</span><span>4.5% pa</span></div>
+    <h2>All Loan Types</h2>
+    <p class="section-desc">All loans require a valid National ID and collateral of higher value than the requested loan amount.</p>
+    <div class="loans-grid" style="margin-top:2.5rem;">
+      <div class="loan-card fade-up"><div class="loan-icon">👤</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, travel, medical bills, or any personal need. Fast approval with minimal requirements.</p><div class="loan-meta"><span>Up to MK 2M</span><span>4.5% pa</span></div><div style="margin-top:0.8rem;font-size:0.78rem;color:var(--text-muted);">Collateral required · National ID · 3–24 months</div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
+      <div class="loan-card fade-up"><div class="loan-icon">🏢</div><h3>Business Loan</h3><p>Grow your business with working capital, equipment financing, or expansion funds. Flexible repayment terms up to 36 months.</p><div class="loan-meta"><span>Up to MK 10M</span><span>6% pa</span></div><div style="margin-top:0.8rem;font-size:0.78rem;color:var(--text-muted);">Collateral required · National ID · 6–36 months</div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
+      <div class="loan-card fade-up"><div class="loan-icon">🚨</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial crisis. Simplified process for quick disbursal to your account.</p><div class="loan-meta"><span>Up to MK 500K</span><span>5% pa</span></div><div style="margin-top:0.8rem;font-size:0.78rem;color:var(--text-muted);">Collateral required · National ID · 1–12 months</div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
     </div>
-    <div class="loan-card fade-up">
-      <div class="loan-icon">🏢</div>
-      <h3>Business Loan</h3>
-      <p>Grow your business with working capital, equipment financing, or expansion funds. Flexible repayment terms.</p>
-      <div class="loan-meta"><span>Up to MK 10M</span><span>6% pa</span></div>
-    </div>
-    <div class="loan-card fade-up">
-      <div class="loan-icon">🚨</div>
-      <h3>Emergency Loan</h3>
-      <p>Access urgent funds within hours during a financial emergency. Simplified process for quick disbursal.</p>
-      <div class="loan-meta"><span>Up to MK 500K</span><span>5% pa</span></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ── HOW IT WORKS ── -->
-<section id="how">
-  <div class="section-label">Process</div>
-  <h2>Simple 4-Step Process</h2>
-  <p class="section-desc">Getting a loan with Phindu has never been easier. Follow these steps to get funded.</p>
-  <div class="steps-grid">
-    <div class="step fade-up">
-      <div class="step-num">1</div>
-      <h3>Fill the Form</h3>
-      <p>Complete our online application form with your personal details and National ID number.</p>
-    </div>
-    <div class="step fade-up">
-      <div class="step-num">2</div>
-      <h3>We Review</h3>
-      <p>Our team reviews your application and verifies your identity through your National ID.</p>
-    </div>
-    <div class="step fade-up">
-      <div class="step-num">3</div>
-      <h3>Get Approval</h3>
-      <p>Receive your loan approval notification via phone or email within 24 hours.</p>
-    </div>
-    <div class="step fade-up">
-      <div class="step-num">4</div>
-      <h3>Receive Funds</h3>
-      <p>Approved funds are disbursed directly to your mobile wallet or bank account.</p>
+    <div style="margin-top:3rem;background:var(--surface);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius);padding:2rem;">
+      <div class="section-label">Requirements</div><h2 style="font-size:1.5rem;">What You Need to Apply</h2>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1rem;margin-top:1.5rem;">
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:32px;height:32px;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🪪</div><div><strong style="font-size:0.9rem;display:block;">National ID</strong><span style="font-size:0.8rem;color:var(--text-muted);">Valid Malawi National ID card</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:32px;height:32px;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">🏠</div><div><strong style="font-size:0.9rem;display:block;">Collateral</strong><span style="font-size:0.8rem;color:var(--text-muted);">Item of value exceeding loan amount</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:32px;height:32px;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">💼</div><div><strong style="font-size:0.9rem;display:block;">Proof of Income</strong><span style="font-size:0.8rem;color:var(--text-muted);">Employment or business income</span></div></div>
+        <div style="display:flex;gap:10px;align-items:flex-start;"><div style="width:32px;height:32px;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">📱</div><div><strong style="font-size:0.9rem;display:block;">Phone Number</strong><span style="font-size:0.8rem;color:var(--text-muted);">Active Malawi mobile number</span></div></div>
+      </div>
     </div>
   </div>
-</section>
+  <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
+</div>
 
-<!-- ── APPLICATION FORM ── -->
-<section id="apply">
-  <div class="form-layout">
-    <div class="form-info fade-up">
-      <div class="section-label">Apply Now</div>
-      <h2>Start Your Application</h2>
-      <p class="section-desc">Fill in the form and our team will get back to you within 24 hours. Your information is kept strictly confidential.</p>
-      <div class="info-points" style="margin-top: 2rem;">
-        <div class="info-point">
-          <div class="info-point-icon">🔒</div>
-          <div class="info-point-text">
-            <h4>Secure & Confidential</h4>
-            <p>Your personal and financial data is protected and never shared with third parties.</p>
-          </div>
+<!-- ════════ PAGE: APPLY ════════ -->
+<div class="page" id="page-apply">
+  <div class="page-section">
+    <div class="apply-layout">
+      <div class="fade-up">
+        <div class="section-label">Apply Now</div><h2>Start Your Application</h2>
+        <p class="section-desc">Fill in the form and our team will contact you within 24 hours. All information is kept strictly confidential.</p>
+        <div class="form-info-points">
+          <div class="info-point"><div class="info-point-icon">🔒</div><div class="info-point-text"><h4>Secure & Confidential</h4><p>Your data is protected and never shared with third parties.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">⚡</div><div class="info-point-text"><h4>Fast Response</h4><p>Our team reviews applications within 24 hours.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">🏠</div><div class="info-point-text"><h4>Collateral Required</h4><p>Provide a valuable item exceeding the loan amount as security.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">🪪</div><div class="info-point-text"><h4>National ID Required</h4><p>Your Malawi National ID is needed for identity verification.</p></div></div>
         </div>
-        <div class="info-point">
-          <div class="info-point-icon">⚡</div>
-          <div class="info-point-text">
-            <h4>Fast Response</h4>
-            <p>Our team reviews applications within 24 hours and contacts you promptly.</p>
+      </div>
+      <div class="form-card fade-up">
+        <div class="form-title">Loan Application Form</div>
+        <div class="form-subtitle">Fields marked <span style="color:var(--gold)">*</span> are required</div>
+        <form id="loanForm" novalidate>
+          <div class="form-section-heading">Personal Information</div>
+          <div class="form-row">
+            <div class="field"><label>First Name <span>*</span></label><input type="text" id="firstName" placeholder="e.g. Chisomo"/><div class="field-error" id="err-firstName">Please enter your first name</div></div>
+            <div class="field"><label>Last Name <span>*</span></label><input type="text" id="lastName" placeholder="e.g. Banda"/><div class="field-error" id="err-lastName">Please enter your last name</div></div>
           </div>
-        </div>
-        <div class="info-point">
-          <div class="info-point-icon">📋</div>
-          <div class="info-point-text">
-            <h4>Minimal Requirements</h4>
-            <p>All you need is your National ID. No complex documents or guarantors required for most loans.</p>
+          <div class="form-row">
+            <div class="field"><label>Phone Number <span>*</span></label><input type="tel" id="phone" placeholder="e.g. +265 999 123 456"/><div class="field-error" id="err-phone">Enter a valid phone number</div></div>
+            <div class="field"><label>Email Address</label><input type="email" id="email" placeholder="yourname@email.com"/></div>
           </div>
+          <div class="field"><label>National ID Number <span>*</span></label><input type="text" id="nationalId" placeholder="e.g. MW-1234-5678-9012" style="letter-spacing:1px"/><div class="field-error" id="err-nationalId">Please enter your National ID number</div></div>
+          <div class="form-row">
+            <div class="field"><label>Date of Birth <span>*</span></label><input type="date" id="dob"/><div class="field-error" id="err-dob">Please select your date of birth</div></div>
+            <div class="field"><label>Gender</label><select id="gender"><option value="">Select gender</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
+          </div>
+          <div class="field"><label>Home Address <span>*</span></label><input type="text" id="address" placeholder="e.g. Area 25, Lilongwe"/><div class="field-error" id="err-address">Please enter your address</div></div>
+
+          <div class="form-section-heading">Loan Details</div>
+          <div class="form-row">
+            <div class="field"><label>Loan Type <span>*</span></label><select id="loanType"><option value="">Select loan type</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select><div class="field-error" id="err-loanType">Please select a loan type</div></div>
+            <div class="field"><label>Loan Amount (MK) <span>*</span></label><input type="number" id="loanAmount" placeholder="e.g. 200000" min="1000" oninput="updateCollateralHint()"/><div class="field-error" id="err-loanAmount">Please enter the loan amount</div></div>
+          </div>
+          <div class="form-row">
+            <div class="field"><label>Repayment Period <span>*</span></label><select id="repayPeriod"><option value="">Select period</option><option>3 months</option><option>6 months</option><option>12 months</option><option>18 months</option><option>24 months</option><option>36 months</option></select><div class="field-error" id="err-repayPeriod">Please select a repayment period</div></div>
+            <div class="field"><label>Employment Status <span>*</span></label><select id="employment"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="field-error" id="err-employment">Please select employment status</div></div>
+          </div>
+          <div class="field"><label>Monthly Income (MK) <span>*</span></label><input type="number" id="income" placeholder="e.g. 150000"/><div class="field-error" id="err-income">Please enter your monthly income</div></div>
+          <div class="field"><label>Purpose of Loan <span>*</span></label><textarea id="purpose" placeholder="Briefly describe why you need this loan..."></textarea><div class="field-error" id="err-purpose">Please describe the purpose</div></div>
+
+          <div class="form-section-heading">Collateral Information</div>
+          <div class="field">
+            <label>Collateral Item <span>*</span></label>
+            <input type="text" id="collateralItem" placeholder="e.g. Motor Vehicle, Land Title, Electronics, Livestock"/>
+            <div class="collateral-note" id="collateralNote">⚠ Collateral must be a valuable item worth MORE than your loan amount.</div>
+            <div class="field-error" id="err-collateralItem">Please describe your collateral item</div>
+          </div>
+          <div class="field">
+            <label>Estimated Collateral Value (MK) <span>*</span></label>
+            <input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkCollateral()"/>
+            <div class="field-error" id="err-collateralValue">Collateral value must exceed the loan amount</div>
+          </div>
+          <div class="field"><label>Collateral Description <span>*</span></label><textarea id="collateralDesc" placeholder="Describe the item in detail — make, model, condition, location, etc."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
+
+          <button type="submit" class="submit-btn" id="submitBtn">
+            <div class="spinner" id="spinner"></div>
+            <span id="btnText">Submit Application →</span>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+  <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('contact')">Contact</button></div></footer>
+</div>
+
+<!-- ════════ PAGE: CONTACT ════════ -->
+<div class="page" id="page-contact">
+  <div class="page-section">
+    <div class="section-label">Get In Touch</div>
+    <h2>Contact Us</h2>
+    <p class="section-desc">We're here to help every step of the way. Reach out via phone, WhatsApp, or visit our office in Lilongwe.</p>
+    <div class="contact-grid">
+      <div class="contact-card fade-up">
+        <h3>📞 Phone & WhatsApp</h3>
+        <div class="contact-item"><div class="contact-icon">📱</div><div class="contact-item-text"><strong>Phone Line 1</strong><a href="tel:+265994016935">+265 994 016 935</a></div></div>
+        <div class="contact-item"><div class="contact-icon">📱</div><div class="contact-item-text"><strong>Phone Line 2</strong><a href="tel:+265996275586">+265 996 275 586</a></div></div>
+        <div class="contact-item"><div class="contact-icon">💬</div><div class="contact-item-text"><strong>WhatsApp Support</strong><a href="https://wa.me/265998337818" target="_blank">+265 998 337 818</a></div></div>
+        <a href="https://wa.me/265998337818" target="_blank" class="wa-btn-big">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+          Chat on WhatsApp
+        </a>
+      </div>
+      <div class="contact-card fade-up">
+        <h3>📍 Our Location</h3>
+        <div class="contact-item"><div class="contact-icon">🏢</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
+        <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-item-text"><strong>Business Hours</strong>Monday – Friday: 8:00 AM – 5:00 PM<br/>Saturday: 9:00 AM – 1:00 PM</div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Applications Email</strong>youngduwa265@gmail.com</div></div>
+        <div class="map-box">
+          <span style="font-size:2rem;">📍</span>
+          <p style="font-size:0.85rem;color:var(--text-muted);text-align:center;">Lilongwe, Malawi<br/><a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.8rem;">Open in Google Maps →</a></p>
         </div>
       </div>
     </div>
-
-    <div class="form-card fade-up">
-      <div class="form-title">Loan Application Form</div>
-      <div class="form-subtitle">Fields marked <span style="color:var(--gold)">*</span> are required</div>
-
-      <form id="loanForm" novalidate>
-
-        <div class="form-section-heading">Personal Information</div>
-
-        <div class="form-row">
-          <div class="field">
-            <label>First Name <span>*</span></label>
-            <input type="text" id="firstName" placeholder="e.g. Chisomo" />
-            <div class="field-error" id="err-firstName">Please enter your first name</div>
-          </div>
-          <div class="field">
-            <label>Last Name <span>*</span></label>
-            <input type="text" id="lastName" placeholder="e.g. Banda" />
-            <div class="field-error" id="err-lastName">Please enter your last name</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label>Phone Number <span>*</span></label>
-            <input type="tel" id="phone" placeholder="e.g. +265 999 123 456" />
-            <div class="field-error" id="err-phone">Enter a valid phone number</div>
-          </div>
-          <div class="field">
-            <label>Email Address</label>
-            <input type="email" id="email" placeholder="yourname@email.com" />
-          </div>
-        </div>
-
-        <div class="field">
-          <label>National ID Number <span>*</span></label>
-          <input type="text" id="nationalId" placeholder="e.g. MW-1234-5678-9012" style="letter-spacing:1px;" />
-          <div class="field-error" id="err-nationalId">Please enter your National ID number</div>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label>Date of Birth <span>*</span></label>
-            <input type="date" id="dob" />
-            <div class="field-error" id="err-dob">Please select your date of birth</div>
-          </div>
-          <div class="field">
-            <label>Gender</label>
-            <select id="gender">
-              <option value="">Select gender</option>
-              <option>Male</option>
-              <option>Female</option>
-              <option>Prefer not to say</option>
-            </select>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Home Address <span>*</span></label>
-          <input type="text" id="address" placeholder="e.g. Area 25, Lilongwe" />
-          <div class="field-error" id="err-address">Please enter your address</div>
-        </div>
-
-        <div class="form-section-heading">Loan Details</div>
-
-        <div class="form-row">
-          <div class="field">
-            <label>Loan Type <span>*</span></label>
-            <select id="loanType">
-              <option value="">Select loan type</option>
-              <option>Personal Loan</option>
-              <option>Business Loan</option>
-              <option>Emergency Loan</option>
-            </select>
-            <div class="field-error" id="err-loanType">Please select a loan type</div>
-          </div>
-          <div class="field">
-            <label>Loan Amount (MK) <span>*</span></label>
-            <input type="number" id="loanAmount" placeholder="e.g. 200000" min="1000" />
-            <div class="field-error" id="err-loanAmount">Please enter the loan amount</div>
-          </div>
-        </div>
-
-        <div class="form-row">
-          <div class="field">
-            <label>Repayment Period <span>*</span></label>
-            <select id="repayPeriod">
-              <option value="">Select period</option>
-              <option>3 months</option>
-              <option>6 months</option>
-              <option>12 months</option>
-              <option>18 months</option>
-              <option>24 months</option>
-              <option>36 months</option>
-            </select>
-            <div class="field-error" id="err-repayPeriod">Please select a repayment period</div>
-          </div>
-          <div class="field">
-            <label>Employment Status <span>*</span></label>
-            <select id="employment">
-              <option value="">Select status</option>
-              <option>Employed (Formal)</option>
-              <option>Self Employed</option>
-              <option>Business Owner</option>
-              <option>Student</option>
-              <option>Other</option>
-            </select>
-            <div class="field-error" id="err-employment">Please select employment status</div>
-          </div>
-        </div>
-
-        <div class="field">
-          <label>Monthly Income (MK) <span>*</span></label>
-          <input type="number" id="income" placeholder="e.g. 150000" />
-          <div class="field-error" id="err-income">Please enter your monthly income</div>
-        </div>
-
-        <div class="field">
-          <label>Purpose of Loan <span>*</span></label>
-          <textarea id="purpose" placeholder="Briefly describe why you need this loan..."></textarea>
-          <div class="field-error" id="err-purpose">Please describe the purpose</div>
-        </div>
-
-        <button type="submit" class="submit-btn" id="submitBtn">
-          <div class="spinner" id="spinner"></div>
-          <span id="btnText">Submit Application →</span>
-        </button>
-
-      </form>
+    <div style="text-align:center;margin-top:3rem;background:var(--surface);border:1px solid rgba(201,168,76,0.15);border-radius:var(--radius);padding:2.5rem;">
+      <h2 style="font-size:1.6rem;margin-bottom:0.5rem;">Ready to Apply?</h2>
+      <p style="color:var(--text-muted);margin-bottom:1.5rem;font-size:0.95rem;">Start your loan application today — it only takes a few minutes.</p>
+      <button class="btn-primary" onclick="showPage('apply')">Start Application →</button>
     </div>
   </div>
-</section>
+  <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved. Lilongwe, Malawi.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
+</div>
 
-<!-- ── FOOTER ── -->
-<footer>
-  <div class="footer-logo">Phindu Loans</div>
-  <div class="footer-copy">© 2026 Phindu Loans. All rights reserved. Malawi.</div>
-  <div class="footer-links">
-    <a href="#">Privacy Policy</a>
-    <a href="#">Terms & Conditions</a>
-    <a href="#">Contact Us</a>
+<!-- ════════ PAGE: DASHBOARD ════════ -->
+<div class="page" id="page-dashboard">
+  <div class="page-section">
+    <div class="dash-header">
+      <div><div class="section-label">Admin</div><h2>Applications Dashboard</h2></div>
+      <button class="btn-secondary" onclick="exportCSV()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">⬇ Export CSV</button>
+    </div>
+    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here. They are also emailed automatically to <strong>youngduwa265@gmail.com</strong>.</span></div>
+    <div class="dash-stats">
+      <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
+      <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
+      <div class="dash-stat approved"><div class="dash-stat-num" id="stat-approved">0</div><div class="dash-stat-label">Approved</div></div>
+      <div class="dash-stat rejected"><div class="dash-stat-num" id="stat-rejected">0</div><div class="dash-stat-label">Rejected</div></div>
+    </div>
+    <div class="dash-controls">
+      <input class="dash-search" type="text" id="dashSearch" placeholder="🔍  Search by name, ID, phone..." oninput="renderTable()"/>
+      <select class="dash-filter" id="filterType" onchange="renderTable()"><option value="">All Loan Types</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select>
+      <select class="dash-filter" id="filterStatus" onchange="renderTable()"><option value="">All Statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+      <select class="dash-filter" id="filterDate" onchange="renderTable()"><option value="">All Time</option><option value="today">Today</option><option value="week">This Week</option><option value="month">This Month</option></select>
+    </div>
+    <div class="table-wrap">
+      <table class="apps-table">
+        <thead><tr><th>#</th><th>Applicant</th><th>Loan Type</th><th>Amount</th><th>Collateral</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="appsTableBody"></tbody>
+      </table>
+      <div class="no-apps" id="noApps" style="display:none;">
+        <div style="font-size:2.5rem;margin-bottom:0.8rem;">📋</div>
+        <p>No applications found.</p>
+        <p style="font-size:0.8rem;margin-top:0.4rem;color:var(--text-muted);">Submitted applications will appear here automatically.</p>
+      </div>
+    </div>
   </div>
-</footer>
+  <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('home')">Home</button></div></footer>
+</div>
 
-<!-- TOAST -->
+<!-- MODAL -->
+<div class="modal-overlay" id="appModal">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+    <div class="modal-title" id="modalTitle">Application Details</div>
+    <div class="modal-grid" id="modalBody"></div>
+    <div class="modal-actions" id="modalActions"></div>
+  </div>
+</div>
+
+<!-- WHATSAPP FLOAT -->
+<a href="https://wa.me/265998337818" target="_blank" class="wa-float">
+  <span class="wa-tooltip">Chat with us</span>
+  <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
 <div class="toast" id="toast"></div>
 
 <script>
-  // ── EmailJS Configuration ──────────────────────────────────
-  const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
-  const EMAILJS_SERVICE_ID  = "service_zunei3e";
-  const EMAILJS_TEMPLATE_ID = "template_4m5wthi";
+const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
+const EMAILJS_SERVICE_ID  = "service_zunei3e";
+const EMAILJS_TEMPLATE_ID = "template_4m5wthi";
+emailjs.init(EMAILJS_PUBLIC_KEY);
 
-  emailjs.init(EMAILJS_PUBLIC_KEY);
-
-  // ── Intersection Observer for animations ──────────────────
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
-  }, { threshold: 0.1 });
-  document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
-
-  // ── Validation ────────────────────────────────────────────
-  function validate() {
-    const required = [
-      'firstName','lastName','phone','nationalId','dob',
-      'address','loanType','loanAmount','repayPeriod','employment','income','purpose'
-    ];
-    let valid = true;
-    required.forEach(id => {
-      const el = document.getElementById(id);
-      const err = document.getElementById('err-' + id);
-      if (!el.value.trim()) {
-        el.classList.add('error');
-        if (err) err.classList.add('show');
-        valid = false;
-      } else {
-        el.classList.remove('error');
-        if (err) err.classList.remove('show');
+// ── PAGE NAVIGATION ──────────────────────────────────────────
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(b => b.classList.remove('active'));
+  document.getElementById('page-' + name).classList.add('active');
+  const nb = document.getElementById('nav-' + name);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0, 0);
+  if (name === 'dashboard') { renderTable(); updateStats(); }
+  setTimeout(() => {
+    document.querySelectorAll('#page-' + name + ' .fade-up').forEach(el => {
+      if (!el.classList.contains('visible')) {
+        const o = new IntersectionObserver(entries => { entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.08 });
+        o.observe(el);
       }
     });
-    return valid;
+  }, 60);
+}
+
+function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+
+// ── COLLATERAL ───────────────────────────────────────────────
+function updateCollateralHint() {
+  const amt = Number(document.getElementById('loanAmount').value);
+  document.getElementById('collateralNote').textContent = amt > 0
+    ? `⚠ Your collateral must be worth MORE than MK ${amt.toLocaleString()}`
+    : '⚠ Collateral must be a valuable item worth MORE than your loan amount.';
+}
+
+function checkCollateral() {
+  const loan = Number(document.getElementById('loanAmount').value);
+  const coll = Number(document.getElementById('collateralValue').value);
+  const err  = document.getElementById('err-collateralValue');
+  const inp  = document.getElementById('collateralValue');
+  if (loan > 0 && coll > 0 && coll <= loan) {
+    inp.classList.add('error');
+    err.textContent = `Collateral (MK ${coll.toLocaleString()}) must exceed loan (MK ${loan.toLocaleString()})`;
+    err.classList.add('show');
+  } else { inp.classList.remove('error'); err.classList.remove('show'); }
+}
+
+// ── VALIDATION ───────────────────────────────────────────────
+function validate() {
+  const required = ['firstName','lastName','phone','nationalId','dob','address',
+    'loanType','loanAmount','repayPeriod','employment','income','purpose',
+    'collateralItem','collateralValue','collateralDesc'];
+  let valid = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    const err = document.getElementById('err-' + id);
+    if (!el.value.trim()) {
+      el.classList.add('error');
+      if (err && id !== 'collateralValue') err.classList.add('show');
+      valid = false;
+    } else { el.classList.remove('error'); if (err) err.classList.remove('show'); }
+  });
+  const loan = Number(document.getElementById('loanAmount').value);
+  const coll = Number(document.getElementById('collateralValue').value);
+  if (coll > 0 && loan > 0 && coll <= loan) {
+    document.getElementById('collateralValue').classList.add('error');
+    const err = document.getElementById('err-collateralValue');
+    err.textContent = `Collateral (MK ${coll.toLocaleString()}) must exceed loan (MK ${loan.toLocaleString()})`;
+    err.classList.add('show'); valid = false;
   }
+  return valid;
+}
 
-  // ── Toast helper ──────────────────────────────────────────
-  function showToast(msg, type) {
-    const t = document.getElementById('toast');
-    t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
-    t.className = `toast ${type} show`;
-    setTimeout(() => t.classList.remove('show'), 5500);
+// ── TOAST ────────────────────────────────────────────────────
+function showToast(msg, type) {
+  const t = document.getElementById('toast');
+  t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
+  t.className = `toast ${type} show`;
+  setTimeout(() => t.classList.remove('show'), 5500);
+}
+
+// ── LOCAL STORAGE ────────────────────────────────────────────
+function getApps() { try { return JSON.parse(localStorage.getItem('phindu_apps') || '[]'); } catch { return []; } }
+function saveApps(a) { localStorage.setItem('phindu_apps', JSON.stringify(a)); }
+
+// ── FORM SUBMIT ──────────────────────────────────────────────
+document.getElementById('loanForm').addEventListener('submit', async function(e) {
+  e.preventDefault();
+  if (!validate()) return;
+  const btn = document.getElementById('submitBtn');
+  const spinner = document.getElementById('spinner');
+  const btnText = document.getElementById('btnText');
+  btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Submitting...';
+
+  const app = {
+    id: 'PL-' + Date.now(),
+    firstName: document.getElementById('firstName').value,
+    lastName: document.getElementById('lastName').value,
+    phone: document.getElementById('phone').value,
+    email: document.getElementById('email').value || 'Not provided',
+    nationalId: document.getElementById('nationalId').value,
+    dob: document.getElementById('dob').value,
+    gender: document.getElementById('gender').value || 'Not specified',
+    address: document.getElementById('address').value,
+    loanType: document.getElementById('loanType').value,
+    loanAmount: document.getElementById('loanAmount').value,
+    repayPeriod: document.getElementById('repayPeriod').value,
+    employment: document.getElementById('employment').value,
+    income: document.getElementById('income').value,
+    purpose: document.getElementById('purpose').value,
+    collateralItem: document.getElementById('collateralItem').value,
+    collateralValue: document.getElementById('collateralValue').value,
+    collateralDesc: document.getElementById('collateralDesc').value,
+    submittedAt: new Date().toLocaleString('en-MW', { timeZone: 'Africa/Blantyre' }),
+    status: 'pending',
+  };
+
+  const params = {
+    applicant_name: `${app.firstName} ${app.lastName}`,
+    national_id: app.nationalId, phone: app.phone, email: app.email,
+    dob: app.dob, gender: app.gender, address: app.address,
+    loan_type: app.loanType,
+    loan_amount: `MK ${Number(app.loanAmount).toLocaleString()}`,
+    repay_period: app.repayPeriod, employment: app.employment,
+    income: `MK ${Number(app.income).toLocaleString()}`,
+    purpose: app.purpose,
+    collateral_item: app.collateralItem,
+    collateral_value: `MK ${Number(app.collateralValue).toLocaleString()}`,
+    collateral_desc: app.collateralDesc,
+    submitted_at: app.submittedAt, app_id: app.id,
+  };
+
+  try {
+    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
+    const apps = getApps(); apps.unshift(app); saveApps(apps);
+    showToast('Application submitted! We will contact you within 24 hours.', 'success');
+    document.getElementById('loanForm').reset();
+    updateCollateralHint();
+  } catch (err) {
+    showToast('Submission failed. Please try again or call us directly.', 'error');
+    console.error(err);
+  } finally {
+    btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Submit Application →';
   }
+});
 
-  // ── Submit via EmailJS ───────────────────────────────────
-  document.getElementById('loanForm').addEventListener('submit', async function(e) {
-    e.preventDefault();
-    if (!validate()) return;
+// ── DASHBOARD ────────────────────────────────────────────────
+function updateStats() {
+  const apps = getApps();
+  document.getElementById('stat-total').textContent    = apps.length;
+  document.getElementById('stat-pending').textContent  = apps.filter(a => a.status==='pending').length;
+  document.getElementById('stat-approved').textContent = apps.filter(a => a.status==='approved').length;
+  document.getElementById('stat-rejected').textContent = apps.filter(a => a.status==='rejected').length;
+}
 
-    const btn     = document.getElementById('submitBtn');
-    const spinner = document.getElementById('spinner');
-    const btnText = document.getElementById('btnText');
+function renderTable() {
+  const apps    = getApps();
+  const search  = (document.getElementById('dashSearch').value || '').toLowerCase();
+  const typeF   = document.getElementById('filterType').value;
+  const statusF = document.getElementById('filterStatus').value;
+  const dateF   = document.getElementById('filterDate').value;
+  const now     = new Date();
 
-    btn.disabled = true;
-    spinner.style.display = 'block';
-    btnText.textContent = 'Submitting...';
-
-    const params = {
-      applicant_name : `${document.getElementById('firstName').value} ${document.getElementById('lastName').value}`,
-      national_id    : document.getElementById('nationalId').value,
-      phone          : document.getElementById('phone').value,
-      email          : document.getElementById('email').value || 'Not provided',
-      dob            : document.getElementById('dob').value,
-      gender         : document.getElementById('gender').value || 'Not specified',
-      address        : document.getElementById('address').value,
-      loan_type      : document.getElementById('loanType').value,
-      loan_amount    : `MK ${Number(document.getElementById('loanAmount').value).toLocaleString()}`,
-      repay_period   : document.getElementById('repayPeriod').value,
-      employment     : document.getElementById('employment').value,
-      income         : `MK ${Number(document.getElementById('income').value).toLocaleString()}`,
-      purpose        : document.getElementById('purpose').value,
-      submitted_at   : new Date().toLocaleString('en-MW', { timeZone: 'Africa/Blantyre' }),
-    };
-
-    try {
-      await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-      showToast('Application submitted successfully! We will contact you within 24 hours.', 'success');
-      document.getElementById('loanForm').reset();
-    } catch (err) {
-      showToast('Submission failed. Please try again or call us directly.', 'error');
-      console.error(err);
-    } finally {
-      btn.disabled = false;
-      spinner.style.display = 'none';
-      btnText.textContent = 'Submit Application →';
+  const filtered = apps.filter(a => {
+    const name = `${a.firstName} ${a.lastName}`.toLowerCase();
+    if (search && !name.includes(search) && !(a.nationalId||'').toLowerCase().includes(search) && !(a.phone||'').includes(search)) return false;
+    if (typeF && a.loanType !== typeF) return false;
+    if (statusF && a.status !== statusF) return false;
+    if (dateF) {
+      const d = new Date(a.submittedAt);
+      if (dateF === 'today' && d.toDateString() !== now.toDateString()) return false;
+      if (dateF === 'week') { const w = new Date(now); w.setDate(now.getDate()-7); if (d < w) return false; }
+      if (dateF === 'month') { const m = new Date(now); m.setMonth(now.getMonth()-1); if (d < m) return false; }
     }
+    return true;
   });
 
-  // ── Clear field errors on input ───────────────────────────
-  document.querySelectorAll('input, select, textarea').forEach(el => {
-    el.addEventListener('input', () => {
-      el.classList.remove('error');
-      const err = document.getElementById('err-' + el.id);
-      if (err) err.classList.remove('show');
-    });
+  const tbody = document.getElementById('appsTableBody');
+  document.getElementById('noApps').style.display = filtered.length === 0 ? 'block' : 'none';
+
+  tbody.innerHTML = filtered.map((a, i) => `
+    <tr>
+      <td style="color:var(--text-muted);font-size:0.76rem;">${i+1}</td>
+      <td><div style="font-weight:600;font-size:0.88rem;">${a.firstName} ${a.lastName}</div><div style="font-size:0.74rem;color:var(--text-muted);">${a.phone}</div></td>
+      <td style="font-size:0.82rem;">${a.loanType}</td>
+      <td style="font-weight:600;color:var(--gold-light);">MK ${Number(a.loanAmount).toLocaleString()}</td>
+      <td style="font-size:0.8rem;">${a.collateralItem||'—'}</td>
+      <td style="font-size:0.76rem;color:var(--text-muted);">${a.submittedAt}</td>
+      <td><span class="status-badge ${a.status}"><span class="status-dot"></span>${a.status.charAt(0).toUpperCase()+a.status.slice(1)}</span></td>
+      <td style="display:flex;gap:4px;flex-wrap:wrap;">
+        <button class="action-btn" onclick="viewApp('${a.id}')">View</button>
+        <button class="action-btn approve" onclick="updateStatus('${a.id}','approved')">✓</button>
+        <button class="action-btn reject" onclick="updateStatus('${a.id}','rejected')">✗</button>
+      </td>
+    </tr>`).join('');
+  updateStats();
+}
+
+function updateStatus(id, status) {
+  const apps = getApps(); const app = apps.find(a => a.id===id);
+  if (!app) return; app.status = status; saveApps(apps); renderTable();
+  showToast(`Application ${status}.`, status==='approved'?'success':'error');
+}
+
+function viewApp(id) {
+  const app = getApps().find(a => a.id===id); if (!app) return;
+  document.getElementById('modalTitle').textContent = `${app.firstName} ${app.lastName} — Application`;
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-field"><div class="modal-field-label">Application ID</div><div class="modal-field-value" style="font-size:0.8rem;">${app.id}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge ${app.status}"><span class="status-dot"></span>${app.status}</span></div></div>
+    <div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">${app.firstName} ${app.lastName}</div></div>
+    <div class="modal-field"><div class="modal-field-label">National ID</div><div class="modal-field-value" style="letter-spacing:1px;">${app.nationalId}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Phone</div><div class="modal-field-value">${app.phone}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">${app.email}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">${app.dob}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">${app.gender}</div></div>
+    <div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">${app.address}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">${app.loanType}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">MK ${Number(app.loanAmount).toLocaleString()}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">${app.repayPeriod}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">${app.employment}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK ${Number(app.income).toLocaleString()}</div></div>
+    <div class="modal-field full"><div class="modal-field-label">Purpose</div><div class="modal-field-value">${app.purpose}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">${app.collateralItem}</div></div>
+    <div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK ${Number(app.collateralValue).toLocaleString()}</div></div>
+    <div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">${app.collateralDesc}</div></div>
+    <div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">${app.submittedAt}</div></div>`;
+  document.getElementById('modalActions').innerHTML = `
+    <button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus('${app.id}','approved');closeModal()">✓ Approve</button>
+    <button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus('${app.id}','rejected');closeModal()">✗ Reject</button>`;
+  document.getElementById('appModal').classList.add('open');
+}
+
+function closeModal() { document.getElementById('appModal').classList.remove('open'); }
+document.getElementById('appModal').addEventListener('click', function(e) { if(e.target===this) closeModal(); });
+
+// ── CSV EXPORT ───────────────────────────────────────────────
+function exportCSV() {
+  const apps = getApps();
+  if (!apps.length) { showToast('No applications to export.', 'error'); return; }
+  const h = ['ID','First Name','Last Name','Phone','Email','National ID','DOB','Gender','Address','Loan Type','Amount','Period','Employment','Income','Purpose','Collateral Item','Collateral Value','Collateral Desc','Submitted','Status'];
+  const rows = apps.map(a => [a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,`"${a.address}"`,a.loanType,a.loanAmount,a.repayPeriod,a.employment,a.income,`"${a.purpose}"`,`"${a.collateralItem}"`,a.collateralValue,`"${a.collateralDesc}"`,a.submittedAt,a.status].join(','));
+  const csv = [h.join(','), ...rows].join('\n');
+  const b = new Blob([csv],{type:'text/csv'}); const u = URL.createObjectURL(b);
+  const a = document.createElement('a'); a.href=u; a.download=`phindu-loans-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(u);
+}
+
+// ── CLEAR ERRORS ─────────────────────────────────────────────
+document.querySelectorAll('input,select,textarea').forEach(el => {
+  el.addEventListener('input', () => {
+    el.classList.remove('error');
+    const err = document.getElementById('err-' + el.id);
+    if (err) err.classList.remove('show');
   });
+});
+
+// ── INIT ANIMATIONS ──────────────────────────────────────────
+const globalObs = new IntersectionObserver(entries => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(el => globalObs.observe(el));
 </script>
-
 </body>
 </html>
