@@ -18,8 +18,11 @@
 
     /* NAV */
     nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(10,15,30,0.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,0.15);}
-    .logo{display:flex;align-items:center;gap:10px;font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:900;color:var(--gold);cursor:pointer;}
-    .logo-icon{width:36px;height:36px;background:linear-gradient(135deg,var(--gold),var(--gold-dark));border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:1rem;}
+    .logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+    .logo-shield{width:38px;height:38px;flex-shrink:0;}
+    .logo-text-wrap{display:flex;flex-direction:column;line-height:1;}
+    .logo-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--gold);letter-spacing:0.04em;}
+    .logo-sub{font-size:0.52rem;font-weight:600;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-top:2px;}
     .nav-links{display:flex;gap:0.3rem;list-style:none;align-items:center;}
     .nav-links button{color:var(--text-muted);font-size:0.88rem;font-weight:500;padding:0.45rem 0.9rem;border-radius:8px;border:none;background:none;cursor:pointer;transition:color 0.2s,background 0.2s;font-family:'DM Sans',sans-serif;}
     .nav-links button:hover{color:var(--text);background:rgba(255,255,255,0.06);}
@@ -261,7 +264,21 @@
 
 <!-- NAV -->
 <nav>
-  <div class="logo" onclick="showPage('home')"><div class="logo-icon">₱</div>Phindu</div>
+  <div class="logo" onclick="showPage('home')">
+    <svg class="logo-shield" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
+      <path d="M40,2 L78,2 L78,58 Q78,82 40,96 Q2,82 2,58 Z" fill="#C9A84C"/>
+      <path d="M40,10 L70,10 L70,58 Q70,76 40,88 Q10,76 10,58 Z" fill="#0A0F1E"/>
+      <circle cx="40" cy="51" r="18" fill="none" stroke="#C9A84C" stroke-width="2.5"/>
+      <text x="40" y="58" text-anchor="middle" font-size="18" font-weight="700" fill="#C9A84C" font-family="Arial,sans-serif">&#8369;</text>
+      <line x1="26" y1="18" x2="26" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="40" y1="18" x2="40" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
+      <line x1="54" y1="18" x2="54" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
+    </svg>
+    <div class="logo-text-wrap">
+      <span class="logo-name">Phindu</span>
+      <span class="logo-sub">Micro Finance</span>
+    </div>
+  </div>
   <ul class="nav-links">
     <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
     <li><button onclick="showPage('loans')" id="nav-loans">Loan Types</button></li>
@@ -514,7 +531,7 @@
         <h3>📍 Our Location</h3>
         <div class="contact-item"><div class="contact-icon">🏢</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
         <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-item-text"><strong>Business Hours</strong>Mon – Fri: 8:00 AM – 5:00 PM<br/>Saturday: 9:00 AM – 1:00 PM</div></div>
-        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Email</strong>youngduwa265@gmail.com</div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="3d445248535a59484a5c0f0b087d5a505c5451135e5250">[email&#160;protected]</a></div></div>
         <div class="map-box"><span style="font-size:2rem;">📍</span><p style="font-size:0.85rem;color:var(--text-muted);text-align:center;">Lilongwe, Malawi<br/><a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.8rem;">Open in Google Maps →</a></p></div>
       </div>
     </div>
@@ -545,7 +562,7 @@
         <button class="dash-logout-btn" onclick="lockDashboard()">🔒 Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here and also emailed automatically to <strong>youngduwa265@gmail.com</strong>.</span></div>
+    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here and also emailed automatically to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="552c3a203b3231202234676360153238343c397b363a38">[email&#160;protected]</a></strong>.</span></div>
     <div class="dash-stats">
       <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
       <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
@@ -587,7 +604,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── CONFIG ────────────────────────────────────────────────────
 const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 const EMAILJS_SERVICE_ID  = "service_zunei3e";
@@ -1029,11 +1046,4 @@ document.querySelectorAll('input,select,textarea').forEach(function(el) {
   });
 });
 
-// ── INIT ANIMATIONS ────────────────────────────────────────────
-var globalObs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08 });
-document.querySelectorAll('.fade-up').forEach(function(el) { globalObs.observe(el); });
-</script>
-</body>
-</html>
+// ── INIT ANIMATIONS ──────────────────────�
