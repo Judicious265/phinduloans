@@ -160,7 +160,8 @@
     .wa-btn-big:hover{transform:translateY(-2px);}
 
     /* DASHBOARD LOGIN */
-    .dash-login-overlay{position:fixed;inset:0;background:rgba(10,15,30,0.97);z-index:400;display:flex;align-items:center;justify-content:center;padding:1rem;}
+    .dash-login-overlay{position:fixed;inset:0;background:rgba(10,15,30,0.97);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .dash-login-overlay.open{display:flex;}
     .dash-login-box{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center;}
     .dash-login-icon{font-size:2.5rem;margin-bottom:1rem;}
     .dash-login-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:0.3rem;}
@@ -523,7 +524,7 @@
         <h3>📍 Our Location</h3>
         <div class="contact-item"><div class="contact-icon">🏢</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
         <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-item-text"><strong>Business Hours</strong>Monday – Friday: 8:00 AM – 5:00 PM<br/>Saturday: 9:00 AM – 1:00 PM</div></div>
-        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Applications Email</strong>youngduwa265@gmail.com</div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Applications Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0e77617b60696a7b796f3c383b4e69636f6762206d6163">[email&#160;protected]</a></div></div>
         <div class="map-box"><span style="font-size:2rem;">📍</span><p style="font-size:0.85rem;color:var(--text-muted);text-align:center;">Lilongwe, Malawi<br/><a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.8rem;">Open in Google Maps →</a></p></div>
       </div>
     </div>
@@ -554,7 +555,7 @@
         <button class="dash-logout-btn" onclick="lockDashboard()">🔒 Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here locally and also emailed to <strong>youngduwa265@gmail.com</strong> automatically.</span></div>
+    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here locally and also emailed to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3aabca6bdb4b7a6a4b2e1e5e693b4beb2babffdb0bcbe">[email&#160;protected]</a></strong> automatically.</span></div>
     <div class="dash-stats">
       <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
       <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
@@ -596,7 +597,7 @@
 
 <div class="toast" id="toast"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 // ── CONFIG ───────────────────────────────────────────────────
 const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 const EMAILJS_SERVICE_ID  = "service_zunei3e";
@@ -652,7 +653,7 @@ let dashUnlocked = false;
 function openDashboard() {
   showPage('dashboard');
   if (!dashUnlocked) {
-    document.getElementById('dashLoginOverlay').style.display = 'flex';
+    document.getElementById('dashLoginOverlay').classList.add('open');
     document.getElementById('dashPasswordInput').value = '';
     document.getElementById('dashLoginError').classList.remove('show');
     setTimeout(() => document.getElementById('dashPasswordInput').focus(), 100);
@@ -663,7 +664,7 @@ function checkDashPassword() {
   const val = document.getElementById('dashPasswordInput').value;
   if (val === ADMIN_PASSWORD) {
     dashUnlocked = true;
-    document.getElementById('dashLoginOverlay').style.display = 'none';
+    document.getElementById('dashLoginOverlay').classList.remove('open');
     renderTable(); updateStats();
   } else {
     document.getElementById('dashLoginError').classList.add('show');
@@ -674,7 +675,7 @@ function checkDashPassword() {
 
 function lockDashboard() {
   dashUnlocked = false;
-  document.getElementById('dashLoginOverlay').style.display = 'flex';
+  document.getElementById('dashLoginOverlay').classList.add('open');
   showToast('Dashboard locked.', 'info');
 }
 
@@ -995,11 +996,4 @@ document.querySelectorAll('input,select,textarea').forEach(el => {
   });
 });
 
-// ── INIT ANIMATIONS ──────────────────────────────────────────
-const globalObs = new IntersectionObserver(entries => {
-  entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); });
-}, { threshold: 0.08 });
-document.querySelectorAll('.fade-up').forEach(el => globalObs.observe(el));
-</script>
-</body>
-</html>
+// ── INIT ANIMATIONS ────────────�
