@@ -6,6 +6,7 @@
   <title>Phindu Loans — Fast. Simple. Trusted.</title>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+
   <style>
     :root {
       --gold: #C9A84C;
@@ -631,12 +632,7 @@
       <p>Access urgent funds within hours during a financial emergency. Simplified process for quick disbursal.</p>
       <div class="loan-meta"><span>Up to MK 500K</span><span>5% pa</span></div>
     </div>
-    <div class="loan-card fade-up">
-      <div class="loan-icon">🎓</div>
-      <h3>Education Loan</h3>
-      <p>Invest in knowledge. Cover tuition, books, accommodation and other education costs with ease.</p>
-      <div class="loan-meta"><span>Up to MK 3M</span><span>3.5% pa</span></div>
-    </div>
+
   </div>
 </section>
 
@@ -773,7 +769,6 @@
               <option>Personal Loan</option>
               <option>Business Loan</option>
               <option>Emergency Loan</option>
-              <option>Education Loan</option>
             </select>
             <div class="field-error" id="err-loanType">Please select a loan type</div>
           </div>
@@ -837,7 +832,7 @@
 <!-- ── FOOTER ── -->
 <footer>
   <div class="footer-logo">Phindu Loans</div>
-  <div class="footer-copy">© 2025 Phindu Loans. All rights reserved. Malawi.</div>
+  <div class="footer-copy">© 2026 Phindu Loans. All rights reserved. Malawi.</div>
   <div class="footer-links">
     <a href="#">Privacy Policy</a>
     <a href="#">Terms & Conditions</a>
@@ -850,29 +845,19 @@
 
 <script>
   // ── EmailJS Configuration ──────────────────────────────────
-  // STEP 1: Go to https://www.emailjs.com/ and create a free account
-  // STEP 2: Create an Email Service (Gmail, Outlook, etc.) — copy the Service ID
-  // STEP 3: Create an Email Template — copy the Template ID
-  //         In your template, use these variables:
-  //         {{applicant_name}}, {{national_id}}, {{phone}}, {{email}},
-  //         {{loan_type}}, {{loan_amount}}, {{repay_period}},
-  //         {{employment}}, {{income}}, {{purpose}}, {{address}}, {{dob}}, {{gender}}
-  // STEP 4: Copy your Public Key from Account > API Keys
-  // STEP 5: Replace the values below with your real credentials
+  const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
+  const EMAILJS_SERVICE_ID  = "service_zunei3e";
+  const EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 
-  const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";     // e.g. "user_abc123XYZ"
-  const EMAILJS_SERVICE_ID  = "service_zunei3e";     // e.g. "service_gmail"
-  const EMAILJS_TEMPLATE_ID = "template_4m5wthi";    // e.g. "template_loanapp"
+  emailjs.init(EMAILJS_PUBLIC_KEY);
 
-  emailjs.init(LqW2mAfvnN9B_leO1);
-
-  // ── Intersection Observer for animations ────────────────────
+  // ── Intersection Observer for animations ──────────────────
   const observer = new IntersectionObserver((entries) => {
     entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
   }, { threshold: 0.1 });
   document.querySelectorAll('.fade-up').forEach(el => observer.observe(el));
 
-  // ── Form validation ─────────────────────────────────────────
+  // ── Validation ────────────────────────────────────────────
   function validate() {
     const required = [
       'firstName','lastName','phone','nationalId','dob',
@@ -894,20 +879,20 @@
     return valid;
   }
 
-  // ── Toast helper ─────────────────────────────────────────────
+  // ── Toast helper ──────────────────────────────────────────
   function showToast(msg, type) {
     const t = document.getElementById('toast');
     t.textContent = (type === 'success' ? '✅ ' : '❌ ') + msg;
     t.className = `toast ${type} show`;
-    setTimeout(() => t.classList.remove('show'), 5000);
+    setTimeout(() => t.classList.remove('show'), 5500);
   }
 
-  // ── Form submit ───────────────────────────────────────────────
+  // ── Submit via EmailJS ───────────────────────────────────
   document.getElementById('loanForm').addEventListener('submit', async function(e) {
     e.preventDefault();
     if (!validate()) return;
 
-    const btn = document.getElementById('submitBtn');
+    const btn     = document.getElementById('submitBtn');
     const spinner = document.getElementById('spinner');
     const btnText = document.getElementById('btnText');
 
@@ -933,22 +918,12 @@
     };
 
     try {
-      // If EmailJS is not configured yet, simulate success
-      if (EMAILJS_PUBLIC_KEY === "LqW2mAfvnN9B_leO1") {
-        await new Promise(r => setTimeout(r, 1500)); // simulate delay
-        throw new Error("DEMO_MODE");
-      }
-
       await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
       showToast('Application submitted successfully! We will contact you within 24 hours.', 'success');
       document.getElementById('loanForm').reset();
     } catch (err) {
-      if (err.message === "DEMO_MODE") {
-        showToast('⚠️ Demo mode: EmailJS not configured yet. See setup instructions in the code.', 'error');
-      } else {
-        showToast('Failed to submit. Please try again or call us directly.', 'error');
-        console.error(err);
-      }
+      showToast('Submission failed. Please try again or call us directly.', 'error');
+      console.error(err);
     } finally {
       btn.disabled = false;
       spinner.style.display = 'none';
@@ -956,7 +931,7 @@
     }
   });
 
-  // Clear errors on input
+  // ── Clear field errors on input ───────────────────────────
   document.querySelectorAll('input, select, textarea').forEach(el => {
     el.addEventListener('input', () => {
       el.classList.remove('error');
