@@ -581,7 +581,7 @@ var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL = "https://script.google.com/macros/s/AKfycbyzm3apWaLYfTXWUYOLte5LIpvIJwnAEYqRLyCH71RcfH5z5TTkz9RdEgxyrMuV2maO/exec";
+var SHEETS_URL = "https://script.google.com/macros/s/AKfycbyfwedXdHL1AJK1EQT6TLCpMLAdZk7TeEZoUOhf-pndOLe42xHLuMF71ckcDcxn8XKs/exec";
 var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var PERIOD_TO_KEY = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
 var dashUnlocked = false;
@@ -767,35 +767,32 @@ function getApps() { try { return JSON.parse(localStorage.getItem('phindu_apps')
 function saveApps(a) { localStorage.setItem('phindu_apps', JSON.stringify(a)); }
 
 function saveToSheets(app) {
-  var payload = {
-    app_id: app.id,
-    firstName: app.firstName,
-    lastName: app.lastName,
-    phone: app.phone,
-    email: app.email,
-    nationalId: app.nationalId,
-    dob: app.dob,
-    gender: app.gender,
-    address: app.address,
-    loanType: app.loanType,
-    loanAmount: app.loanAmount,
-    repayPeriod: app.repayPeriod,
-    interestRate: app.interestRate,
-    totalRepayment: app.totalRepayment,
-    employment: app.employment,
-    income: app.income,
-    purpose: app.purpose,
-    collateralItem: app.collateralItem,
-    collateralValue: app.collateralValue,
-    collateralDesc: app.collateralDesc,
-    submittedAt: app.submittedAt
-  };
-  fetch(SHEETS_URL, {
-    method: 'POST',
-    mode: 'no-cors',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(payload)
-  }).catch(function(err) { console.log('Sheets error:', err); });
+  // Use URL parameters via image trick to bypass CORS completely
+  var params = [
+    'app_id='        + encodeURIComponent(app.id),
+    'firstName='     + encodeURIComponent(app.firstName),
+    'lastName='      + encodeURIComponent(app.lastName),
+    'phone='         + encodeURIComponent(app.phone),
+    'email='         + encodeURIComponent(app.email),
+    'nationalId='    + encodeURIComponent(app.nationalId),
+    'dob='           + encodeURIComponent(app.dob),
+    'gender='        + encodeURIComponent(app.gender),
+    'address='       + encodeURIComponent(app.address),
+    'loanType='      + encodeURIComponent(app.loanType),
+    'loanAmount='    + encodeURIComponent(app.loanAmount),
+    'repayPeriod='   + encodeURIComponent(app.repayPeriod),
+    'interestRate='  + encodeURIComponent(app.interestRate),
+    'totalRepayment='+ encodeURIComponent(app.totalRepayment),
+    'employment='    + encodeURIComponent(app.employment),
+    'income='        + encodeURIComponent(app.income),
+    'purpose='       + encodeURIComponent(app.purpose),
+    'collateralItem='+ encodeURIComponent(app.collateralItem),
+    'collateralValue='+ encodeURIComponent(app.collateralValue),
+    'collateralDesc='+ encodeURIComponent(app.collateralDesc),
+    'submittedAt='   + encodeURIComponent(app.submittedAt)
+  ].join('&');
+  var img = new Image();
+  img.src = SHEETS_URL + '?' + params;
 }
 
 document.getElementById('loanForm').addEventListener('submit', function(e) {
