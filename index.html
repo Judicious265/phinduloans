@@ -500,7 +500,7 @@
         <h3>&#128205; Our Location</h3>
         <div class="contact-item"><div class="contact-icon">&#127970;</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
         <div class="contact-item"><div class="contact-icon">&#128336;</div><div class="contact-item-text"><strong>Business Hours</strong>Mon - Fri: 8:00 AM - 5:00 PM<br/>Saturday: 9:00 AM - 1:00 PM</div></div>
-        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong>youngduwa265@gmail.com</div></div>
+        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2dbcdd7ccc5c6d7d5c3909497e2c5cfc3cbce8cc1cdcf">[email&#160;protected]</a></div></div>
         <div class="contact-item"><div class="contact-icon">&#127760;</div><div class="contact-item-text"><strong>Website</strong><a href="https://phindumicrofinance.netlify.app" target="_blank">phindumicrofinance.netlify.app</a></div></div>
         <div class="map-box"><span style="font-size:2rem;">&#128205;</span><p style="font-size:0.85rem;color:var(--text-muted);text-align:center;">Lilongwe, Malawi<br/><a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.8rem;">Open in Google Maps &rarr;</a></p></div>
       </div>
@@ -534,7 +534,7 @@
         <button class="dash-logout-btn" onclick="lockDashboard()">&#128274; Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications submitted on this device are stored here and also emailed automatically to <strong>youngduwa265@gmail.com</strong>.</span></div>
+    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications submitted on this device are stored here and also emailed automatically to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9a0b6acb7bebdacaeb8ebefec99beb4b8b0b5f7bab6b4">[email&#160;protected]</a></strong>.</span></div>
     <div class="dash-stats">
       <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
       <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
@@ -576,11 +576,12 @@
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
+var SHEETS_URL = "https://script.google.com/macros/s/AKfycbyzm3apWaLYfTXWUYOLte5LIpvIJwnAEYqRLyCH71RcfH5z5TTkz9RdEgxyrMuV2maO/exec";
 var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var PERIOD_TO_KEY = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
 var dashUnlocked = false;
@@ -765,6 +766,38 @@ function showToast(msg, type) {
 function getApps() { try { return JSON.parse(localStorage.getItem('phindu_apps')||'[]'); } catch(e) { return []; } }
 function saveApps(a) { localStorage.setItem('phindu_apps', JSON.stringify(a)); }
 
+function saveToSheets(app) {
+  var payload = {
+    app_id: app.id,
+    firstName: app.firstName,
+    lastName: app.lastName,
+    phone: app.phone,
+    email: app.email,
+    nationalId: app.nationalId,
+    dob: app.dob,
+    gender: app.gender,
+    address: app.address,
+    loanType: app.loanType,
+    loanAmount: app.loanAmount,
+    repayPeriod: app.repayPeriod,
+    interestRate: app.interestRate,
+    totalRepayment: app.totalRepayment,
+    employment: app.employment,
+    income: app.income,
+    purpose: app.purpose,
+    collateralItem: app.collateralItem,
+    collateralValue: app.collateralValue,
+    collateralDesc: app.collateralDesc,
+    submittedAt: app.submittedAt
+  };
+  fetch(SHEETS_URL, {
+    method: 'POST',
+    mode: 'no-cors',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(payload)
+  }).catch(function(err) { console.log('Sheets error:', err); });
+}
+
 document.getElementById('loanForm').addEventListener('submit', function(e) {
   e.preventDefault();
   if (!validate()) {
@@ -826,6 +859,7 @@ document.getElementById('loanForm').addEventListener('submit', function(e) {
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
     .then(function() {
       var apps = getApps(); apps.unshift(app); saveApps(apps);
+      saveToSheets(app);
       showToast('Application submitted! We will contact you within 24 hours.', 'success');
       document.getElementById('loanForm').reset();
       idPhotoBase64 = null;
