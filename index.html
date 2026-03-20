@@ -11,6 +11,8 @@
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{scroll-behavior:smooth;}
     body{font-family:'DM Sans',sans-serif;background:var(--deep);color:var(--text);overflow-x:hidden;}
+
+    /* PAGES */
     .page{display:none;min-height:100vh;padding-top:72px;}
     .page.active{display:block;}
 
@@ -23,7 +25,7 @@
     .nav-links button:hover{color:var(--text);background:rgba(255,255,255,0.06);}
     .nav-links button.active{color:var(--gold);background:rgba(201,168,76,0.1);}
     .nav-cta{background:linear-gradient(135deg,var(--gold),var(--gold-dark))!important;color:var(--deep)!important;font-weight:700!important;border-radius:50px!important;}
-    .nav-hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;}
+    .nav-hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;padding:4px;}
     .nav-mobile{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(10,15,30,0.98);border-bottom:1px solid rgba(201,168,76,0.15);padding:1rem 5%;flex-direction:column;gap:0.4rem;z-index:199;}
     .nav-mobile.open{display:flex;}
     .nav-mobile button{color:var(--text-muted);font-size:0.95rem;padding:0.7rem 1rem;border-radius:8px;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;}
@@ -40,7 +42,7 @@
     h1 .highlight{background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .hero-desc{font-size:1.05rem;color:var(--text-muted);line-height:1.7;margin-bottom:2rem;max-width:500px;animation:fadeUp 0.8s 0.2s ease both;}
     .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
-    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);padding:0.85rem 2rem;border-radius:50px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(201,168,76,0.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;text-decoration:none;}
+    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);padding:0.85rem 2rem;border-radius:50px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(201,168,76,0.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;}
     .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,0.4);}
     .btn-secondary{background:transparent;color:var(--text);padding:0.85rem 2rem;border-radius:50px;font-weight:600;font-size:0.95rem;border:1px solid rgba(240,237,230,0.2);transition:border-color 0.2s,background 0.2s;display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;cursor:pointer;}
     .btn-secondary:hover{border-color:var(--gold);background:rgba(201,168,76,0.06);}
@@ -70,6 +72,8 @@
     .section-desc{color:var(--text-muted);font-size:1rem;line-height:1.7;max-width:540px;}
     .page-section{padding:4rem 5%;}
     .page-section.alt{background:var(--deep2);}
+
+    /* LOAN CARDS */
     .loans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;}
     .loan-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.8rem;transition:transform 0.3s,border-color 0.3s,box-shadow 0.3s;cursor:pointer;position:relative;overflow:hidden;}
     .loan-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
@@ -80,13 +84,30 @@
     .loan-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
     .loan-meta{display:flex;gap:0.7rem;flex-wrap:wrap;}
     .loan-meta span{font-size:0.75rem;font-weight:600;background:rgba(201,168,76,0.1);color:var(--gold-light);padding:0.22rem 0.65rem;border-radius:50px;}
+
+    /* STEPS */
     .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:2.5rem;}
     .step{text-align:center;padding:1.8rem 1.3rem;background:var(--surface);border-radius:var(--radius);border:1px solid rgba(255,255,255,0.06);}
     .step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
     .step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.4rem;}
     .step p{font-size:0.82rem;color:var(--text-muted);line-height:1.6;}
 
-    /* FORM */
+    /* CALCULATOR */
+    .calc-wrap{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2rem;max-width:720px;margin:0 auto;}
+    .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+    .calc-result{background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:1.5rem;margin-top:1.2rem;display:none;}
+    .calc-result.show{display:block;}
+    .calc-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0.9rem;margin-bottom:1rem;}
+    .calc-item{background:var(--surface2);border-radius:10px;padding:0.9rem;text-align:center;}
+    .calc-item-val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold-light);}
+    .calc-item-lbl{font-size:0.72rem;color:var(--text-muted);margin-top:3px;}
+    .rate-table{width:100%;border-collapse:collapse;margin-top:1.5rem;font-size:0.83rem;}
+    .rate-table th{background:rgba(201,168,76,0.1);color:var(--gold-light);padding:0.7rem 1rem;text-align:left;font-weight:600;}
+    .rate-table td{padding:0.65rem 1rem;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--text-muted);}
+    .rate-table tr:hover td{background:rgba(255,255,255,0.02);color:var(--text);}
+    .rate-table .active-row td{color:var(--gold-light);font-weight:600;background:rgba(201,168,76,0.06);}
+
+    /* APPLY FORM */
     .apply-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:3.5rem;align-items:start;}
     .form-info-points{display:flex;flex-direction:column;gap:1rem;margin-top:1.8rem;}
     .info-point{display:flex;gap:10px;align-items:flex-start;}
@@ -101,7 +122,7 @@
     .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;}
     .field{display:flex;flex-direction:column;gap:5px;margin-bottom:0.9rem;}
     .field label{font-size:0.8rem;font-weight:500;color:var(--text-muted);}
-    .field label span.req{color:var(--gold);margin-left:2px;}
+    .field label .req{color:var(--gold);margin-left:2px;}
     .field input,.field select,.field textarea{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;transition:border-color 0.2s,box-shadow 0.2s;outline:none;width:100%;}
     .field input::placeholder,.field textarea::placeholder{color:rgba(156,163,175,0.4);}
     .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
@@ -111,6 +132,7 @@
     .field-error{font-size:0.75rem;color:var(--error);margin-top:1px;display:none;}
     .field-error.show{display:block;}
     .collateral-note{font-size:0.75rem;color:var(--gold-light);margin-top:4px;background:rgba(201,168,76,0.08);padding:0.45rem 0.7rem;border-radius:6px;border-left:2px solid var(--gold);}
+    .inline-calc-box{display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:0.9rem 1rem;margin-bottom:0.9rem;font-size:0.85rem;}
     .submit-btn{width:100%;margin-top:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.95rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s;box-shadow:0 8px 28px rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;gap:8px;}
     .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 36px rgba(201,168,76,0.4);}
     .submit-btn:disabled{opacity:0.7;cursor:not-allowed;}
@@ -118,32 +140,14 @@
     @keyframes spin{to{transform:rotate(360deg)}}
 
     /* ID UPLOAD */
-    .id-upload-area{border:2px dashed rgba(201,168,76,0.3);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;background:rgba(201,168,76,0.03);position:relative;}
+    .id-upload-area{border:2px dashed rgba(201,168,76,0.3);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;background:rgba(201,168,76,0.03);position:relative;overflow:hidden;}
     .id-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.06);}
     .id-upload-area.has-file{border-color:var(--success);background:rgba(34,197,94,0.05);}
     .id-upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-    .id-upload-icon{font-size:2rem;margin-bottom:0.5rem;}
-    .id-upload-text{font-size:0.85rem;color:var(--text-muted);}
-    .id-upload-text strong{color:var(--gold-light);display:block;margin-bottom:2px;}
-    .id-preview{max-width:100%;max-height:160px;border-radius:8px;margin-top:0.8rem;object-fit:cover;display:none;}
-
-    /* LOAN CALCULATOR */
-    .calc-wrap{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2rem;max-width:700px;margin:0 auto;}
-    .calc-title{font-family:'Playfair Display',serif;font-size:1.4rem;font-weight:700;margin-bottom:0.3rem;}
-    .calc-sub{font-size:0.85rem;color:var(--text-muted);margin-bottom:1.8rem;}
-    .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1.2rem;}
-    .calc-result{background:linear-gradient(135deg,rgba(201,168,76,0.12),rgba(201,168,76,0.05));border:1px solid rgba(201,168,76,0.25);border-radius:14px;padding:1.5rem;margin-top:1.2rem;display:none;}
-    .calc-result.show{display:block;}
-    .calc-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0.9rem;margin-bottom:1rem;}
-    .calc-item{background:var(--surface2);border-radius:10px;padding:0.9rem;text-align:center;}
-    .calc-item-val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold-light);}
-    .calc-item-lbl{font-size:0.72rem;color:var(--text-muted);margin-top:3px;}
-    .calc-warning{font-size:0.8rem;color:var(--warning);background:rgba(245,158,11,0.1);border:1px solid rgba(245,158,11,0.2);border-radius:8px;padding:0.6rem 0.9rem;margin-top:0.8rem;}
-    .rate-table{width:100%;border-collapse:collapse;margin-top:1.5rem;font-size:0.83rem;}
-    .rate-table th{background:rgba(201,168,76,0.1);color:var(--gold-light);padding:0.7rem 1rem;text-align:left;font-weight:600;}
-    .rate-table td{padding:0.65rem 1rem;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--text-muted);}
-    .rate-table tr:hover td{background:rgba(255,255,255,0.02);color:var(--text);}
-    .rate-table .highlight-row td{color:var(--gold-light);font-weight:600;}
+    .id-upload-icon{font-size:1.8rem;margin-bottom:0.4rem;}
+    .id-upload-label{font-size:0.85rem;color:var(--text-muted);}
+    .id-upload-label strong{color:var(--gold-light);display:block;margin-bottom:2px;}
+    .id-preview{max-width:100%;max-height:150px;border-radius:8px;margin-top:0.8rem;object-fit:cover;display:none;border:1px solid rgba(255,255,255,0.1);}
 
     /* CONTACT */
     .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
@@ -154,12 +158,11 @@
     .contact-item-text{font-size:0.88rem;line-height:1.6;}
     .contact-item-text strong{display:block;font-weight:600;margin-bottom:2px;}
     .contact-item-text a{color:var(--gold-light);text-decoration:none;}
-    .contact-item-text a:hover{text-decoration:underline;}
-    .map-box{background:var(--surface2);border-radius:var(--radius);height:200px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;border:1px dashed rgba(201,168,76,0.2);margin-top:1rem;}
-    .wa-btn-big{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:0.85rem 1.8rem;border-radius:50px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1.2rem;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 6px 20px rgba(37,211,102,0.3);}
+    .map-box{background:var(--surface2);border-radius:var(--radius);height:180px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;border:1px dashed rgba(201,168,76,0.2);margin-top:1rem;}
+    .wa-btn-big{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:0.85rem 1.8rem;border-radius:50px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1.2rem;transition:transform 0.2s;box-shadow:0 6px 20px rgba(37,211,102,0.3);}
     .wa-btn-big:hover{transform:translateY(-2px);}
 
-    /* DASHBOARD LOGIN */
+    /* DASHBOARD LOGIN - hidden by default, shown only on demand */
     .dash-login-overlay{position:fixed;inset:0;background:rgba(10,15,30,0.97);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem;}
     .dash-login-overlay.open{display:flex;}
     .dash-login-box{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center;}
@@ -169,7 +172,7 @@
     .dash-login-input{width:100%;background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.8rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;margin-bottom:1rem;text-align:center;letter-spacing:0.1em;}
     .dash-login-input:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
     .dash-login-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.9rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;}
-    .dash-login-error{color:var(--error);font-size:0.82rem;margin-top:0.5rem;display:none;}
+    .dash-login-error{color:var(--error);font-size:0.82rem;margin-top:0.6rem;display:none;}
     .dash-login-error.show{display:block;}
     .dash-logout-btn{background:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text-muted);padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
     .dash-logout-btn:hover{border-color:var(--error);color:var(--error);}
@@ -223,7 +226,7 @@
     .modal-field-value{font-size:0.88rem;font-weight:500;word-break:break-word;}
     .modal-field.full{grid-column:1/-1;}
     .modal-actions{display:flex;gap:0.8rem;margin-top:1.2rem;justify-content:flex-end;}
-    .id-img-preview{max-width:100%;border-radius:8px;margin-top:0.5rem;border:1px solid rgba(255,255,255,0.1);}
+    .id-img-modal{max-width:100%;border-radius:8px;margin-top:0.5rem;border:1px solid rgba(255,255,255,0.1);}
 
     /* WHATSAPP FLOAT */
     .wa-float{position:fixed;bottom:1.8rem;right:1.8rem;z-index:300;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;}
@@ -279,7 +282,7 @@
   <button onclick="openDashboard();toggleMenu()">Dashboard</button>
 </div>
 
-<!-- ════ PAGE: HOME ════ -->
+<!-- ══ HOME ══ -->
 <div class="page active" id="page-home">
   <div class="hero-wrap">
     <div class="hero-bg"></div><div class="hero-grid"></div>
@@ -315,7 +318,7 @@
   <div class="page-section alt">
     <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Our Products</div><h2>Loans For Every Need</h2></div>
     <div class="loans-grid">
-      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">👤</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, or any need.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div></div>
+      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">👤</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, or any personal need.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div></div>
       <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">🏢</div><h3>Business Loan</h3><p>Grow your business with working capital or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>From 10%</span></div></div>
       <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">🚨</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial emergency.</p><div class="loan-meta"><span>Up to MK 500K</span><span>From 10%</span></div></div>
     </div>
@@ -325,52 +328,46 @@
     <div class="section-label">Process</div><h2>Simple 4-Step Process</h2>
     <div class="steps-grid">
       <div class="step fade-up"><div class="step-num">1</div><h3>Fill the Form</h3><p>Complete the application with your details, National ID photo and collateral.</p></div>
-      <div class="step fade-up"><div class="step-num">2</div><h3>We Review</h3><p>Our team verifies your identity and collateral value.</p></div>
-      <div class="step fade-up"><div class="step-num">3</div><h3>Get Approval</h3><p>Receive approval notification within 24 hours.</p></div>
-      <div class="step fade-up"><div class="step-num">4</div><h3>Receive Funds</h3><p>Funds disbursed to your mobile wallet or bank account.</p></div>
+      <div class="step fade-up"><div class="step-num">2</div><h3>We Review</h3><p>Our team verifies your identity and collateral value within 24 hours.</p></div>
+      <div class="step fade-up"><div class="step-num">3</div><h3>Get Approval</h3><p>Receive your approval notification via phone or email.</p></div>
+      <div class="step fade-up"><div class="step-num">4</div><h3>Receive Funds</h3><p>Funds disbursed directly to your mobile wallet or bank account.</p></div>
     </div>
   </div>
   <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved. Lilongwe, Malawi.</div><div class="footer-links"><button onclick="showPage('contact')">Contact</button><button onclick="showPage('apply')">Apply</button></div></footer>
 </div>
 
-<!-- ════ PAGE: LOAN TYPES ════ -->
+<!-- ══ LOAN TYPES ══ -->
 <div class="page" id="page-loans">
   <div class="page-section">
     <div class="section-label">Our Products</div><h2>All Loan Types</h2>
-    <p class="section-desc">All loans require a valid National ID photo and collateral of higher value than the requested amount. Maximum repayment period is 2 months.</p>
+    <p class="section-desc">All loans require a valid National ID photo and collateral of higher value than the loan amount. Maximum repayment period is 2 months.</p>
     <div class="loans-grid" style="margin-top:2.5rem;">
       <div class="loan-card fade-up"><div class="loan-icon">👤</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, travel, medical bills, or any personal need.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div><div style="margin-top:0.8rem;font-size:0.78rem;color:var(--text-muted);">Collateral required · National ID photo · Max 2 months</div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
       <div class="loan-card fade-up"><div class="loan-icon">🏢</div><h3>Business Loan</h3><p>Grow your business with working capital, equipment financing, or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>From 10%</span></div><div style="margin-top:0.8rem;font-size:0.78rem;color:var(--text-muted);">Collateral required · National ID photo · Max 2 months</div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
       <div class="loan-card fade-up"><div class="loan-icon">🚨</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial crisis. Simplified process.</p><div class="loan-meta"><span>Up to MK 500K</span><span>From 10%</span></div><div style="margin-top:0.8rem;font-size:0.78rem;color:var(--text-muted);">Collateral required · National ID photo · Max 2 months</div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
     </div>
-    <div style="margin-top:2rem;text-align:center;"><button class="btn-secondary" onclick="showPage('calculator')">Calculate Repayments →</button></div>
   </div>
   <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
 </div>
 
-<!-- ════ PAGE: CALCULATOR ════ -->
+<!-- ══ CALCULATOR ══ -->
 <div class="page" id="page-calculator">
   <div class="page-section">
-    <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Tools</div><h2>Loan Repayment Calculator</h2><p class="section-desc" style="margin:0 auto;">Enter your desired loan amount and period to instantly see your total repayment and interest.</p></div>
+    <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Tools</div><h2>Loan Repayment Calculator</h2><p class="section-desc" style="margin:0 auto;">Enter your loan amount and period to instantly see your total repayment.</p></div>
     <div class="calc-wrap fade-up">
       <div class="calc-row">
-        <div class="field">
-          <label>Loan Amount (MK)</label>
-          <input type="number" id="calcAmount" placeholder="e.g. 200000" oninput="calculateLoan()" min="1000"/>
-        </div>
-        <div class="field">
-          <label>Repayment Period</label>
+        <div class="field" style="margin-bottom:0"><label>Loan Amount (MK)</label><input type="number" id="calcAmount" placeholder="e.g. 200000" oninput="calculateLoan()" min="1000"/></div>
+        <div class="field" style="margin-bottom:0"><label>Repayment Period</label>
           <select id="calcPeriod" onchange="calculateLoan()">
             <option value="">Select period</option>
             <option value="1week">1 Week — 10% interest</option>
             <option value="2weeks">2 Weeks — 20% interest</option>
             <option value="3weeks">3 Weeks — 30% interest</option>
             <option value="1month">1 Month — 35% interest</option>
-            <option value="2months">2 Months — 50% interest</option>
+            <option value="2months">2 Months — 50% interest (Max)</option>
           </select>
         </div>
       </div>
-
       <div class="calc-result" id="calcResult">
         <div class="calc-result-grid">
           <div class="calc-item"><div class="calc-item-val" id="res-principal">—</div><div class="calc-item-lbl">Loan Amount</div></div>
@@ -378,33 +375,29 @@
           <div class="calc-item"><div class="calc-item-val" id="res-total">—</div><div class="calc-item-lbl">Total Repayment</div></div>
           <div class="calc-item"><div class="calc-item-val" id="res-rate">—</div><div class="calc-item-lbl">Interest Rate</div></div>
         </div>
-        <div style="background:var(--surface2);border-radius:10px;padding:1rem;font-size:0.85rem;margin-top:0.5rem;">
-          <strong style="color:var(--gold-light);">Summary:</strong> <span id="res-summary" style="color:var(--text-muted);"></span>
-        </div>
+        <div style="background:var(--surface2);border-radius:10px;padding:1rem;font-size:0.85rem;margin-top:0.5rem;color:var(--text-muted);" id="res-summary"></div>
         <button class="btn-primary" style="margin-top:1rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply For This Loan →</button>
       </div>
-
-      <!-- Rate table -->
       <div style="margin-top:2rem;">
-        <div style="font-size:0.78rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--gold);margin-bottom:0.8rem;">Interest Rate Schedule</div>
+        <div class="section-label" style="margin-bottom:0.8rem;">Interest Rate Schedule</div>
         <table class="rate-table" id="rateTable">
-          <thead><tr><th>Period</th><th>Rate</th><th>Example: MK 100,000</th><th>Total Repay</th></tr></thead>
+          <thead><tr><th>Period</th><th>Interest Rate</th><th>On MK 100,000</th><th>Total Repay</th></tr></thead>
           <tbody>
-            <tr><td>1 Week</td><td>10%</td><td>MK 10,000 interest</td><td>MK 110,000</td></tr>
-            <tr><td>2 Weeks</td><td>20%</td><td>MK 20,000 interest</td><td>MK 120,000</td></tr>
-            <tr><td>3 Weeks</td><td>30%</td><td>MK 30,000 interest</td><td>MK 130,000</td></tr>
-            <tr><td>1 Month</td><td>35%</td><td>MK 35,000 interest</td><td>MK 135,000</td></tr>
-            <tr><td>2 Months (Max)</td><td>50%</td><td>MK 50,000 interest</td><td>MK 150,000</td></tr>
+            <tr data-key="1week"><td>1 Week</td><td>10%</td><td>MK 10,000</td><td>MK 110,000</td></tr>
+            <tr data-key="2weeks"><td>2 Weeks</td><td>20%</td><td>MK 20,000</td><td>MK 120,000</td></tr>
+            <tr data-key="3weeks"><td>3 Weeks</td><td>30%</td><td>MK 30,000</td><td>MK 130,000</td></tr>
+            <tr data-key="1month"><td>1 Month</td><td>35%</td><td>MK 35,000</td><td>MK 135,000</td></tr>
+            <tr data-key="2months"><td>2 Months (Max)</td><td>50%</td><td>MK 50,000</td><td>MK 150,000</td></tr>
           </tbody>
         </table>
-        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.8rem;">⚠ Maximum repayment period is 2 months. All interest is charged on the principal amount.</p>
+        <p style="font-size:0.78rem;color:var(--text-muted);margin-top:0.8rem;">⚠ Maximum repayment period is 2 months. Interest is charged on the principal amount.</p>
       </div>
     </div>
   </div>
   <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
 </div>
 
-<!-- ════ PAGE: APPLY ════ -->
+<!-- ══ APPLY ══ -->
 <div class="page" id="page-apply">
   <div class="page-section">
     <div class="apply-layout">
@@ -412,17 +405,18 @@
         <div class="section-label">Apply Now</div><h2>Start Your Application</h2>
         <p class="section-desc">Fill in the form and our team will contact you within 24 hours.</p>
         <div class="form-info-points">
-          <div class="info-point"><div class="info-point-icon">🪪</div><div class="info-point-text"><h4>National ID Photo Required</h4><p>Upload a clear photo of the front of your National ID card.</p></div></div>
-          <div class="info-point"><div class="info-point-icon">🏠</div><div class="info-point-text"><h4>Collateral Required</h4><p>Provide a valuable item exceeding the loan amount as security.</p></div></div>
-          <div class="info-point"><div class="info-point-icon">⏱</div><div class="info-point-text"><h4>Max 2 Months</h4><p>Maximum repayment period is 2 months. Use the calculator to estimate repayments.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">🪪</div><div class="info-point-text"><h4>National ID Photo Required</h4><p>Upload a clear front-page photo of your National ID card.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">🏠</div><div class="info-point-text"><h4>Collateral Required</h4><p>A valuable item exceeding the loan amount as security.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">⏱</div><div class="info-point-text"><h4>Max 2 Months</h4><p>Maximum repayment is 2 months at 50% interest.</p></div></div>
           <div class="info-point"><div class="info-point-icon">⚡</div><div class="info-point-text"><h4>Fast Response</h4><p>Our team reviews applications within 24 hours.</p></div></div>
         </div>
         <div style="margin-top:1.5rem;"><button class="btn-secondary" onclick="showPage('calculator')" style="font-size:0.85rem;padding:0.6rem 1.2rem;">🧮 Open Calculator First</button></div>
       </div>
       <div class="form-card fade-up">
         <div class="form-title">Loan Application Form</div>
-        <div class="form-subtitle">Fields marked <span style="color:var(--gold)">*</span> are required · Max repayment: 2 months</div>
+        <div class="form-subtitle">Fields marked <span style="color:var(--gold)">*</span> are required</div>
         <form id="loanForm" novalidate>
+
           <div class="form-section-heading">Personal Information</div>
           <div class="form-row">
             <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="firstName" placeholder="e.g. Chisomo"/><div class="field-error" id="err-firstName">Please enter your first name</div></div>
@@ -439,17 +433,16 @@
           </div>
           <div class="field"><label>Home Address <span class="req">*</span></label><input type="text" id="address" placeholder="e.g. Area 25, Lilongwe"/><div class="field-error" id="err-address">Please enter your address</div></div>
 
-          <!-- ID UPLOAD -->
           <div class="form-section-heading">National ID Verification</div>
           <div class="field">
             <label>National ID — Front Page Photo <span class="req">*</span></label>
             <div class="id-upload-area" id="idUploadArea">
               <input type="file" id="idPhoto" accept="image/*" onchange="handleIdUpload(event)"/>
               <div class="id-upload-icon">🪪</div>
-              <div class="id-upload-text"><strong>Click or drag to upload your National ID</strong>Front page only · JPG, PNG · Max 5MB</div>
-              <img class="id-preview" id="idPreview" alt="ID Preview"/>
+              <div class="id-upload-label"><strong>Click or drag to upload your National ID</strong>Front page only · JPG or PNG · Max 5MB</div>
+              <img class="id-preview" id="idPreview" alt="National ID Preview"/>
             </div>
-            <div class="field-error" id="err-idPhoto">Please upload your National ID photo</div>
+            <div class="field-error" id="err-idPhoto">Please upload a photo of your National ID</div>
           </div>
 
           <div class="form-section-heading">Loan Details</div>
@@ -466,23 +459,20 @@
                 <option value="2 Weeks">2 Weeks (20% interest)</option>
                 <option value="3 Weeks">3 Weeks (30% interest)</option>
                 <option value="1 Month">1 Month (35% interest)</option>
-                <option value="2 Months">2 Months (50% interest)</option>
+                <option value="2 Months">2 Months — Max (50% interest)</option>
               </select>
               <div class="field-error" id="err-repayPeriod">Please select a repayment period</div>
             </div>
             <div class="field"><label>Employment Status <span class="req">*</span></label><select id="employment"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="field-error" id="err-employment">Please select employment status</div></div>
           </div>
-          <!-- Inline repayment estimate -->
-          <div id="inlineCalc" style="display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:0.9rem 1rem;margin-bottom:0.9rem;font-size:0.85rem;">
-            <strong style="color:var(--gold-light);">Estimated Repayment:</strong> <span id="inlineCalcText" style="color:var(--text-muted);"></span>
-          </div>
+          <div class="inline-calc-box" id="inlineCalcBox"><strong style="color:var(--gold-light);">💡 Estimated Repayment: </strong><span id="inlineCalcText" style="color:var(--text-muted);"></span></div>
           <div class="field"><label>Monthly Income (MK) <span class="req">*</span></label><input type="number" id="income" placeholder="e.g. 150000"/><div class="field-error" id="err-income">Please enter your monthly income</div></div>
           <div class="field"><label>Purpose of Loan <span class="req">*</span></label><textarea id="purpose" placeholder="Briefly describe why you need this loan..."></textarea><div class="field-error" id="err-purpose">Please describe the purpose</div></div>
 
           <div class="form-section-heading">Collateral Information</div>
           <div class="field">
             <label>Collateral Item <span class="req">*</span></label>
-            <input type="text" id="collateralItem" placeholder="e.g. Motor Vehicle, Land Title, Electronics, Livestock"/>
+            <input type="text" id="collateralItem" placeholder="e.g. Motor Vehicle, Land Title, Electronics"/>
             <div class="collateral-note" id="collateralNote">⚠ Collateral must be worth MORE than your loan amount.</div>
             <div class="field-error" id="err-collateralItem">Please describe your collateral item</div>
           </div>
@@ -491,7 +481,7 @@
             <input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkCollateral()"/>
             <div class="field-error" id="err-collateralValue">Collateral value must exceed the loan amount</div>
           </div>
-          <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item in detail — make, model, condition, location, etc."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
+          <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item in detail — make, model, condition, location..."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
 
           <button type="submit" class="submit-btn" id="submitBtn">
             <div class="spinner" id="spinner"></div>
@@ -504,7 +494,7 @@
   <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('contact')">Contact</button></div></footer>
 </div>
 
-<!-- ════ PAGE: CONTACT ════ -->
+<!-- ══ CONTACT ══ -->
 <div class="page" id="page-contact">
   <div class="page-section">
     <div class="section-label">Get In Touch</div><h2>Contact Us</h2>
@@ -523,8 +513,8 @@
       <div class="contact-card fade-up">
         <h3>📍 Our Location</h3>
         <div class="contact-item"><div class="contact-icon">🏢</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
-        <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-item-text"><strong>Business Hours</strong>Monday – Friday: 8:00 AM – 5:00 PM<br/>Saturday: 9:00 AM – 1:00 PM</div></div>
-        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Applications Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0e77617b60696a7b796f3c383b4e69636f6762206d6163">[email&#160;protected]</a></div></div>
+        <div class="contact-item"><div class="contact-icon">🕐</div><div class="contact-item-text"><strong>Business Hours</strong>Mon – Fri: 8:00 AM – 5:00 PM<br/>Saturday: 9:00 AM – 1:00 PM</div></div>
+        <div class="contact-item"><div class="contact-icon">✉️</div><div class="contact-item-text"><strong>Email</strong>youngduwa265@gmail.com</div></div>
         <div class="map-box"><span style="font-size:2rem;">📍</span><p style="font-size:0.85rem;color:var(--text-muted);text-align:center;">Lilongwe, Malawi<br/><a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.8rem;">Open in Google Maps →</a></p></div>
       </div>
     </div>
@@ -532,17 +522,17 @@
   <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved. Lilongwe, Malawi.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
 </div>
 
-<!-- ════ PAGE: DASHBOARD ════ -->
-<!-- LOGIN OVERLAY -->
+<!-- ══ DASHBOARD ══ -->
+<!-- Password overlay — hidden by default, only shown when Dashboard is clicked -->
 <div class="dash-login-overlay" id="dashLoginOverlay">
   <div class="dash-login-box">
     <div class="dash-login-icon">🔐</div>
-    <div class="dash-login-title">Admin Access</div>
+    <div class="dash-login-title">Admin Access Only</div>
     <div class="dash-login-sub">Enter the admin password to view loan applications</div>
     <input type="password" class="dash-login-input" id="dashPasswordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkDashPassword()"/>
     <button class="dash-login-btn" onclick="checkDashPassword()">Unlock Dashboard</button>
     <div class="dash-login-error" id="dashLoginError">Incorrect password. Please try again.</div>
-    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:1rem;">Default password: <strong style="color:var(--gold-light);">phindu2026</strong></p>
+    <p style="font-size:0.75rem;color:var(--text-muted);margin-top:1.2rem;">Default password: <strong style="color:var(--gold-light);">phindu2026</strong></p>
   </div>
 </div>
 
@@ -555,7 +545,7 @@
         <button class="dash-logout-btn" onclick="lockDashboard()">🔒 Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here locally and also emailed to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d3aabca6bdb4b7a6a4b2e1e5e693b4beb2babffdb0bcbe">[email&#160;protected]</a></strong> automatically.</span></div>
+    <div class="dash-note"><span>ℹ️</span><span>Applications submitted on this device are stored here and also emailed automatically to <strong>youngduwa265@gmail.com</strong>.</span></div>
     <div class="dash-stats">
       <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
       <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
@@ -573,7 +563,7 @@
         <thead><tr><th>#</th><th>Applicant</th><th>Loan Type</th><th>Amount</th><th>Period</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
         <tbody id="appsTableBody"></tbody>
       </table>
-      <div class="no-apps" id="noApps" style="display:none;"><div style="font-size:2.5rem;margin-bottom:0.8rem;">📋</div><p>No applications found.</p><p style="font-size:0.8rem;margin-top:0.4rem;color:var(--text-muted);">Submitted applications will appear here.</p></div>
+      <div class="no-apps" id="noApps" style="display:none;"><div style="font-size:2.5rem;margin-bottom:0.8rem;">📋</div><p>No applications found.</p><p style="font-size:0.8rem;margin-top:0.4rem;">Submitted applications will appear here automatically.</p></div>
     </div>
   </div>
   <footer><div class="footer-logo">Phindu Loans</div><div class="footer-copy">© 2026 Phindu Loans. All rights reserved.</div><div class="footer-links"><button onclick="showPage('home')">Home</button></div></footer>
@@ -597,75 +587,70 @@
 
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
-// ── CONFIG ───────────────────────────────────────────────────
+<script>
+// ── CONFIG ────────────────────────────────────────────────────
 const EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 const EMAILJS_SERVICE_ID  = "service_zunei3e";
 const EMAILJS_TEMPLATE_ID = "template_4m5wthi";
-const ADMIN_PASSWORD      = "phindu2026"; // Change this to your own password!
-const SMS_NUMBER          = "+265998337818";
-
-// ── SMS via TextBelt (free tier: 1 SMS/day) ──────────────────
-// To get more SMS: sign up at textbelt.com for a paid key
-// Replace "textbelt" below with your paid key for unlimited SMS
-const TEXTBELT_KEY = "textbelt"; // free = 1 SMS/day. Get paid key at textbelt.com
-
-async function sendSMS(message) {
-  try {
-    await fetch("https://textbelt.com/text", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ phone: SMS_NUMBER, message, key: TEXTBELT_KEY })
-    });
-  } catch(e) { console.log("SMS error:", e); }
-}
+const ADMIN_PASSWORD      = "phindu2026"; // ← Change to your own password
 
 emailjs.init(EMAILJS_PUBLIC_KEY);
 
-// ── INTEREST RATES ───────────────────────────────────────────
-const RATES = { "1week":0.10, "2weeks":0.20, "3weeks":0.30, "1month":0.35, "2months":0.50 };
-const PERIOD_MAP = { "1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months" };
+// ── INTEREST RATES ────────────────────────────────────────────
+const RATES = {
+  "1week": 0.10, "2weeks": 0.20,
+  "3weeks": 0.30, "1month": 0.35, "2months": 0.50
+};
+const PERIOD_TO_KEY = {
+  "1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks",
+  "1 Month":"1month","2 Months":"2months"
+};
 
-// ── PAGE NAVIGATION ──────────────────────────────────────────
+// ── PAGE NAVIGATION ───────────────────────────────────────────
 function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(b => b.classList.remove('active'));
   document.getElementById('page-' + name).classList.add('active');
-  const nb = document.getElementById('nav-' + name);
+  var nb = document.getElementById('nav-' + name);
   if (nb) nb.classList.add('active');
   window.scrollTo(0, 0);
   if (name === 'dashboard') { renderTable(); updateStats(); }
-  setTimeout(() => {
-    document.querySelectorAll('#page-' + name + ' .fade-up').forEach(el => {
+  setTimeout(function() {
+    document.querySelectorAll('#page-' + name + ' .fade-up').forEach(function(el) {
       if (!el.classList.contains('visible')) {
-        const o = new IntersectionObserver(entries => { entries.forEach(e => { if(e.isIntersecting) e.target.classList.add('visible'); }); }, { threshold: 0.08 });
+        var o = new IntersectionObserver(function(entries) {
+          entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+        }, { threshold: 0.08 });
         o.observe(el);
       }
     });
   }, 60);
 }
 
-function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
+function toggleMenu() {
+  document.getElementById('mobileMenu').classList.toggle('open');
+}
 
-// ── DASHBOARD PASSWORD ───────────────────────────────────────
-let dashUnlocked = false;
+// ── DASHBOARD PASSWORD ─────────────────────────────────────────
+var dashUnlocked = false;
 
 function openDashboard() {
   showPage('dashboard');
   if (!dashUnlocked) {
-    document.getElementById('dashLoginOverlay').classList.add('open');
     document.getElementById('dashPasswordInput').value = '';
     document.getElementById('dashLoginError').classList.remove('show');
-    setTimeout(() => document.getElementById('dashPasswordInput').focus(), 100);
+    document.getElementById('dashLoginOverlay').classList.add('open');
+    setTimeout(function() { document.getElementById('dashPasswordInput').focus(); }, 150);
   }
 }
 
 function checkDashPassword() {
-  const val = document.getElementById('dashPasswordInput').value;
+  var val = document.getElementById('dashPasswordInput').value;
   if (val === ADMIN_PASSWORD) {
     dashUnlocked = true;
     document.getElementById('dashLoginOverlay').classList.remove('open');
-    renderTable(); updateStats();
+    renderTable();
+    updateStats();
   } else {
     document.getElementById('dashLoginError').classList.add('show');
     document.getElementById('dashPasswordInput').value = '';
@@ -676,324 +661,379 @@ function checkDashPassword() {
 function lockDashboard() {
   dashUnlocked = false;
   document.getElementById('dashLoginOverlay').classList.add('open');
+  document.getElementById('dashPasswordInput').value = '';
+  document.getElementById('dashLoginError').classList.remove('show');
   showToast('Dashboard locked.', 'info');
 }
 
-// ── LOAN CALCULATOR ──────────────────────────────────────────
+// ── LOAN CALCULATOR ────────────────────────────────────────────
 function calculateLoan() {
-  const amt    = Number(document.getElementById('calcAmount').value);
-  const period = document.getElementById('calcPeriod').value;
-  const result = document.getElementById('calcResult');
+  var amt    = Number(document.getElementById('calcAmount').value);
+  var period = document.getElementById('calcPeriod').value;
+  var result = document.getElementById('calcResult');
   if (!amt || !period || amt <= 0) { result.classList.remove('show'); return; }
-  const rate     = RATES[period];
-  const interest = amt * rate;
-  const total    = amt + interest;
-  const periodLabels = {"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};
-  document.getElementById('res-principal').textContent = `MK ${amt.toLocaleString()}`;
-  document.getElementById('res-interest').textContent  = `MK ${interest.toLocaleString()}`;
-  document.getElementById('res-total').textContent     = `MK ${total.toLocaleString()}`;
-  document.getElementById('res-rate').textContent      = `${(rate*100).toFixed(0)}%`;
-  document.getElementById('res-summary').textContent   = `If you borrow MK ${amt.toLocaleString()} for ${periodLabels[period]}, you will repay a total of MK ${total.toLocaleString()} (MK ${interest.toLocaleString()} interest).`;
-  // Highlight active row in rate table
-  document.querySelectorAll('.rate-table tbody tr').forEach((tr,i) => {
-    tr.classList.remove('highlight-row');
-    const map = ["1week","2weeks","3weeks","1month","2months"];
-    if (map[i] === period) tr.classList.add('highlight-row');
+  var rate     = RATES[period];
+  var interest = amt * rate;
+  var total    = amt + interest;
+  var labels   = {"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};
+  document.getElementById('res-principal').textContent = 'MK ' + amt.toLocaleString();
+  document.getElementById('res-interest').textContent  = 'MK ' + interest.toLocaleString();
+  document.getElementById('res-total').textContent     = 'MK ' + total.toLocaleString();
+  document.getElementById('res-rate').textContent      = (rate * 100).toFixed(0) + '%';
+  document.getElementById('res-summary').textContent   =
+    'If you borrow MK ' + amt.toLocaleString() + ' for ' + labels[period] +
+    ', you will repay a total of MK ' + total.toLocaleString() +
+    ' (MK ' + interest.toLocaleString() + ' interest).';
+  document.querySelectorAll('#rateTable tbody tr').forEach(function(tr) {
+    tr.classList.toggle('active-row', tr.getAttribute('data-key') === period);
   });
   result.classList.add('show');
 }
 
+// Inline calculator on apply form
 function autoCalc() {
-  const amt    = Number(document.getElementById('loanAmount').value);
-  const period = document.getElementById('repayPeriod').value;
-  const box    = document.getElementById('inlineCalc');
-  const txt    = document.getElementById('inlineCalcText');
-  const key    = PERIOD_MAP[period];
+  var amt    = Number(document.getElementById('loanAmount').value);
+  var period = document.getElementById('repayPeriod').value;
+  var box    = document.getElementById('inlineCalcBox');
+  var key    = PERIOD_TO_KEY[period];
   if (amt > 0 && key) {
-    const rate  = RATES[key];
-    const total = amt + amt * rate;
-    txt.textContent = `You will repay MK ${total.toLocaleString()} total (MK ${(amt*rate).toLocaleString()} interest at ${(rate*100).toFixed(0)}%)`;
+    var rate  = RATES[key];
+    var total = amt + amt * rate;
+    document.getElementById('inlineCalcText').textContent =
+      'You will repay MK ' + total.toLocaleString() +
+      ' total (MK ' + (amt * rate).toLocaleString() +
+      ' interest at ' + (rate * 100).toFixed(0) + '%)';
     box.style.display = 'block';
-  } else { box.style.display = 'none'; }
+  } else {
+    box.style.display = 'none';
+  }
 }
 
-// ── COLLATERAL ───────────────────────────────────────────────
+// ── COLLATERAL HINT ────────────────────────────────────────────
 function updateCollateralHint() {
-  const amt = Number(document.getElementById('loanAmount').value);
-  document.getElementById('collateralNote').textContent = amt > 0
-    ? `⚠ Your collateral must be worth MORE than MK ${amt.toLocaleString()}`
+  var amt  = Number(document.getElementById('loanAmount').value);
+  var note = document.getElementById('collateralNote');
+  note.textContent = amt > 0
+    ? '⚠ Your collateral must be worth MORE than MK ' + amt.toLocaleString()
     : '⚠ Collateral must be worth MORE than your loan amount.';
 }
 
 function checkCollateral() {
-  const loan = Number(document.getElementById('loanAmount').value);
-  const coll = Number(document.getElementById('collateralValue').value);
-  const err  = document.getElementById('err-collateralValue');
-  const inp  = document.getElementById('collateralValue');
+  var loan = Number(document.getElementById('loanAmount').value);
+  var coll = Number(document.getElementById('collateralValue').value);
+  var err  = document.getElementById('err-collateralValue');
+  var inp  = document.getElementById('collateralValue');
   if (loan > 0 && coll > 0 && coll <= loan) {
     inp.classList.add('error');
-    err.textContent = `Collateral (MK ${coll.toLocaleString()}) must exceed loan (MK ${loan.toLocaleString()})`;
+    err.textContent = 'Collateral (MK ' + coll.toLocaleString() + ') must exceed loan (MK ' + loan.toLocaleString() + ')';
     err.classList.add('show');
-  } else { inp.classList.remove('error'); err.classList.remove('show'); }
+  } else {
+    inp.classList.remove('error');
+    err.classList.remove('show');
+  }
 }
 
-// ── ID UPLOAD ────────────────────────────────────────────────
-let idPhotoBase64 = null;
+// ── ID PHOTO UPLOAD ────────────────────────────────────────────
+var idPhotoBase64 = null;
 
 function handleIdUpload(e) {
-  const file = e.target.files[0];
+  var file = e.target.files[0];
   if (!file) return;
   if (file.size > 5 * 1024 * 1024) { showToast('File too large. Max 5MB.', 'error'); return; }
-  const reader = new FileReader();
+  var reader = new FileReader();
   reader.onload = function(ev) {
     idPhotoBase64 = ev.target.result;
-    const preview = document.getElementById('idPreview');
+    var preview = document.getElementById('idPreview');
     preview.src = idPhotoBase64;
     preview.style.display = 'block';
     document.getElementById('idUploadArea').classList.add('has-file');
-    document.querySelector('#idUploadArea .id-upload-text').innerHTML = '<strong style="color:var(--success)">✓ ID photo uploaded successfully</strong>Click to change';
+    document.querySelector('#idUploadArea .id-upload-label').innerHTML =
+      '<strong style="color:var(--success)">✓ ID photo uploaded successfully</strong>Click to change photo';
     document.getElementById('err-idPhoto').classList.remove('show');
   };
   reader.readAsDataURL(file);
 }
 
-// ── VALIDATION ───────────────────────────────────────────────
+// ── FORM VALIDATION ────────────────────────────────────────────
 function validate() {
-  const required = ['firstName','lastName','phone','nationalId','dob','address',
+  var required = ['firstName','lastName','phone','nationalId','dob','address',
     'loanType','loanAmount','repayPeriod','employment','income','purpose',
     'collateralItem','collateralValue','collateralDesc'];
-  let valid = true;
-  required.forEach(id => {
-    const el  = document.getElementById(id);
-    const err = document.getElementById('err-' + id);
+  var valid = true;
+  required.forEach(function(id) {
+    var el  = document.getElementById(id);
+    var err = document.getElementById('err-' + id);
     if (!el.value.trim()) {
       el.classList.add('error');
       if (err && id !== 'collateralValue') err.classList.add('show');
       valid = false;
-    } else { el.classList.remove('error'); if (err) err.classList.remove('show'); }
+    } else {
+      el.classList.remove('error');
+      if (err) err.classList.remove('show');
+    }
   });
-  // ID photo
   if (!idPhotoBase64) {
     document.getElementById('err-idPhoto').classList.add('show');
     valid = false;
   }
-  // Collateral value check
-  const loan = Number(document.getElementById('loanAmount').value);
-  const coll = Number(document.getElementById('collateralValue').value);
+  var loan = Number(document.getElementById('loanAmount').value);
+  var coll = Number(document.getElementById('collateralValue').value);
   if (coll > 0 && loan > 0 && coll <= loan) {
     document.getElementById('collateralValue').classList.add('error');
-    const err = document.getElementById('err-collateralValue');
-    err.textContent = `Collateral (MK ${coll.toLocaleString()}) must exceed loan (MK ${loan.toLocaleString()})`;
-    err.classList.add('show'); valid = false;
+    var err = document.getElementById('err-collateralValue');
+    err.textContent = 'Collateral (MK ' + coll.toLocaleString() + ') must exceed loan (MK ' + loan.toLocaleString() + ')';
+    err.classList.add('show');
+    valid = false;
   }
   return valid;
 }
 
-// ── TOAST ────────────────────────────────────────────────────
+// ── TOAST ──────────────────────────────────────────────────────
 function showToast(msg, type) {
-  const t = document.getElementById('toast');
-  t.textContent = (type==='success'?'✅ ':type==='info'?'ℹ️ ':'❌ ') + msg;
-  t.className = `toast ${type} show`;
-  setTimeout(() => t.classList.remove('show'), 5500);
+  var t = document.getElementById('toast');
+  t.textContent = (type === 'success' ? '✅ ' : type === 'info' ? 'ℹ️ ' : '❌ ') + msg;
+  t.className = 'toast ' + type + ' show';
+  setTimeout(function() { t.classList.remove('show'); }, 5500);
 }
 
-// ── LOCAL STORAGE ────────────────────────────────────────────
-function getApps() { try { return JSON.parse(localStorage.getItem('phindu_apps')||'[]'); } catch { return []; } }
+// ── LOCAL STORAGE ──────────────────────────────────────────────
+function getApps() {
+  try { return JSON.parse(localStorage.getItem('phindu_apps') || '[]'); }
+  catch(e) { return []; }
+}
 function saveApps(a) { localStorage.setItem('phindu_apps', JSON.stringify(a)); }
 
-// ── FORM SUBMIT ──────────────────────────────────────────────
-document.getElementById('loanForm').addEventListener('submit', async function(e) {
+// ── FORM SUBMIT ────────────────────────────────────────────────
+document.getElementById('loanForm').addEventListener('submit', function(e) {
   e.preventDefault();
-  if (!validate()) { document.querySelector('.field-error.show')?.scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  if (!validate()) {
+    var firstErr = document.querySelector('.field-error.show');
+    if (firstErr) firstErr.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    return;
+  }
+  var btn     = document.getElementById('submitBtn');
+  var spinner = document.getElementById('spinner');
+  var btnText = document.getElementById('btnText');
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  btnText.textContent   = 'Submitting...';
 
-  const btn = document.getElementById('submitBtn');
-  const spinner = document.getElementById('spinner');
-  const btnText = document.getElementById('btnText');
-  btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Submitting...';
+  var loanAmt  = Number(document.getElementById('loanAmount').value);
+  var periodVal = document.getElementById('repayPeriod').value;
+  var rate      = RATES[PERIOD_TO_KEY[periodVal]] || 0;
+  var totalRepay = loanAmt + loanAmt * rate;
 
-  const loanAmt    = Number(document.getElementById('loanAmount').value);
-  const periodVal  = document.getElementById('repayPeriod').value;
-  const periodKey  = PERIOD_MAP[periodVal];
-  const rate       = RATES[periodKey] || 0;
-  const totalRepay = loanAmt + loanAmt * rate;
-
-  const app = {
+  var app = {
     id: 'PL-' + Date.now(),
     firstName: document.getElementById('firstName').value,
-    lastName: document.getElementById('lastName').value,
-    phone: document.getElementById('phone').value,
-    email: document.getElementById('email').value || 'Not provided',
-    nationalId: document.getElementById('nationalId').value,
-    dob: document.getElementById('dob').value,
-    gender: document.getElementById('gender').value || 'Not specified',
-    address: document.getElementById('address').value,
-    loanType: document.getElementById('loanType').value,
-    loanAmount: loanAmt,
-    repayPeriod: periodVal,
-    interestRate: `${(rate*100).toFixed(0)}%`,
+    lastName:  document.getElementById('lastName').value,
+    phone:     document.getElementById('phone').value,
+    email:     document.getElementById('email').value || 'Not provided',
+    nationalId:document.getElementById('nationalId').value,
+    dob:       document.getElementById('dob').value,
+    gender:    document.getElementById('gender').value || 'Not specified',
+    address:   document.getElementById('address').value,
+    loanType:  document.getElementById('loanType').value,
+    loanAmount:loanAmt,
+    repayPeriod:periodVal,
+    interestRate: (rate * 100).toFixed(0) + '%',
     totalRepayment: totalRepay,
-    employment: document.getElementById('employment').value,
-    income: document.getElementById('income').value,
-    purpose: document.getElementById('purpose').value,
+    employment:document.getElementById('employment').value,
+    income:    document.getElementById('income').value,
+    purpose:   document.getElementById('purpose').value,
     collateralItem: document.getElementById('collateralItem').value,
-    collateralValue: document.getElementById('collateralValue').value,
+    collateralValue:document.getElementById('collateralValue').value,
     collateralDesc: document.getElementById('collateralDesc').value,
-    idPhotoBase64: idPhotoBase64,
+    idPhotoBase64:  idPhotoBase64,
     submittedAt: new Date().toLocaleString('en-MW', { timeZone: 'Africa/Blantyre' }),
-    status: 'pending',
+    status: 'pending'
   };
 
-  const params = {
-    applicant_name: `${app.firstName} ${app.lastName}`,
-    national_id: app.nationalId, phone: app.phone, email: app.email,
-    dob: app.dob, gender: app.gender, address: app.address,
-    loan_type: app.loanType,
-    loan_amount: `MK ${loanAmt.toLocaleString()}`,
-    repay_period: periodVal,
-    interest_rate: app.interestRate,
-    total_repayment: `MK ${totalRepay.toLocaleString()}`,
-    employment: app.employment,
-    income: `MK ${Number(app.income).toLocaleString()}`,
-    purpose: app.purpose,
+  var params = {
+    applicant_name:  app.firstName + ' ' + app.lastName,
+    national_id:     app.nationalId,
+    phone:           app.phone,
+    email:           app.email,
+    dob:             app.dob,
+    gender:          app.gender,
+    address:         app.address,
+    loan_type:       app.loanType,
+    loan_amount:     'MK ' + loanAmt.toLocaleString(),
+    repay_period:    periodVal,
+    interest_rate:   app.interestRate,
+    total_repayment: 'MK ' + totalRepay.toLocaleString(),
+    employment:      app.employment,
+    income:          'MK ' + Number(app.income).toLocaleString(),
+    purpose:         app.purpose,
     collateral_item: app.collateralItem,
-    collateral_value: `MK ${Number(app.collateralValue).toLocaleString()}`,
+    collateral_value:'MK ' + Number(app.collateralValue).toLocaleString(),
     collateral_desc: app.collateralDesc,
-    submitted_at: app.submittedAt,
-    app_id: app.id,
+    submitted_at:    app.submittedAt,
+    app_id:          app.id
   };
 
-  try {
-    await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params);
-    // Send SMS notification
-    const smsMsg = `Phindu Loans: New application from ${app.firstName} ${app.lastName}. Phone: ${app.phone}. Loan: MK ${loanAmt.toLocaleString()} (${periodVal}). ID: ${app.id}`;
-    sendSMS(smsMsg);
-    // Save locally
-    const apps = getApps(); apps.unshift(app); saveApps(apps);
-    showToast('Application submitted! We will contact you within 24 hours.', 'success');
-    document.getElementById('loanForm').reset();
-    idPhotoBase64 = null;
-    document.getElementById('idPreview').style.display = 'none';
-    document.getElementById('idUploadArea').classList.remove('has-file');
-    document.querySelector('#idUploadArea .id-upload-text').innerHTML = '<strong>Click or drag to upload your National ID</strong>Front page only · JPG, PNG · Max 5MB';
-    updateCollateralHint();
-    autoCalc();
-  } catch(err) {
-    showToast('Submission failed. Please call us directly.', 'error');
-    console.error(err);
-  } finally {
-    btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Submit Application →';
-  }
+  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+    .then(function() {
+      var apps = getApps();
+      apps.unshift(app);
+      saveApps(apps);
+      showToast('Application submitted! We will contact you within 24 hours.', 'success');
+      document.getElementById('loanForm').reset();
+      idPhotoBase64 = null;
+      document.getElementById('idPreview').style.display = 'none';
+      document.getElementById('idUploadArea').classList.remove('has-file');
+      document.querySelector('#idUploadArea .id-upload-label').innerHTML =
+        '<strong>Click or drag to upload your National ID</strong>Front page only · JPG or PNG · Max 5MB';
+      updateCollateralHint();
+      document.getElementById('inlineCalcBox').style.display = 'none';
+    })
+    .catch(function(err) {
+      showToast('Submission failed. Please call us directly.', 'error');
+      console.error(err);
+    })
+    .finally(function() {
+      btn.disabled = false;
+      spinner.style.display = 'none';
+      btnText.textContent = 'Submit Application →';
+    });
 });
 
-// ── DASHBOARD ────────────────────────────────────────────────
+// ── DASHBOARD ──────────────────────────────────────────────────
 function updateStats() {
-  const apps = getApps();
+  var apps = getApps();
   document.getElementById('stat-total').textContent    = apps.length;
-  document.getElementById('stat-pending').textContent  = apps.filter(a=>a.status==='pending').length;
-  document.getElementById('stat-approved').textContent = apps.filter(a=>a.status==='approved').length;
-  document.getElementById('stat-rejected').textContent = apps.filter(a=>a.status==='rejected').length;
+  document.getElementById('stat-pending').textContent  = apps.filter(function(a){return a.status==='pending';}).length;
+  document.getElementById('stat-approved').textContent = apps.filter(function(a){return a.status==='approved';}).length;
+  document.getElementById('stat-rejected').textContent = apps.filter(function(a){return a.status==='rejected';}).length;
 }
 
 function renderTable() {
-  const apps    = getApps();
-  const search  = (document.getElementById('dashSearch').value||'').toLowerCase();
-  const typeF   = document.getElementById('filterType').value;
-  const statusF = document.getElementById('filterStatus').value;
-  const dateF   = document.getElementById('filterDate').value;
-  const now     = new Date();
-  const filtered = apps.filter(a => {
-    const name = `${a.firstName} ${a.lastName}`.toLowerCase();
+  var apps    = getApps();
+  var search  = (document.getElementById('dashSearch').value || '').toLowerCase();
+  var typeF   = document.getElementById('filterType').value;
+  var statusF = document.getElementById('filterStatus').value;
+  var dateF   = document.getElementById('filterDate').value;
+  var now     = new Date();
+  var filtered = apps.filter(function(a) {
+    var name = (a.firstName + ' ' + a.lastName).toLowerCase();
     if (search && !name.includes(search) && !(a.nationalId||'').toLowerCase().includes(search) && !(a.phone||'').includes(search)) return false;
     if (typeF && a.loanType !== typeF) return false;
     if (statusF && a.status !== statusF) return false;
     if (dateF) {
-      const d = new Date(a.submittedAt);
-      if (dateF==='today' && d.toDateString()!==now.toDateString()) return false;
-      if (dateF==='week'){const w=new Date(now);w.setDate(now.getDate()-7);if(d<w)return false;}
-      if (dateF==='month'){const m=new Date(now);m.setMonth(now.getMonth()-1);if(d<m)return false;}
+      var d = new Date(a.submittedAt);
+      if (dateF === 'today' && d.toDateString() !== now.toDateString()) return false;
+      if (dateF === 'week')  { var w = new Date(now); w.setDate(now.getDate()-7);    if (d < w) return false; }
+      if (dateF === 'month') { var m = new Date(now); m.setMonth(now.getMonth()-1);  if (d < m) return false; }
     }
     return true;
   });
-  const tbody = document.getElementById('appsTableBody');
-  document.getElementById('noApps').style.display = filtered.length===0?'block':'none';
-  tbody.innerHTML = filtered.map((a,i) => `
-    <tr>
-      <td style="color:var(--text-muted);font-size:0.76rem;">${i+1}</td>
-      <td><div style="font-weight:600;font-size:0.88rem;">${a.firstName} ${a.lastName}</div><div style="font-size:0.74rem;color:var(--text-muted);">${a.phone}</div></td>
-      <td style="font-size:0.82rem;">${a.loanType}</td>
-      <td style="font-weight:600;color:var(--gold-light);">MK ${Number(a.loanAmount).toLocaleString()}</td>
-      <td style="font-size:0.8rem;">${a.repayPeriod||'—'}</td>
-      <td style="font-size:0.76rem;color:var(--text-muted);">${a.submittedAt}</td>
-      <td><span class="status-badge ${a.status}"><span class="status-dot"></span>${a.status.charAt(0).toUpperCase()+a.status.slice(1)}</span></td>
-      <td style="display:flex;gap:4px;flex-wrap:wrap;">
-        <button class="action-btn" onclick="viewApp('${a.id}')">View</button>
-        <button class="action-btn approve" onclick="updateStatus('${a.id}','approved')">✓</button>
-        <button class="action-btn reject" onclick="updateStatus('${a.id}','rejected')">✗</button>
-      </td>
-    </tr>`).join('');
+  var tbody = document.getElementById('appsTableBody');
+  document.getElementById('noApps').style.display = filtered.length === 0 ? 'block' : 'none';
+  tbody.innerHTML = filtered.map(function(a, i) {
+    return '<tr>' +
+      '<td style="color:var(--text-muted);font-size:0.76rem;">' + (i+1) + '</td>' +
+      '<td><div style="font-weight:600;font-size:0.88rem;">' + a.firstName + ' ' + a.lastName + '</div>' +
+          '<div style="font-size:0.74rem;color:var(--text-muted);">' + a.phone + '</div></td>' +
+      '<td style="font-size:0.82rem;">' + a.loanType + '</td>' +
+      '<td style="font-weight:600;color:var(--gold-light);">MK ' + Number(a.loanAmount).toLocaleString() + '</td>' +
+      '<td style="font-size:0.8rem;">' + (a.repayPeriod||'—') + '</td>' +
+      '<td style="font-size:0.76rem;color:var(--text-muted);">' + a.submittedAt + '</td>' +
+      '<td><span class="status-badge ' + a.status + '"><span class="status-dot"></span>' +
+          a.status.charAt(0).toUpperCase() + a.status.slice(1) + '</span></td>' +
+      '<td style="display:flex;gap:4px;flex-wrap:wrap;">' +
+        '<button class="action-btn" onclick="viewApp(\'' + a.id + '\')">View</button>' +
+        '<button class="action-btn approve" onclick="updateStatus(\'' + a.id + '\',\'approved\')">✓</button>' +
+        '<button class="action-btn reject" onclick="updateStatus(\'' + a.id + '\',\'rejected\')">✗</button>' +
+      '</td></tr>';
+  }).join('');
   updateStats();
 }
 
 function updateStatus(id, status) {
-  const apps = getApps(); const app = apps.find(a=>a.id===id);
-  if (!app) return; app.status = status; saveApps(apps); renderTable();
-  showToast(`Application ${status}.`, status==='approved'?'success':'error');
+  var apps = getApps();
+  var app  = apps.find(function(a) { return a.id === id; });
+  if (!app) return;
+  app.status = status;
+  saveApps(apps);
+  renderTable();
+  showToast('Application ' + status + '.', status === 'approved' ? 'success' : 'error');
 }
 
 function viewApp(id) {
-  const app = getApps().find(a=>a.id===id); if(!app) return;
-  document.getElementById('modalTitle').textContent = `${app.firstName} ${app.lastName} — Application`;
-  const totalRepay = app.totalRepayment || (Number(app.loanAmount) + Number(app.loanAmount) * (parseFloat(app.interestRate||'0')/100));
-  document.getElementById('modalBody').innerHTML = `
-    <div class="modal-field"><div class="modal-field-label">App ID</div><div class="modal-field-value" style="font-size:0.78rem;">${app.id}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge ${app.status}"><span class="status-dot"></span>${app.status}</span></div></div>
-    <div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">${app.firstName} ${app.lastName}</div></div>
-    <div class="modal-field"><div class="modal-field-label">National ID</div><div class="modal-field-value" style="letter-spacing:1px;">${app.nationalId}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Phone</div><div class="modal-field-value">${app.phone}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">${app.email}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">${app.dob}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">${app.gender}</div></div>
-    <div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">${app.address}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">${app.loanType}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">MK ${Number(app.loanAmount).toLocaleString()}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">${app.repayPeriod}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">${app.interestRate||'—'}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">MK ${Number(totalRepay).toLocaleString()}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">${app.employment}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK ${Number(app.income).toLocaleString()}</div></div>
-    <div class="modal-field full"><div class="modal-field-label">Purpose</div><div class="modal-field-value">${app.purpose}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">${app.collateralItem}</div></div>
-    <div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK ${Number(app.collateralValue).toLocaleString()}</div></div>
-    <div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">${app.collateralDesc}</div></div>
-    ${app.idPhotoBase64 ? `<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><img src="${app.idPhotoBase64}" class="id-img-preview" alt="National ID"/></div>` : ''}
-    <div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">${app.submittedAt}</div></div>`;
-  document.getElementById('modalActions').innerHTML = `
-    <button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus('${app.id}','approved');closeModal()">✓ Approve</button>
-    <button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus('${app.id}','rejected');closeModal()">✗ Reject</button>`;
+  var app = getApps().find(function(a) { return a.id === id; });
+  if (!app) return;
+  document.getElementById('modalTitle').textContent = app.firstName + ' ' + app.lastName + ' — Application';
+  var totalRepay = app.totalRepayment || (Number(app.loanAmount) * (1 + parseFloat(app.interestRate||'0') / 100));
+  document.getElementById('modalBody').innerHTML =
+    '<div class="modal-field"><div class="modal-field-label">App ID</div><div class="modal-field-value" style="font-size:0.78rem;">' + app.id + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge ' + app.status + '"><span class="status-dot"></span>' + app.status + '</span></div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">' + app.firstName + ' ' + app.lastName + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">National ID</div><div class="modal-field-value" style="letter-spacing:1px;">' + app.nationalId + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Phone</div><div class="modal-field-value">' + app.phone + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">' + app.email + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">' + app.dob + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">' + app.gender + '</div></div>' +
+    '<div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">' + app.address + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">' + app.loanType + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">MK ' + Number(app.loanAmount).toLocaleString() + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">' + app.repayPeriod + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">' + (app.interestRate||'—') + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">MK ' + Number(totalRepay).toLocaleString() + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">' + app.employment + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK ' + Number(app.income).toLocaleString() + '</div></div>' +
+    '<div class="modal-field full"><div class="modal-field-label">Purpose</div><div class="modal-field-value">' + app.purpose + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">' + app.collateralItem + '</div></div>' +
+    '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK ' + Number(app.collateralValue).toLocaleString() + '</div></div>' +
+    '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">' + app.collateralDesc + '</div></div>' +
+    (app.idPhotoBase64 ? '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><img src="' + app.idPhotoBase64 + '" class="id-img-modal" alt="National ID"/></div>' : '') +
+    '<div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">' + app.submittedAt + '</div></div>';
+  document.getElementById('modalActions').innerHTML =
+    '<button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\'' + app.id + '\',\'approved\');closeModal()">✓ Approve</button>' +
+    '<button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\'' + app.id + '\',\'rejected\');closeModal()">✗ Reject</button>';
   document.getElementById('appModal').classList.add('open');
 }
 
 function closeModal() { document.getElementById('appModal').classList.remove('open'); }
-document.getElementById('appModal').addEventListener('click', function(e){ if(e.target===this)closeModal(); });
+document.getElementById('appModal').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
 
-// ── CSV EXPORT ───────────────────────────────────────────────
+// ── CSV EXPORT ─────────────────────────────────────────────────
 function exportCSV() {
-  const apps = getApps();
+  var apps = getApps();
   if (!apps.length) { showToast('No applications to export.', 'error'); return; }
-  const h = ['ID','First Name','Last Name','Phone','Email','National ID','DOB','Gender','Address','Loan Type','Amount','Period','Interest Rate','Total Repayment','Employment','Income','Purpose','Collateral Item','Collateral Value','Collateral Desc','Submitted','Status'];
-  const rows = apps.map(a => [a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,`"${a.address}"`,a.loanType,a.loanAmount,a.repayPeriod,a.interestRate||'',a.totalRepayment||'',a.employment,a.income,`"${a.purpose}"`,`"${a.collateralItem}"`,a.collateralValue,`"${a.collateralDesc}"`,a.submittedAt,a.status].join(','));
-  const csv = [h.join(','),...rows].join('\n');
-  const b = new Blob([csv],{type:'text/csv'}); const u = URL.createObjectURL(b);
-  const a = document.createElement('a'); a.href=u; a.download=`phindu-loans-${new Date().toISOString().slice(0,10)}.csv`; a.click(); URL.revokeObjectURL(u);
+  var h = ['ID','First Name','Last Name','Phone','Email','National ID','DOB','Gender','Address',
+           'Loan Type','Amount','Period','Interest Rate','Total Repayment',
+           'Employment','Income','Purpose','Collateral Item','Collateral Value','Collateral Desc','Submitted','Status'];
+  var rows = apps.map(function(a) {
+    return [a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,
+            '"'+a.address+'"',a.loanType,a.loanAmount,a.repayPeriod,a.interestRate||'',
+            a.totalRepayment||'',a.employment,a.income,'"'+a.purpose+'"',
+            '"'+a.collateralItem+'"',a.collateralValue,'"'+a.collateralDesc+'"',
+            a.submittedAt,a.status].join(',');
+  });
+  var csv  = [h.join(',')].concat(rows).join('\n');
+  var blob = new Blob([csv], { type: 'text/csv' });
+  var url  = URL.createObjectURL(blob);
+  var a    = document.createElement('a');
+  a.href = url;
+  a.download = 'phindu-loans-' + new Date().toISOString().slice(0,10) + '.csv';
+  a.click();
+  URL.revokeObjectURL(url);
 }
 
-// ── CLEAR ERRORS ─────────────────────────────────────────────
-document.querySelectorAll('input,select,textarea').forEach(el => {
-  el.addEventListener('input', () => {
+// ── CLEAR ERRORS ON INPUT ──────────────────────────────────────
+document.querySelectorAll('input,select,textarea').forEach(function(el) {
+  el.addEventListener('input', function() {
     el.classList.remove('error');
-    const err = document.getElementById('err-' + el.id);
+    var err = document.getElementById('err-' + el.id);
     if (err) err.classList.remove('show');
   });
 });
 
-// ── INIT ANIMATIONS ────────────�
+// ── INIT ANIMATIONS ────────────────────────────────────────────
+var globalObs = new IntersectionObserver(function(entries) {
+  entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-up').forEach(function(el) { globalObs.observe(el); });
+</script>
+</body>
+</html>
