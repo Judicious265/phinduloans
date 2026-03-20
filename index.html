@@ -853,26 +853,29 @@ document.getElementById('loanForm').addEventListener('submit', function(e) {
     submitted_at:app.submittedAt,
     app_id:app.id
   };
+  // Save locally and to Google Sheets immediately — always works
+  var apps = getApps(); apps.unshift(app); saveApps(apps);
+  saveToSheets(app);
+
+  // Send email via EmailJS — best effort, doesn't block success
   emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
     .then(function() {
-      var apps = getApps(); apps.unshift(app); saveApps(apps);
-      saveToSheets(app);
-      showToast('Application submitted! We will contact you within 24 hours.', 'success');
-      document.getElementById('loanForm').reset();
-      idPhotoBase64 = null;
-      document.getElementById('idPreview').style.display = 'none';
-      document.getElementById('idUploadArea').classList.remove('has-file');
-      document.querySelector('#idUploadArea .id-upload-label').innerHTML = '<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';
-      updateCollateralHint();
-      document.getElementById('inlineCalcBox').style.display = 'none';
+      console.log('Email sent successfully');
     })
     .catch(function(err) {
-      showToast('Submission failed. Please call us directly.', 'error');
-      console.error(err);
-    })
-    .finally(function() {
-      btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Submit Application';
+      console.log('Email note:', err);
     });
+
+  // Always show success and reset form
+  showToast('Application submitted! We will contact you within 24 hours.', 'success');
+  document.getElementById('loanForm').reset();
+  idPhotoBase64 = null;
+  document.getElementById('idPreview').style.display = 'none';
+  document.getElementById('idUploadArea').classList.remove('has-file');
+  document.querySelector('#idUploadArea .id-upload-label').innerHTML = '<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';
+  updateCollateralHint();
+  document.getElementById('inlineCalcBox').style.display = 'none';
+  btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Submit Application';
 });
 
 function updateStats() {
