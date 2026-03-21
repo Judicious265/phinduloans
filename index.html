@@ -530,6 +530,7 @@
     <div class="dash-header">
       <div><div class="section-label">Admin</div><h2>Applications Dashboard</h2></div>
       <div style="display:flex;gap:0.8rem;align-items:center;">
+        <button class="btn-secondary" onclick="loadFromSheets()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#8635; Refresh</button>
         <button class="btn-secondary" onclick="exportCSV()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#11015; Export CSV</button>
         <button class="dash-logout-btn" onclick="lockDashboard()">&#128274; Lock</button>
       </div>
@@ -581,7 +582,10 @@ var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL = "https://script.google.com/macros/s/AKfycbyfwedXdHL1AJK1EQT6TLCpMLAdZk7TeEZoUOhf-pndOLe42xHLuMF71ckcDcxn8XKs/exec";
+var SHEETS_URL   = "https://script.google.com/macros/s/AKfycbx-QzSbzzfbLKieoWKj_s3qtMEchzDDFKEA7bE6wbI6iVPnZw2B-4WkkrwyfFg5kzSE/exec";
+var SHEETS_READ  = "https://script.google.com/macros/s/AKfycbx-QzSbzzfbLKieoWKj_s3qtMEchzDDFKEA7bE6wbI6iVPnZw2B-4WkkrwyfFg5kzSE/exec?action=getAll";
+var sheetsApps   = [];
+var sheetsLoaded = false;
 var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var PERIOD_TO_KEY = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
 var dashUnlocked = false;
@@ -616,7 +620,7 @@ function showPage(name) {
   var nb = document.getElementById('nav-' + name);
   if (nb) nb.classList.add('active');
   window.scrollTo(0, 0);
-  if (name === 'dashboard') { renderTable(); updateStats(); }
+  if (name === 'dashboard') { if (dashUnlocked) { loadFromSheets(); } }
   setTimeout(function() {
     document.querySelectorAll('#page-' + name + ' .fade-up').forEach(function(el) {
       if (!el.classList.contains('visible')) {
@@ -638,6 +642,8 @@ function openDashboard() {
     document.getElementById('dashLoginError').classList.remove('show');
     document.getElementById('dashLoginOverlay').classList.add('open');
     setTimeout(function() { document.getElementById('dashPasswordInput').focus(); }, 150);
+  } else {
+    loadFromSheets();
   }
 }
 
@@ -646,7 +652,7 @@ function checkDashPassword() {
   if (val === ADMIN_PASSWORD) {
     dashUnlocked = true;
     document.getElementById('dashLoginOverlay').classList.remove('open');
-    renderTable(); updateStats();
+    loadFromSheets();
   } else {
     document.getElementById('dashLoginError').classList.add('show');
     document.getElementById('dashPasswordInput').value = '';
@@ -879,15 +885,54 @@ document.getElementById('loanForm').addEventListener('submit', function(e) {
 });
 
 function updateStats() {
-  var apps = getApps();
+  var apps = sheetsLoaded ? sheetsApps : getApps();
   document.getElementById('stat-total').textContent    = apps.length;
-  document.getElementById('stat-pending').textContent  = apps.filter(function(a){return a.status==='pending';}).length;
-  document.getElementById('stat-approved').textContent = apps.filter(function(a){return a.status==='approved';}).length;
-  document.getElementById('stat-rejected').textContent = apps.filter(function(a){return a.status==='rejected';}).length;
+  document.getElementById('stat-pending').textContent  = apps.filter(function(a){return (a.status||'pending').toLowerCase()==='pending';}).length;
+  document.getElementById('stat-approved').textContent = apps.filter(function(a){return (a.status||'').toLowerCase()==='approved';}).length;
+  document.getElementById('stat-rejected').textContent = apps.filter(function(a){return (a.status||'').toLowerCase()==='rejected';}).length;
+}
+
+function loadFromSheets() {
+  var tbody = document.getElementById('appsTableBody');
+  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading applications from database...</td></tr>';
+  var url = SHEETS_READ + '&t=' + Date.now();
+  var script = document.createElement('script');
+  window._sheetsCallback = function(data) {
+    document.head.removeChild(script);
+    if (data && data.rows) {
+      sheetsApps = data.rows.map(function(row) {
+        return {
+          id: row[0]||'', firstName: row[1]||'', lastName: row[2]||'',
+          phone: row[3]||'', email: row[4]||'', nationalId: row[5]||'',
+          dob: row[6]||'', gender: row[7]||'', address: row[8]||'',
+          loanType: row[9]||'', loanAmount: row[10]||'', repayPeriod: row[11]||'',
+          interestRate: row[12]||'', totalRepayment: row[13]||'',
+          employment: row[14]||'', income: row[15]||'', purpose: row[16]||'',
+          collateralItem: row[17]||'', collateralValue: row[18]||'',
+          collateralDesc: row[19]||'', submittedAt: row[20]||'',
+          status: (row[21]||'pending').toLowerCase()
+        };
+      });
+      sheetsLoaded = true;
+      renderTable();
+      updateStats();
+    } else {
+      sheetsLoaded = false;
+      renderTable();
+    }
+  };
+  script.src = SHEETS_READ.replace('?action=getAll','?action=getAll&callback=_sheetsCallback') + '&t=' + Date.now();
+  script.onerror = function() {
+    document.head.removeChild(script);
+    sheetsLoaded = false;
+    renderTable();
+    updateStats();
+  };
+  document.head.appendChild(script);
 }
 
 function renderTable() {
-  var apps = getApps();
+  var apps = sheetsLoaded ? sheetsApps : getApps();
   var search = (document.getElementById('dashSearch').value||'').toLowerCase();
   var typeF = document.getElementById('filterType').value;
   var statusF = document.getElementById('filterStatus').value;
