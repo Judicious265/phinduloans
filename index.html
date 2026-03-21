@@ -971,11 +971,25 @@ function renderTable() {
 }
 
 function updateStatus(id, status) {
+  // Update in sheetsApps array
+  if (sheetsLoaded) {
+    var sApp = sheetsApps.find(function(a){return a.id===id;});
+    if (sApp) sApp.status = status;
+  }
+  // Update in localStorage
   var apps = getApps();
   var app = apps.find(function(a){return a.id===id;});
-  if (!app) return;
-  app.status = status; saveApps(apps); renderTable();
-  showToast('Application '+status+'.', status==='approved'?'success':'error');
+  if (app) { app.status = status; saveApps(apps); }
+
+  // Update in Google Sheets
+  var updateUrl = SHEETS_URL + '?action=updateStatus&app_id=' + encodeURIComponent(id) + '&status=' + encodeURIComponent(status);
+  var img = new Image();
+  img.src = updateUrl;
+
+  renderTable();
+  updateStats();
+  var label = status.charAt(0).toUpperCase() + status.slice(1);
+  showToast('Application ' + label + ' and saved to Google Sheets.', status==='approved'?'success':'error');
 }
 
 function viewApp(id) {
