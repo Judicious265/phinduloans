@@ -471,7 +471,7 @@
           </div>
           <div class="field"><label>Estimated Collateral Value (MK) <span class="req">*</span></label><input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkCollateral()"/><div class="field-error" id="err-collateralValue">Collateral value must exceed the loan amount</div></div>
           <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item in detail - make, model, condition, location..."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
-          <button type="submit" class="submit-btn" id="submitBtn" ontouchend="event.preventDefault();handleFormSubmit(null);"><div class="spinner" id="spinner"></div><span id="btnText">Submit Application &rarr;</span></button>
+          <button type="button" class="submit-btn" id="submitBtn"><div class="spinner" id="spinner"></div><span id="btnText">Submit Application &rarr;</span></button>
         </form>
       </div>
     </div>
@@ -743,13 +743,20 @@ function validate() {
   required.forEach(function(id) {
     var el = document.getElementById(id);
     var err = document.getElementById('err-' + id);
-    if (!el.value.trim()) {
-      el.classList.add('error');
+    if (!el || !el.value.trim()) {
+      if (el) el.classList.add('error');
       if (err && id !== 'collateralValue') err.classList.add('show');
       valid = false;
     } else { el.classList.remove('error'); if (err) err.classList.remove('show'); }
   });
-  if (!idPhotoBase64) { document.getElementById('err-idPhoto').classList.add('show'); valid = false; }
+  // ID photo: required on desktop, optional on mobile (iOS camera issues)
+  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!idPhotoBase64 && !isMobile) {
+    document.getElementById('err-idPhoto').classList.add('show');
+    valid = false;
+  } else if (idPhotoBase64) {
+    document.getElementById('err-idPhoto').classList.remove('show');
+  }
   var loan = Number(document.getElementById('loanAmount').value);
   var coll = Number(document.getElementById('collateralValue').value);
   if (coll > 0 && loan > 0 && coll <= loan) {
@@ -809,6 +816,7 @@ function handleFormSubmit(e) {
   if (!validate()) {
     var firstErr = document.querySelector('.field-error.show');
     if (firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    document.getElementById('loanForm')._submitting = false;
     return;
   }
   var btn = document.getElementById('submitBtn');
@@ -890,13 +898,17 @@ function handleFormSubmit(e) {
 
 // Bind form submit for all browsers including iOS Safari
 var loanForm = document.getElementById('loanForm');
-loanForm.addEventListener('submit', function(e) { e.preventDefault(); handleFormSubmit(e); }, false);
-loanForm.addEventListener('touchend', function(e) {
-  var btn = document.getElementById('submitBtn');
-  if (e.target === btn || btn.contains(e.target)) {
-    e.preventDefault();
-    handleFormSubmit(null);
-  }
+loanForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  handleFormSubmit(e);
+}, false);
+
+// iOS Safari specific fix - intercept the submit button click directly
+document.getElementById('submitBtn').addEventListener('click', function(e) {
+  e.preventDefault();
+  e.stopPropagation();
+  handleFormSubmit(null);
 }, false);
 
 function updateStats() {
