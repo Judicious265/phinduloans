@@ -203,9 +203,9 @@
     .action-btn.reject:hover{border-color:var(--error);color:var(--error);}
     .no-apps{text-align:center;padding:3rem;color:var(--text-muted);}
     .dash-note{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:1rem 1.3rem;font-size:0.83rem;color:var(--gold-light);margin-bottom:1.5rem;display:flex;gap:10px;align-items:flex-start;}
-    .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;-webkit-overflow-scrolling:touch;}
-    .modal-overlay.open{display:flex;}
-    .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:1.5rem;max-width:640px;width:100%;position:relative;margin:auto;-webkit-overflow-scrolling:touch;}
+    .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;overflow-y:scroll;-webkit-overflow-scrolling:touch;}
+    .modal-overlay.open{display:block;}
+    .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:16px;padding:1.5rem;max-width:640px;width:calc(100% - 2rem);position:relative;margin:1rem auto 3rem auto;}
     .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.3rem;cursor:pointer;}
     .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.3rem;padding-right:2rem;}
     .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
@@ -560,9 +560,9 @@
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="appModal">
-  <div class="modal">
-    <button class="modal-close" onclick="closeModal()">&#10005;</button>
+<div class="modal-overlay" id="appModal" onclick="handleOverlayClick(event)">
+  <div class="modal" id="appModalBox">
+    <button class="modal-close" onclick="closeModal()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;color:var(--text);font-size:1.3rem;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;">&#10005;</button>
     <div class="modal-title" id="modalTitle">Application Details</div>
     <div class="modal-grid" id="modalBody"></div>
     <div class="modal-actions" id="modalActions"></div>
@@ -989,7 +989,7 @@ function renderTable() {
       '<td style="font-size:0.76rem;color:var(--text-muted);">'+a.submittedAt+'</td>'+
       '<td><span class="status-badge '+a.status+'"><span class="status-dot"></span>'+a.status.charAt(0).toUpperCase()+a.status.slice(1)+'</span></td>'+
       '<td style="display:flex;gap:4px;flex-wrap:wrap;">'+
-        '<button class="action-btn" onclick="event.stopPropagation();viewApp(\''+a.id+'\')" ontouchend="event.stopPropagation();viewApp(\''+a.id+'\')">View</button>'+
+        '<button class="action-btn" onclick="openAppModal(\''+a.id+'\')">View</button>'+
         '<button class="action-btn approve" onclick="updateStatus(\''+a.id+'\',\'approved\')">Approve</button>'+
         '<button class="action-btn reject" onclick="updateStatus(\''+a.id+'\',\'rejected\')">Reject</button>'+
       '</td></tr>';
@@ -1019,9 +1019,21 @@ function updateStatus(id, status) {
   showToast('Application ' + label + ' and saved to Google Sheets.', status==='approved'?'success':'error');
 }
 
+function openAppModal(id) {
+  // Small delay ensures DOM is ready on slow mobile devices
+  setTimeout(function() { viewApp(id); }, 50);
+}
+
 function viewApp(id) {
-  var app = getApps().find(function(a){return a.id===id;});
-  if (!app) return;
+  // Look in sheetsApps first (cross-device), fall back to localStorage
+  var app = null;
+  if (sheetsLoaded && sheetsApps.length > 0) {
+    app = sheetsApps.find(function(a){ return a.id === id; });
+  }
+  if (!app) {
+    app = getApps().find(function(a){ return a.id === id; });
+  }
+  if (!app) { showToast('Application not found. Please refresh.', 'error'); return; }
   document.getElementById('modalTitle').textContent = app.firstName+' '+app.lastName+' - Application';
   var totalRepay = app.totalRepayment || Number(app.loanAmount);
   document.getElementById('modalBody').innerHTML =
@@ -1053,11 +1065,20 @@ function viewApp(id) {
   var overlay = document.getElementById('appModal');
   overlay.classList.add('open');
   overlay.scrollTop = 0;
-  document.body.style.overflow = 'hidden';
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
 }
 
-function closeModal() { document.getElementById('appModal').classList.remove('open'); document.body.style.overflow = ''; }
-document.getElementById('appModal').addEventListener('click', function(e){if(e.target===this)closeModal();});
+function closeModal() {
+  document.getElementById('appModal').classList.remove('open');
+  document.body.style.position = '';
+  document.body.style.width = '';
+}
+
+function handleOverlayClick(e) {
+  var box = document.getElementById('appModalBox');
+  if (box && !box.contains(e.target)) { closeModal(); }
+}
 
 function exportCSV() {
   var apps = getApps();
