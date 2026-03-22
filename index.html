@@ -46,7 +46,7 @@
     h1 .highlight{background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
     .hero-desc{font-size:1.05rem;color:var(--text-muted);line-height:1.7;margin-bottom:2rem;max-width:500px;animation:fadeUp 0.8s 0.2s ease both;}
     .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;animation:fadeUp 0.8s 0.3s ease both;}
-    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);padding:0.85rem 2rem;border-radius:50px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(201,168,76,0.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;}
+    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);padding:0.85rem 2rem;border-radius:50px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;box-shadow:0 8px 32px rgba(201,168,76,0.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
     .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,0.4);}
     .btn-secondary{background:transparent;color:var(--text);padding:0.85rem 2rem;border-radius:50px;font-weight:600;font-size:0.95rem;border:1px solid rgba(240,237,230,0.2);transition:border-color 0.2s,background 0.2s;display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;cursor:pointer;}
     .btn-secondary:hover{border-color:var(--gold);background:rgba(201,168,76,0.06);}
@@ -203,9 +203,9 @@
     .action-btn.reject:hover{border-color:var(--error);color:var(--error);}
     .no-apps{text-align:center;padding:3rem;color:var(--text-muted);}
     .dash-note{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:1rem 1.3rem;font-size:0.83rem;color:var(--gold-light);margin-bottom:1.5rem;display:flex;gap:10px;align-items:flex-start;}
-    .modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.75);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+    .modal-overlay{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.85);z-index:9999;display:none;align-items:flex-start;justify-content:center;padding:1rem;overflow-y:auto;-webkit-overflow-scrolling:touch;}
     .modal-overlay.open{display:flex;}
-    .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2rem;max-width:640px;width:100%;max-height:90vh;overflow-y:auto;position:relative;}
+    .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:1.5rem;max-width:640px;width:100%;position:relative;margin:auto;-webkit-overflow-scrolling:touch;}
     .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.3rem;cursor:pointer;}
     .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.3rem;padding-right:2rem;}
     .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
@@ -471,7 +471,7 @@
           </div>
           <div class="field"><label>Estimated Collateral Value (MK) <span class="req">*</span></label><input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkCollateral()"/><div class="field-error" id="err-collateralValue">Collateral value must exceed the loan amount</div></div>
           <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item in detail - make, model, condition, location..."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
-          <button type="submit" class="submit-btn" id="submitBtn"><div class="spinner" id="spinner"></div><span id="btnText">Submit Application &rarr;</span></button>
+          <button type="submit" class="submit-btn" id="submitBtn" ontouchend="event.preventDefault();handleFormSubmit(null);"><div class="spinner" id="spinner"></div><span id="btnText">Submit Application &rarr;</span></button>
         </form>
       </div>
     </div>
@@ -801,8 +801,11 @@ function saveToSheets(app) {
   img.src = SHEETS_URL + '?' + params;
 }
 
-document.getElementById('loanForm').addEventListener('submit', function(e) {
-  e.preventDefault();
+function handleFormSubmit(e) {
+  if (e) e.preventDefault();
+  var form = document.getElementById('loanForm');
+  if (form._submitting) return;
+  form._submitting = true;
   if (!validate()) {
     var firstErr = document.querySelector('.field-error.show');
     if (firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
@@ -882,7 +885,19 @@ document.getElementById('loanForm').addEventListener('submit', function(e) {
   updateCollateralHint();
   document.getElementById('inlineCalcBox').style.display = 'none';
   btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Submit Application';
-});
+  document.getElementById('loanForm')._submitting = false;
+}
+
+// Bind form submit for all browsers including iOS Safari
+var loanForm = document.getElementById('loanForm');
+loanForm.addEventListener('submit', function(e) { e.preventDefault(); handleFormSubmit(e); }, false);
+loanForm.addEventListener('touchend', function(e) {
+  var btn = document.getElementById('submitBtn');
+  if (e.target === btn || btn.contains(e.target)) {
+    e.preventDefault();
+    handleFormSubmit(null);
+  }
+}, false);
 
 function updateStats() {
   var apps = sheetsLoaded ? sheetsApps : getApps();
@@ -962,7 +977,7 @@ function renderTable() {
       '<td style="font-size:0.76rem;color:var(--text-muted);">'+a.submittedAt+'</td>'+
       '<td><span class="status-badge '+a.status+'"><span class="status-dot"></span>'+a.status.charAt(0).toUpperCase()+a.status.slice(1)+'</span></td>'+
       '<td style="display:flex;gap:4px;flex-wrap:wrap;">'+
-        '<button class="action-btn" onclick="viewApp(\''+a.id+'\')">View</button>'+
+        '<button class="action-btn" onclick="event.stopPropagation();viewApp(\''+a.id+'\')" ontouchend="event.stopPropagation();viewApp(\''+a.id+'\')">View</button>'+
         '<button class="action-btn approve" onclick="updateStatus(\''+a.id+'\',\'approved\')">Approve</button>'+
         '<button class="action-btn reject" onclick="updateStatus(\''+a.id+'\',\'rejected\')">Reject</button>'+
       '</td></tr>';
@@ -1023,10 +1038,13 @@ function viewApp(id) {
   document.getElementById('modalActions').innerHTML =
     '<button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'approved\');closeModal()">Approve</button>'+
     '<button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'rejected\');closeModal()">Reject</button>';
-  document.getElementById('appModal').classList.add('open');
+  var overlay = document.getElementById('appModal');
+  overlay.classList.add('open');
+  overlay.scrollTop = 0;
+  document.body.style.overflow = 'hidden';
 }
 
-function closeModal() { document.getElementById('appModal').classList.remove('open'); }
+function closeModal() { document.getElementById('appModal').classList.remove('open'); document.body.style.overflow = ''; }
 document.getElementById('appModal').addEventListener('click', function(e){if(e.target===this)closeModal();});
 
 function exportCSV() {
