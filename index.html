@@ -807,108 +807,123 @@ function saveToSheets(app) {
   img.src = SHEETS_URL + '?' + params;
 }
 
-function handleFormSubmit(e) {
-  if (e) e.preventDefault();
-  var form = document.getElementById('loanForm');
-  if (form._submitting) return;
-  form._submitting = true;
+function submitForm() {
+  // Prevent double submission
+  if (window._isSubmitting) return;
+
   if (!validate()) {
     var firstErr = document.querySelector('.field-error.show');
     if (firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
-    document.getElementById('loanForm')._submitting = false;
     return;
   }
-  var btn = document.getElementById('submitBtn');
+
+  window._isSubmitting = true;
+  var btn     = document.getElementById('submitBtn');
   var spinner = document.getElementById('spinner');
   var btnText = document.getElementById('btnText');
-  btn.disabled = true; spinner.style.display = 'block'; btnText.textContent = 'Submitting...';
-  var loanAmt = Number(document.getElementById('loanAmount').value);
+  btn.disabled = true;
+  spinner.style.display = 'block';
+  btnText.textContent = 'Submitting...';
+
+  var loanAmt   = Number(document.getElementById('loanAmount').value);
   var periodVal = document.getElementById('repayPeriod').value;
-  var rate = RATES[PERIOD_TO_KEY[periodVal]] || 0;
+  var rate      = RATES[PERIOD_TO_KEY[periodVal]] || 0;
   var totalRepay = loanAmt + loanAmt * rate;
+
+  // Safe date — works on iOS Safari (no locale options)
+  var now = new Date();
+  var submittedAt = now.getDate() + '/' + (now.getMonth()+1) + '/' + now.getFullYear() +
+    ' ' + now.getHours() + ':' + (now.getMinutes()<10?'0':'')+now.getMinutes();
+
   var app = {
-    id:'PL-'+Date.now(),
-    firstName:document.getElementById('firstName').value,
-    lastName:document.getElementById('lastName').value,
-    phone:document.getElementById('phone').value,
-    email:document.getElementById('email').value||'Not provided',
-    nationalId:document.getElementById('nationalId').value,
-    dob:document.getElementById('dob').value,
-    gender:document.getElementById('gender').value||'Not specified',
-    address:document.getElementById('address').value,
-    loanType:document.getElementById('loanType').value,
-    loanAmount:loanAmt,
-    repayPeriod:periodVal,
-    interestRate:(rate*100).toFixed(0)+'%',
-    totalRepayment:totalRepay,
-    employment:document.getElementById('employment').value,
-    income:document.getElementById('income').value,
-    purpose:document.getElementById('purpose').value,
-    collateralItem:document.getElementById('collateralItem').value,
-    collateralValue:document.getElementById('collateralValue').value,
-    collateralDesc:document.getElementById('collateralDesc').value,
-    idPhotoBase64:idPhotoBase64,
-    submittedAt:new Date().toLocaleString('en-MW',{timeZone:'Africa/Blantyre'}),
-    status:'pending'
+    id           : 'PL-' + Date.now(),
+    firstName    : document.getElementById('firstName').value.trim(),
+    lastName     : document.getElementById('lastName').value.trim(),
+    phone        : document.getElementById('phone').value.trim(),
+    email        : document.getElementById('email').value.trim() || 'Not provided',
+    nationalId   : document.getElementById('nationalId').value.trim(),
+    dob          : document.getElementById('dob').value,
+    gender       : document.getElementById('gender').value || 'Not specified',
+    address      : document.getElementById('address').value.trim(),
+    loanType     : document.getElementById('loanType').value,
+    loanAmount   : loanAmt,
+    repayPeriod  : periodVal,
+    interestRate : (rate * 100).toFixed(0) + '%',
+    totalRepayment: totalRepay,
+    employment   : document.getElementById('employment').value,
+    income       : document.getElementById('income').value.trim(),
+    purpose      : document.getElementById('purpose').value.trim(),
+    collateralItem : document.getElementById('collateralItem').value.trim(),
+    collateralValue: document.getElementById('collateralValue').value.trim(),
+    collateralDesc : document.getElementById('collateralDesc').value.trim(),
+    idPhotoBase64  : idPhotoBase64,
+    submittedAt    : submittedAt,
+    status         : 'pending'
   };
+
   var params = {
-    applicant_name:app.firstName+' '+app.lastName,
-    national_id:app.nationalId,phone:app.phone,email:app.email,
-    dob:app.dob,gender:app.gender,address:app.address,
-    loan_type:app.loanType,
-    loan_amount:'MK '+loanAmt.toLocaleString(),
-    repay_period:periodVal,
-    interest_rate:app.interestRate,
-    total_repayment:'MK '+totalRepay.toLocaleString(),
-    employment:app.employment,
-    income:'MK '+Number(app.income).toLocaleString(),
-    purpose:app.purpose,
-    collateral_item:app.collateralItem,
-    collateral_value:'MK '+Number(app.collateralValue).toLocaleString(),
-    collateral_desc:app.collateralDesc,
-    submitted_at:app.submittedAt,
-    app_id:app.id
+    applicant_name   : app.firstName + ' ' + app.lastName,
+    national_id      : app.nationalId,
+    phone            : app.phone,
+    email            : app.email,
+    dob              : app.dob,
+    gender           : app.gender,
+    address          : app.address,
+    loan_type        : app.loanType,
+    loan_amount      : 'MK ' + loanAmt.toLocaleString(),
+    repay_period     : periodVal,
+    interest_rate    : app.interestRate,
+    total_repayment  : 'MK ' + totalRepay.toLocaleString(),
+    employment       : app.employment,
+    income           : 'MK ' + Number(app.income).toLocaleString(),
+    purpose          : app.purpose,
+    collateral_item  : app.collateralItem,
+    collateral_value : 'MK ' + Number(app.collateralValue).toLocaleString(),
+    collateral_desc  : app.collateralDesc,
+    submitted_at     : app.submittedAt,
+    app_id           : app.id
   };
-  // Save locally and to Google Sheets immediately — always works
-  var apps = getApps(); apps.unshift(app); saveApps(apps);
+
+  // 1. Save to localStorage
+  var apps = getApps();
+  apps.unshift(app);
+  saveApps(apps);
+
+  // 2. Save to Google Sheets
   saveToSheets(app);
 
-  // Send email via EmailJS — best effort, doesn't block success
-  emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-    .then(function() {
-      console.log('Email sent successfully');
-    })
-    .catch(function(err) {
-      console.log('Email note:', err);
-    });
+  // 3. Send email (background — does not block)
+  try {
+    emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
+      .then(function() { console.log('Email OK'); })
+      .catch(function(err) { console.log('Email err:', err); });
+  } catch(ex) { console.log('EmailJS ex:', ex); }
 
-  // Always show success and reset form
+  // 4. Always show success immediately
   showToast('Application submitted! We will contact you within 24 hours.', 'success');
+
+  // 5. Reset form
   document.getElementById('loanForm').reset();
   idPhotoBase64 = null;
   document.getElementById('idPreview').style.display = 'none';
   document.getElementById('idUploadArea').classList.remove('has-file');
-  document.querySelector('#idUploadArea .id-upload-label').innerHTML = '<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';
+  document.querySelector('#idUploadArea .id-upload-label').innerHTML =
+    '<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';
   updateCollateralHint();
   document.getElementById('inlineCalcBox').style.display = 'none';
-  btn.disabled = false; spinner.style.display = 'none'; btnText.textContent = 'Submit Application';
-  document.getElementById('loanForm')._submitting = false;
+
+  // 6. Re-enable button
+  btn.disabled = false;
+  spinner.style.display = 'none';
+  btnText.textContent = 'Submit Application';
+  window._isSubmitting = false;
 }
 
-// Bind form submit for all browsers including iOS Safari
-var loanForm = document.getElementById('loanForm');
-loanForm.addEventListener('submit', function(e) {
-  e.preventDefault();
-  e.stopPropagation();
-  handleFormSubmit(e);
-}, false);
-
-// iOS Safari specific fix - intercept the submit button click directly
+// Single clean event listener — works on all browsers and iOS Safari
 document.getElementById('submitBtn').addEventListener('click', function(e) {
   e.preventDefault();
-  e.stopPropagation();
-  handleFormSubmit(null);
-}, false);
+  submitForm();
+});
 
 function updateStats() {
   var apps = sheetsLoaded ? sheetsApps : getApps();
@@ -1052,6 +1067,7 @@ function viewApp(id) {
     '<div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">MK '+Number(totalRepay).toLocaleString()+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">'+app.employment+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK '+Number(app.income).toLocaleString()+'</div></div>'+
+    '<div class="modal-field full"><div class="modal-field-label">Purpose</div><div class="modal-field-value">'+app.purpose+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+app.collateralItem+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK '+Number(app.collateralValue).toLocaleString()+'</div></div>'+
     '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+app.collateralDesc+'</div></div>'+
