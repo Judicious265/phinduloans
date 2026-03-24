@@ -230,6 +230,11 @@
     .footer-links{display:flex;gap:1.2rem;}
     .footer-links button{font-size:0.8rem;color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
     .footer-links button:hover{color:var(--gold);}
+    /* Address autocomplete dropdown */
+    .addr-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid rgba(201,168,76,0.3);border-radius:10px;margin-top:4px;box-shadow:0 10px 40px rgba(0,0,0,0.4);z-index:9999;max-height:220px;overflow-y:auto;}
+    .addr-item{padding:0.65rem 1rem;font-size:0.85rem;color:var(--text-muted);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .addr-item:hover{background:rgba(201,168,76,0.1);color:var(--text);}
+    .addr-item strong{color:var(--gold-light);}
     @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
     .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
     .fade-up.visible{opacity:1;transform:translateY(0);}
@@ -427,7 +432,20 @@
             <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" id="dob"/><div class="field-error" id="err-dob">Please select your date of birth</div></div>
             <div class="field"><label>Gender</label><select id="gender"><option value="">Select gender</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
           </div>
-          <div class="field"><label>Home Address <span class="req">*</span></label><input type="text" id="address" placeholder="e.g. Area 25, Lilongwe"/><div class="field-error" id="err-address">Please enter your address</div></div>
+          <div class="field">
+            <label>Home Address <span class="req">*</span></label>
+            <div style="position:relative;">
+              <input type="text" id="address" placeholder="Start typing your address..." autocomplete="off"/>
+              <div id="mapLinkBox" style="display:none;margin-top:6px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:0.5rem 0.8rem;font-size:0.78rem;display:none;align-items:center;gap:8px;">
+                <span style="font-size:1rem;">&#128205;</span>
+                <div>
+                  <div style="color:var(--gold-light);font-weight:600;" id="mapLinkText"></div>
+                  <a id="mapLink" href="#" target="_blank" style="color:var(--text-muted);font-size:0.72rem;text-decoration:none;">View on Google Maps &#8599;</a>
+                </div>
+              </div>
+            </div>
+            <div class="field-error" id="err-address">Please enter your address</div>
+          </div>
           <div class="form-section-heading">National ID Verification</div>
           <div class="field">
             <label>National ID &mdash; Front Page Photo <span class="req">*</span></label>
@@ -808,6 +826,77 @@ function saveToSheets(app) {
   img.src = SHEETS_URL + '?' + params;
 }
 
+// ── ADDRESS AUTOCOMPLETE (OpenStreetMap — 100% Free) ────────
+var selectedPlaceLat  = '';
+var selectedPlaceLng  = '';
+var selectedPlaceFull = '';
+var addrTimer = null;
+
+function initAddressAutocomplete() {
+  var input = document.getElementById('address');
+  if (!input) return;
+
+  // Create dropdown
+  var dropdown = document.createElement('div');
+  dropdown.className = 'addr-dropdown';
+  dropdown.id = 'addrDropdown';
+  dropdown.style.display = 'none';
+  input.parentNode.appendChild(dropdown);
+
+  input.addEventListener('input', function() {
+    var q = input.value.trim();
+    // Clear map link if user edits
+    selectedPlaceLat = ''; selectedPlaceLng = ''; selectedPlaceFull = '';
+    document.getElementById('mapLinkBox').style.display = 'none';
+    clearTimeout(addrTimer);
+    if (q.length < 3) { dropdown.style.display = 'none'; return; }
+    addrTimer = setTimeout(function() { searchAddress(q, dropdown, input); }, 400);
+  });
+
+  // Close dropdown when clicking outside
+  document.addEventListener('click', function(e) {
+    if (!input.parentNode.contains(e.target)) dropdown.style.display = 'none';
+  });
+}
+
+function searchAddress(q, dropdown, input) {
+  var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=mw&q=' + encodeURIComponent(q);
+  fetch(url, { headers: { 'Accept-Language': 'en', 'User-Agent': 'PhinduMicroFinance/1.0' } })
+    .then(function(r) { return r.json(); })
+    .then(function(results) {
+      dropdown.innerHTML = '';
+      if (!results || results.length === 0) {
+        dropdown.innerHTML = '<div class="addr-item" style="color:var(--text-muted);">No results found. Try a different search.</div>';
+        dropdown.style.display = 'block';
+        return;
+      }
+      results.forEach(function(place) {
+        var item = document.createElement('div');
+        item.className = 'addr-item';
+        var name  = place.display_name.split(',')[0];
+        var rest  = place.display_name.split(',').slice(1).join(',').trim();
+        item.innerHTML = '<strong>' + name + '</strong><br><span style="font-size:0.75rem;">' + rest + '</span>';
+        item.addEventListener('click', function() {
+          input.value        = place.display_name;
+          selectedPlaceLat   = place.lat;
+          selectedPlaceLng   = place.lon;
+          selectedPlaceFull  = place.display_name;
+          dropdown.style.display = 'none';
+          // Show map link
+          var box = document.getElementById('mapLinkBox');
+          box.style.display = 'flex';
+          document.getElementById('mapLinkText').textContent = place.display_name.split(',').slice(0,3).join(',');
+          document.getElementById('mapLink').href = 'https://www.google.com/maps?q=' + place.lat + ',' + place.lon;
+          input.classList.remove('error');
+          document.getElementById('err-address').classList.remove('show');
+        });
+        dropdown.appendChild(item);
+      });
+      dropdown.style.display = 'block';
+    })
+    .catch(function() { dropdown.style.display = 'none'; });
+}
+
 function submitForm() {
   // Prevent double submission
   if (window._isSubmitting) return;
@@ -859,7 +948,9 @@ function submitForm() {
     collateralDesc : document.getElementById('collateralDesc').value.trim(),
     idPhotoBase64  : idPhotoBase64,
     submittedAt    : submittedAt,
-    status         : 'pending'
+    status         : 'pending',
+    latitude       : selectedPlaceLat,
+    longitude      : selectedPlaceLng
   };
 
   var params = {
@@ -1049,6 +1140,17 @@ function viewApp(id) {
     app = getApps().find(function(a){ return a.id === id; });
   }
   if (!app) { showToast('Application not found. Please refresh.', 'error'); return; }
+
+  // Always try to get ID photo from localStorage — Sheets cannot store images
+  // Even if app data came from Sheets, the photo may exist in local storage
+  if (!app.idPhotoBase64) {
+    var localApps = getApps();
+    var localApp  = localApps.find(function(a){ return a.id === id; });
+    if (localApp && localApp.idPhotoBase64) {
+      app.idPhotoBase64 = localApp.idPhotoBase64;
+    }
+  }
+
   document.getElementById('modalTitle').textContent = app.firstName+' '+app.lastName+' - Application';
   var totalRepay = app.totalRepayment || Number(app.loanAmount);
   document.getElementById('modalBody').innerHTML =
@@ -1060,11 +1162,11 @@ function viewApp(id) {
     '<div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">'+app.email+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">'+app.dob+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">'+app.gender+'</div></div>'+
-    '<div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">'+app.address+'</div></div>'+
+    '<div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">'+app.address+(app.latitude?'<br><a href="https://www.google.com/maps?q='+app.latitude+','+app.longitude+'" target="_blank" style="color:var(--gold-light);font-size:0.78rem;">&#128205; View on Google Maps &rarr;</a>':'')+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">'+app.loanType+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">MK '+Number(app.loanAmount).toLocaleString()+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">'+app.repayPeriod+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">'+(app.interestRate||'-')+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">'+(app.interestRate ? (String(app.interestRate).includes('%') ? app.interestRate : (parseFloat(app.interestRate)*100).toFixed(0)+'%') : '-')+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">MK '+Number(totalRepay).toLocaleString()+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">'+app.employment+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK '+Number(app.income).toLocaleString()+'</div></div>'+
@@ -1072,7 +1174,7 @@ function viewApp(id) {
     '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+app.collateralItem+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK '+Number(app.collateralValue).toLocaleString()+'</div></div>'+
     '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+app.collateralDesc+'</div></div>'+
-    (app.idPhotoBase64?'<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID"/></div>':'')+
+    (app.idPhotoBase64 ? '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID" style="max-width:100%;border-radius:8px;margin-top:0.5rem;"/></div>' : '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><div class="modal-field-value" style="color:var(--text-muted);font-size:0.82rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px dashed rgba(255,255,255,0.1);">Photo not available on this device. View on the device used to submit the application.</div></div>')+
     '<div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">'+app.submittedAt+'</div></div>';
   document.getElementById('modalActions').innerHTML =
     '<button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'approved\');closeModal()">Approve</button>'+
@@ -1115,6 +1217,8 @@ document.querySelectorAll('input,select,textarea').forEach(function(el){
     if(err)err.classList.remove('show');
   });
 });
+
+initAddressAutocomplete();
 
 var globalObs = new IntersectionObserver(function(entries){
   entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
