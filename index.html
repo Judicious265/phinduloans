@@ -479,7 +479,7 @@
           </div>
           <div class="inline-calc-box" id="inlineCalcBox"><strong style="color:var(--gold-light);">Estimated Repayment: </strong><span id="inlineCalcText" style="color:var(--text-muted);"></span></div>
           <div class="field"><label>Monthly Income (MK) <span class="req">*</span></label><input type="number" id="income" placeholder="e.g. 150000"/><div class="field-error" id="err-income">Please enter your monthly income</div></div>
-          <div class="field"><label>Purpose of Loan <span class="req">*</span></label><textarea id="purpose" placeholder="Briefly describe why you need this loan..."></textarea><div class="field-error" id="err-purpose">Please describe the purpose</div></div>
+
           <div class="form-section-heading">Collateral Information</div>
           <div class="field">
             <label>Collateral Item <span class="req">*</span></label>
@@ -600,8 +600,8 @@ var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL   = "https://script.google.com/macros/s/AKfycbx-QzSbzzfbLKieoWKj_s3qtMEchzDDFKEA7bE6wbI6iVPnZw2B-4WkkrwyfFg5kzSE/exec";
-var SHEETS_READ  = "https://script.google.com/macros/s/AKfycbx-QzSbzzfbLKieoWKj_s3qtMEchzDDFKEA7bE6wbI6iVPnZw2B-4WkkrwyfFg5kzSE/exec?action=getAll";
+var SHEETS_URL   = "https://script.google.com/macros/s/AKfycbxQVLuZ3jX5IRd8arDk4u-CD_OW4gcmHrhf_LCopJxGhuf25Lre10hb3G-RcDr4nDJR/exec";
+var SHEETS_READ  = "https://script.google.com/macros/s/AKfycbxQVLuZ3jX5IRd8arDk4u-CD_OW4gcmHrhf_LCopJxGhuf25Lre10hb3G-RcDr4nDJR/exec?action=getAll";
 var sheetsApps   = [];
 var sheetsLoaded = false;
 var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
@@ -756,7 +756,7 @@ function handleIdUpload(e) {
 }
 
 function validate() {
-  var required = ['firstName','lastName','phone','nationalId','dob','address','loanType','loanAmount','repayPeriod','employment','income','purpose','collateralItem','collateralValue','collateralDesc'];
+  var required = ['firstName','lastName','phone','nationalId','dob','address','loanType','loanAmount','repayPeriod','employment','income','collateralItem','collateralValue','collateralDesc'];
   var valid = true;
   required.forEach(function(id) {
     var el = document.getElementById(id);
@@ -816,7 +816,7 @@ function saveToSheets(app) {
     'totalRepayment='+ encodeURIComponent(app.totalRepayment),
     'employment='    + encodeURIComponent(app.employment),
     'income='        + encodeURIComponent(app.income),
-    'purpose='       + encodeURIComponent(app.purpose),
+
     'collateralItem='+ encodeURIComponent(app.collateralItem),
     'collateralValue='+ encodeURIComponent(app.collateralValue),
     'collateralDesc='+ encodeURIComponent(app.collateralDesc),
@@ -960,7 +960,7 @@ function submitForm() {
       totalRepayment: totalRepay,
       employment    : document.getElementById('employment').value || '',
       income        : (document.getElementById('income').value||'').trim(),
-      purpose       : (document.getElementById('purpose').value||'').trim(),
+
       collateralItem: (document.getElementById('collateralItem').value||'').trim(),
       collateralValue:(document.getElementById('collateralValue').value||'').trim(),
       collateralDesc: (document.getElementById('collateralDesc').value||'').trim(),
@@ -986,7 +986,7 @@ function submitForm() {
       total_repayment : 'MK '+totalRepay.toLocaleString(),
       employment      : app.employment,
       income          : 'MK '+(Number(app.income)||0).toLocaleString(),
-      purpose         : app.purpose,
+
       collateral_item : app.collateralItem,
       collateral_value: 'MK '+(Number(app.collateralValue)||0).toLocaleString(),
       collateral_desc : app.collateralDesc,
@@ -1194,7 +1194,7 @@ function viewApp(id) {
     '<div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">MK '+Number(totalRepay).toLocaleString()+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">'+app.employment+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK '+Number(app.income).toLocaleString()+'</div></div>'+
-    '<div class="modal-field full"><div class="modal-field-label">Purpose</div><div class="modal-field-value">'+app.purpose+'</div></div>'+
+
     '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+app.collateralItem+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK '+Number(app.collateralValue).toLocaleString()+'</div></div>'+
     '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+app.collateralDesc+'</div></div>'+
