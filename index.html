@@ -1069,16 +1069,31 @@ function loadFromSheets() {
     document.head.removeChild(script);
     if (data && data.rows) {
       sheetsApps = data.rows.map(function(row) {
+        // Detect old records (22 cols with purpose) vs new records (21 cols without)
+        var hasPurpose = row.length >= 22 && row[21] !== undefined;
+        var base = hasPurpose ? 1 : 0; // offset for old records that had purpose col
         return {
-          id: row[0]||'', firstName: row[1]||'', lastName: row[2]||'',
-          phone: row[3]||'', email: row[4]||'', nationalId: row[5]||'',
-          dob: row[6]||'', gender: row[7]||'', address: row[8]||'',
-          loanType: row[9]||'', loanAmount: row[10]||'', repayPeriod: row[11]||'',
-          interestRate: row[12]||'', totalRepayment: row[13]||'',
-          employment: row[14]||'', income: row[15]||'', purpose: row[16]||'',
-          collateralItem: row[17]||'', collateralValue: row[18]||'',
-          collateralDesc: row[19]||'', submittedAt: row[20]||'',
-          status: (row[21]||'pending').toLowerCase()
+          id             : String(row[0]||''),
+          firstName      : String(row[1]||''),
+          lastName       : String(row[2]||''),
+          phone          : String(row[3]||''),
+          email          : String(row[4]||''),
+          nationalId     : String(row[5]||''),
+          dob            : String(row[6]||''),
+          gender         : String(row[7]||''),
+          address        : String(row[8]||''),
+          loanType       : String(row[9]||''),
+          loanAmount     : row[10]||0,
+          repayPeriod    : String(row[11]||''),
+          interestRate   : String(row[12]||''),
+          totalRepayment : row[13]||0,
+          employment     : String(row[14]||''),
+          income         : row[15]||0,
+          collateralItem : String(row[15 + base + 1]||''),
+          collateralValue: row[15 + base + 2]||0,
+          collateralDesc : String(row[15 + base + 3]||''),
+          submittedAt    : String(row[15 + base + 4]||''),
+          status         : String(row[15 + base + 5]||'pending').toLowerCase()
         };
       });
       sheetsLoaded = true;
@@ -1210,30 +1225,47 @@ function viewApp(id) {
   }
 
   document.getElementById('modalTitle').textContent = app.firstName+' '+app.lastName+' - Application';
-  var totalRepay = app.totalRepayment || Number(app.loanAmount);
-  document.getElementById('modalBody').innerHTML =
-    '<div class="modal-field"><div class="modal-field-label">App ID</div><div class="modal-field-value" style="font-size:0.78rem;">'+app.id+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge '+app.status+'"><span class="status-dot"></span>'+app.status+'</span></div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">'+app.firstName+' '+app.lastName+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">National ID</div><div class="modal-field-value" style="letter-spacing:1px;">'+app.nationalId+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Phone</div><div class="modal-field-value">'+app.phone+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">'+app.email+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">'+app.dob+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">'+app.gender+'</div></div>'+
-    '<div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">'+app.address+(app.latitude?'<br><a href="https://www.google.com/maps?q='+app.latitude+','+app.longitude+'" target="_blank" style="color:var(--gold-light);font-size:0.78rem;">&#128205; View on Google Maps &rarr;</a>':'')+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">'+app.loanType+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">MK '+Number(app.loanAmount).toLocaleString()+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">'+app.repayPeriod+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">'+(app.interestRate ? (String(app.interestRate).includes('%') ? app.interestRate : (parseFloat(app.interestRate)*100).toFixed(0)+'%') : '-')+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">MK '+Number(totalRepay).toLocaleString()+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">'+app.employment+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">MK '+Number(app.income).toLocaleString()+'</div></div>'+
+  var totalRepay = app.totalRepayment || app.loanAmount || 0;
 
-    '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+app.collateralItem+'</div></div>'+
-    '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">MK '+Number(app.collateralValue).toLocaleString()+'</div></div>'+
-    '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+app.collateralDesc+'</div></div>'+
-    (app.idPhotoBase64 ? '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID" style="max-width:100%;border-radius:8px;margin-top:0.5rem;"/></div>' : '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div><div class="modal-field-value" style="color:var(--text-muted);font-size:0.82rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px dashed rgba(255,255,255,0.1);">Photo not available on this device. View on the device used to submit the application.</div></div>')+
-    '<div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">'+app.submittedAt+'</div></div>';
+  // Safe formatting helpers
+  function fmtMK(v) { var n=Number(v); return (isNaN(n)||n===0)?'Not provided':'MK '+n.toLocaleString(); }
+  function fmtStr(v) { var s=String(v||'').trim(); return (s&&s!=='undefined'&&s!=='null')?s:'Not provided'; }
+  function fmtDob(v) { var s=String(v||''); return s.includes('T')?s.split('T')[0]:s||'Not provided'; }
+  function fmtRate(v) {
+    if(!v||v==='undefined') return 'Not provided';
+    var s=String(v); if(s.includes('%')) return s;
+    var n=parseFloat(s); return isNaN(n)?s:(n<1?(n*100).toFixed(0)+'%':n.toFixed(0)+'%');
+  }
+
+  var sClass   = (app.status||'pending').toLowerCase();
+  var sLabel   = sClass.charAt(0).toUpperCase()+sClass.slice(1);
+  var mapLink  = (app.latitude&&app.longitude) ? '<br><a href="https://www.google.com/maps?q='+app.latitude+','+app.longitude+'" target="_blank" style="color:var(--gold-light);font-size:0.78rem;">&#128205; View on Google Maps &rarr;</a>' : '';
+  var photoHtml = app.idPhotoBase64
+    ? '<img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID" style="max-width:100%;border-radius:8px;margin-top:0.5rem;"/>'
+    : '<div style="color:var(--text-muted);font-size:0.82rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px dashed rgba(255,255,255,0.1);">&#128282; Photo not available on this device. View on the device used to submit the application.</div>';
+
+  document.getElementById('modalBody').innerHTML =
+    '<div class="modal-field"><div class="modal-field-label">App ID</div><div class="modal-field-value" style="font-size:0.78rem;">'+fmtStr(app.id)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge '+sClass+'"><span class="status-dot"></span>'+sLabel+'</span></div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">'+fmtStr(app.firstName)+' '+fmtStr(app.lastName)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">National ID</div><div class="modal-field-value" style="letter-spacing:1px;">'+fmtStr(app.nationalId)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Phone</div><div class="modal-field-value">'+fmtStr(app.phone)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">'+fmtStr(app.email)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">'+fmtDob(app.dob)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">'+fmtStr(app.gender)+'</div></div>'+
+    '<div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">'+fmtStr(app.address)+mapLink+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">'+fmtStr(app.loanType)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">'+fmtMK(app.loanAmount)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">'+fmtStr(app.repayPeriod)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">'+fmtRate(app.interestRate)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">'+fmtMK(totalRepay)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">'+fmtStr(app.employment)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">'+fmtMK(app.income)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+fmtStr(app.collateralItem)+'</div></div>'+
+    '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">'+fmtMK(app.collateralValue)+'</div></div>'+
+    '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+fmtStr(app.collateralDesc)+'</div></div>'+
+    '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div>'+photoHtml+'</div>'+
+    '<div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">'+fmtStr(app.submittedAt)+'</div></div>';
   document.getElementById('modalActions').innerHTML =
     '<button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'approved\');closeModal()">Approve</button>'+
     '<button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'rejected\');closeModal()">Reject</button>';
