@@ -600,8 +600,8 @@ var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL   = "https://script.google.com/macros/s/AKfycbxQVLuZ3jX5IRd8arDk4u-CD_OW4gcmHrhf_LCopJxGhuf25Lre10hb3G-RcDr4nDJR/exec";
-var SHEETS_READ  = "https://script.google.com/macros/s/AKfycbxQVLuZ3jX5IRd8arDk4u-CD_OW4gcmHrhf_LCopJxGhuf25Lre10hb3G-RcDr4nDJR/exec?action=getAll";
+var SHEETS_URL   = "https://script.google.com/macros/s/AKfycbwdQiC0na71Tn6KqCoAl-_oanecA0iLvD7QZYJixE4VIKuGU4wUhhGVZhSfYr3G7Ooc/exec";
+var SHEETS_READ  = "https://script.google.com/macros/s/AKfycbwdQiC0na71Tn6KqCoAl-_oanecA0iLvD7QZYJixE4VIKuGU4wUhhGVZhSfYr3G7Ooc/exec?action=getAll";
 var sheetsApps   = [];
 var sheetsLoaded = false;
 var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
@@ -822,8 +822,19 @@ function saveToSheets(app) {
     'collateralDesc='+ encodeURIComponent(app.collateralDesc),
     'submittedAt='   + encodeURIComponent(app.submittedAt)
   ].join('&');
-  var img = new Image();
-  img.src = SHEETS_URL + '?' + params;
+  // Use JSONP for reliable cross-origin saving
+  var script  = document.createElement('script');
+  var cbName  = '_saveCb_' + Date.now();
+  window[cbName] = function() {
+    try { document.head.removeChild(script); } catch(e) {}
+    delete window[cbName];
+  };
+  script.onerror = function() {
+    try { document.head.removeChild(script); } catch(e) {}
+    delete window[cbName];
+  };
+  script.src = SHEETS_URL + '?' + params + '&callback=' + cbName;
+  document.head.appendChild(script);
 }
 
 // ── ADDRESS AUTOCOMPLETE (OpenStreetMap — 100% Free) ────────
@@ -1128,25 +1139,48 @@ function renderTable() {
 }
 
 function updateStatus(id, status) {
-  // Update in sheetsApps array
+  var label = status.charAt(0).toUpperCase() + status.slice(1);
+
+  // Update in memory immediately so UI reflects change instantly
   if (sheetsLoaded) {
-    var sApp = sheetsApps.find(function(a){return a.id===id;});
+    var sApp = sheetsApps.find(function(a){ return a.id === id; });
     if (sApp) sApp.status = status;
   }
+
   // Update in localStorage
   var apps = getApps();
-  var app = apps.find(function(a){return a.id===id;});
+  var app  = apps.find(function(a){ return a.id === id; });
   if (app) { app.status = status; saveApps(apps); }
 
-  // Update in Google Sheets
-  var updateUrl = SHEETS_URL + '?action=updateStatus&app_id=' + encodeURIComponent(id) + '&status=' + encodeURIComponent(status);
-  var img = new Image();
-  img.src = updateUrl;
-
+  // Re-render immediately so user sees the change
   renderTable();
   updateStats();
-  var label = status.charAt(0).toUpperCase() + status.slice(1);
-  showToast('Application ' + label + ' and saved to Google Sheets.', status==='approved'?'success':'error');
+  showToast('Saving ' + label + ' status to Google Sheets...', 'info');
+
+  // Update Google Sheets using JSONP (same reliable method as loadFromSheets)
+  var script    = document.createElement('script');
+  var cbName    = '_updateCb_' + Date.now();
+  var updateUrl = SHEETS_URL + '?action=updateStatus&app_id=' + encodeURIComponent(id) +
+                  '&status=' + encodeURIComponent(status) + '&callback=' + cbName;
+
+  window[cbName] = function(data) {
+    try { document.head.removeChild(script); } catch(e) {}
+    delete window[cbName];
+    if (data && data.status === 'updated') {
+      showToast('Application ' + label + ' and saved successfully.', status === 'approved' ? 'success' : 'error');
+    } else {
+      showToast('Status updated locally. Refresh to sync.', 'info');
+    }
+  };
+
+  script.onerror = function() {
+    try { document.head.removeChild(script); } catch(e) {}
+    delete window[cbName];
+    showToast('Status updated locally. Check your connection.', 'info');
+  };
+
+  script.src = updateUrl;
+  document.head.appendChild(script);
 }
 
 function openAppModal(id) {
