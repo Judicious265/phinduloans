@@ -638,7 +638,7 @@ function showPage(name) {
   var nb = document.getElementById('nav-' + name);
   if (nb) nb.classList.add('active');
   window.scrollTo(0, 0);
-  if (name === 'dashboard') { if (dashUnlocked) { loadFromSheets(); } }
+  if (name === 'dashboard') { if (dashUnlocked) { loadFromSheets(); setTimeout(checkDueReminders, 3000); } }
   setTimeout(function() {
     document.querySelectorAll('#page-' + name + ' .fade-up').forEach(function(el) {
       if (!el.classList.contains('visible')) {
@@ -978,6 +978,13 @@ function submitForm() {
       idPhotoBase64 : idPhotoBase64 || '',
       submittedAt   : submittedAt,
       status        : 'pending',
+      payMethod     : selectedPayMethod,
+      mobileNetwork : (document.getElementById('mobileNetwork')?document.getElementById('mobileNetwork').value:''),
+      mobileNumber  : (document.getElementById('mobileNumber')?document.getElementById('mobileNumber').value.trim():''),
+      mobileAccName : (document.getElementById('mobileAccName')?document.getElementById('mobileAccName').value.trim():''),
+      bankName      : (document.getElementById('bankName')?document.getElementById('bankName').value:''),
+      bankAccount   : (document.getElementById('bankAccount')?document.getElementById('bankAccount').value.trim():''),
+      bankAccName   : (document.getElementById('bankAccName')?document.getElementById('bankAccName').value.trim():''),
       latitude      : selectedPlaceLat || '',
       longitude     : selectedPlaceLng || ''
     };
@@ -1035,6 +1042,12 @@ function submitForm() {
       document.getElementById('mapLinkBox').style.display = 'none';
       updateCollateralHint();
       document.getElementById('inlineCalcBox').style.display = 'none';
+      selectedPayMethod = '';
+      document.querySelectorAll('.pay-method-card').forEach(function(c){ c.classList.remove('selected'); });
+      document.getElementById('payBox-mobile').classList.remove('show');
+      document.getElementById('payBox-bank').classList.remove('show');
+      document.getElementById('termsCheck').checked = false;
+      if (typeof grecaptcha !== 'undefined') try { grecaptcha.reset(); } catch(e) {}
     } catch(e4) { console.log('Reset err:', e4); }
 
   } catch(fatal) {
@@ -1307,6 +1320,224 @@ document.querySelectorAll('input,select,textarea').forEach(function(el){
     if(err)err.classList.remove('show');
   });
 });
+
+// ── PAYMENT METHOD ───────────────────────────────────────────
+var selectedPayMethod = '';
+function selectPayMethod(method) {
+  selectedPayMethod = method;
+  document.querySelectorAll('.pay-method-card').forEach(function(c){ c.classList.remove('selected'); });
+  document.getElementById('payCard-'+method).classList.add('selected');
+  document.getElementById('payBox-mobile').classList.toggle('show', method==='mobile');
+  document.getElementById('payBox-bank').classList.toggle('show', method==='bank');
+  document.getElementById('err-payMethod').classList.remove('show');
+}
+
+// ── TERMS MODAL ───────────────────────────────────────────────
+function openTerms(e) {
+  e.preventDefault();
+  document.getElementById('termsModal').classList.add('open');
+  document.body.style.position = 'fixed';
+  document.body.style.width = '100%';
+}
+function closeTerms() {
+  document.getElementById('termsModal').classList.remove('open');
+  document.body.style.position = '';
+  document.body.style.width = '';
+}
+function acceptTerms() {
+  document.getElementById('termsCheck').checked = true;
+  document.getElementById('err-terms').classList.remove('show');
+  closeTerms();
+}
+
+// ── VALIDATE EXTENSIONS ───────────────────────────────────────
+var _origValidate = validate;
+validate = function() {
+  var ok = _origValidate();
+  // Payment method
+  if (!selectedPayMethod) {
+    document.getElementById('err-payMethod').classList.add('show');
+    ok = false;
+  }
+  // Payment details
+  if (selectedPayMethod === 'mobile') {
+    if (!document.getElementById('mobileNetwork').value) ok = false;
+    if (!document.getElementById('mobileNumber').value.trim()) ok = false;
+    if (!document.getElementById('mobileAccName').value.trim()) ok = false;
+  }
+  if (selectedPayMethod === 'bank') {
+    if (!document.getElementById('bankName').value) ok = false;
+    if (!document.getElementById('bankAccount').value.trim()) ok = false;
+    if (!document.getElementById('bankAccName').value.trim()) ok = false;
+  }
+  // Terms
+  if (!document.getElementById('termsCheck').checked) {
+    document.getElementById('err-terms').classList.add('show');
+    ok = false;
+  } else {
+    document.getElementById('err-terms').classList.remove('show');
+  }
+  // reCAPTCHA
+  var recap = typeof grecaptcha !== 'undefined' ? grecaptcha.getResponse() : 'skip';
+  if (!recap) {
+    document.getElementById('err-captcha').classList.add('show');
+    ok = false;
+  } else {
+    document.getElementById('err-captcha').classList.remove('show');
+  }
+  return ok;
+};
+
+// ── PORTAL TABS ───────────────────────────────────────────────
+function switchPortalTab(name) {
+  document.querySelectorAll('.portal-tab').forEach(function(t){ t.classList.remove('active'); });
+  document.querySelectorAll('.portal-panel').forEach(function(p){ p.classList.remove('active'); });
+  event.target.classList.add('active');
+  document.getElementById('portal-'+name).classList.add('active');
+  if (name === 'tracker') loadTracker();
+}
+
+// ── LOAN LOOKUP ───────────────────────────────────────────────
+function lookupLoan() {
+  var q = (document.getElementById('lookupInput').value||'').trim().toLowerCase();
+  var result = document.getElementById('lookupResult');
+  if (!q) { result.innerHTML = '<p style="color:var(--error);font-size:0.85rem;">Please enter an Application ID or phone number.</p>'; return; }
+  var apps = sheetsLoaded ? sheetsApps : getApps();
+  var found = apps.find(function(a){
+    return String(a.id).toLowerCase()===q || String(a.phone).replace(/\s/g,'').includes(q.replace(/\s/g,''));
+  });
+  if (!found) {
+    result.innerHTML = '<div style="background:rgba(239,68,68,0.1);border:1px solid rgba(239,68,68,0.2);border-radius:10px;padding:1rem;font-size:0.85rem;color:#fca5a5;">No loan found. Please check your Application ID or phone number.</div>';
+    return;
+  }
+  var sClass = (found.status||'pending').toLowerCase();
+  var sLabel = sClass.charAt(0).toUpperCase()+sClass.slice(1);
+  var due = getDueDate(found.submittedAt, found.repayPeriod);
+  result.innerHTML = '<div class="repay-card">'+
+    '<div class="repay-card-header"><div><div class="repay-card-name">'+found.firstName+' '+found.lastName+'</div><div style="font-size:0.75rem;color:var(--text-muted);">'+found.id+'</div></div>'+
+    '<span class="status-badge '+sClass+'"><span class="status-dot"></span>'+sLabel+'</span></div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.5rem;font-size:0.82rem;">'+
+    '<div><div style="color:var(--text-muted);">Loan Amount</div><strong style="color:var(--gold-light);">MK '+Number(found.loanAmount).toLocaleString()+'</strong></div>'+
+    '<div><div style="color:var(--text-muted);">Total Repayment</div><strong style="color:var(--warning);">MK '+Number(found.totalRepayment).toLocaleString()+'</strong></div>'+
+    '<div><div style="color:var(--text-muted);">Period</div><strong>'+found.repayPeriod+'</strong></div>'+
+    '<div><div style="color:var(--text-muted);">Due Date</div><strong style="color:'+(isDueSoon(due)?'var(--error)':'var(--success)')+';">'+due+'</strong></div>'+
+    '</div></div>';
+}
+
+// ── DUE DATE HELPERS ──────────────────────────────────────────
+function getDueDate(submittedAt, period) {
+  if (!submittedAt || !period) return 'Unknown';
+  var parts = String(submittedAt).split('/');
+  if (parts.length < 3) return 'Unknown';
+  var d = new Date(parts[2].split(' ')[0], parts[1]-1, parts[0]);
+  var days = {'1 Week':7,'2 Weeks':14,'3 Weeks':21,'1 Month':30,'2 Months':60}[period] || 30;
+  d.setDate(d.getDate() + days);
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
+}
+function isDueSoon(dueStr) {
+  var parts = dueStr.split('/');
+  if (parts.length < 3) return false;
+  var due = new Date(parts[2], parts[1]-1, parts[0]);
+  return (due - new Date()) < 3 * 24 * 60 * 60 * 1000;
+}
+
+// ── REPAYMENT SCHEDULE ────────────────────────────────────────
+function calcSchedule() {
+  var amt    = Number(document.getElementById('schedAmt').value)||0;
+  var period = document.getElementById('schedPeriod').value;
+  var result = document.getElementById('schedResult');
+  if (!amt || !period) { result.innerHTML=''; return; }
+  var rate   = RATES[period]||0;
+  var total  = amt + amt*rate;
+  var days   = {'1week':7,'2weeks':14,'3weeks':21,'1month':30,'2months':60}[period]||30;
+  var now    = new Date();
+  var due    = new Date(now); due.setDate(now.getDate()+days);
+  var dueStr = String(due.getDate()).padStart(2,'0')+'/'+String(due.getMonth()+1).padStart(2,'0')+'/'+due.getFullYear();
+  result.innerHTML = '<div class="repay-card" style="margin-top:1rem;">'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;font-size:0.85rem;">'+
+    '<div class="calc-item"><div class="calc-item-val">MK '+amt.toLocaleString()+'</div><div class="calc-item-lbl">Principal</div></div>'+
+    '<div class="calc-item"><div class="calc-item-val">MK '+(amt*rate).toLocaleString()+'</div><div class="calc-item-lbl">Interest ('+((rate*100).toFixed(0))+'%)</div></div>'+
+    '<div class="calc-item"><div class="calc-item-val" style="color:var(--warning);">MK '+total.toLocaleString()+'</div><div class="calc-item-lbl">Total Repayment</div></div>'+
+    '<div class="calc-item"><div class="calc-item-val" style="color:var(--success);">'+dueStr+'</div><div class="calc-item-lbl">Due Date (if approved today)</div></div>'+
+    '</div></div>';
+}
+
+// ── REPAYMENT TRACKER (Admin) ─────────────────────────────────
+function loadTracker() {
+  var apps = (sheetsLoaded ? sheetsApps : getApps()).filter(function(a){ return a.status==='approved'; });
+  var list = document.getElementById('trackerList');
+  if (!apps.length) { list.innerHTML='<p style="color:var(--text-muted);font-size:0.85rem;">No approved loans yet.</p>'; return; }
+  list.innerHTML = apps.map(function(a) {
+    var due     = getDueDate(a.submittedAt, a.repayPeriod);
+    var soon    = isDueSoon(due);
+    var repaid  = Number(localStorage.getItem('repaid_'+a.id))||0;
+    var total   = Number(a.totalRepayment)||0;
+    var pct     = total>0 ? Math.min(100,Math.round(repaid/total*100)) : 0;
+    return '<div class="repay-card">'+
+      '<div class="repay-card-header">'+
+      '<div><div class="repay-card-name">'+a.firstName+' '+a.lastName+'</div>'+
+      '<div style="font-size:0.74rem;color:var(--text-muted);">'+a.phone+' &nbsp;|&nbsp; Due: <span style="color:'+(soon?'var(--error)':'var(--success)')+';">'+due+'</span></div></div>'+
+      '<div style="text-align:right;font-size:0.82rem;"><div style="color:var(--gold-light);font-weight:700;">MK '+Number(a.loanAmount).toLocaleString()+'</div><div style="color:var(--text-muted);">Total: MK '+total.toLocaleString()+'</div></div>'+
+      '</div>'+
+      '<div class="repay-progress-bar"><div class="repay-progress-fill" style="width:'+pct+'%"></div></div>'+
+      '<div class="repay-meta"><span><strong>'+pct+'%</strong> repaid</span><span>Paid: <strong>MK '+repaid.toLocaleString()+'</strong></span><span>Remaining: <strong>MK '+(total-repaid).toLocaleString()+'</strong></span></div>'+
+      '<div style="display:flex;gap:0.6rem;margin-top:0.8rem;align-items:center;">'+
+      '<input type="number" id="rpmt_'+a.id+'" placeholder="Enter amount paid (MK)" style="flex:1;background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.55rem 0.8rem;color:var(--text);font-size:0.85rem;outline:none;"/>'+
+      '<button class="btn-primary" style="padding:0.55rem 1rem;font-size:0.82rem;" onclick="logRepayment(''+a.id+'','+total+')">Log Payment</button>'+
+      '</div></div>';
+  }).join('');
+}
+
+function logRepayment(id, total) {
+  var input = document.getElementById('rpmt_'+id);
+  var amt   = Number(input.value)||0;
+  if (!amt || amt<=0) { showToast('Enter a valid amount.','error'); return; }
+  var prev = Number(localStorage.getItem('repaid_'+id))||0;
+  var newTotal = Math.min(total, prev+amt);
+  localStorage.setItem('repaid_'+id, newTotal);
+  input.value = '';
+  showToast('Payment of MK '+amt.toLocaleString()+' logged successfully.','success');
+  loadTracker();
+}
+
+// ── AUTO SMS ON APPROVE/REJECT ────────────────────────────────
+var _origUpdateStatus = updateStatus;
+updateStatus = function(id, status) {
+  _origUpdateStatus(id, status);
+  // Send SMS to customer
+  var apps  = sheetsLoaded ? sheetsApps : getApps();
+  var app   = apps.find(function(a){ return a.id===id; });
+  if (app && app.phone) {
+    var msg = status==='approved'
+      ? 'Phindu Micro Finance: Dear '+app.firstName+', your loan of MK '+Number(app.loanAmount).toLocaleString()+' has been APPROVED. Repayment due: '+getDueDate(app.submittedAt,app.repayPeriod)+'. For inquiries call +265994016935.'
+      : 'Phindu Micro Finance: Dear '+app.firstName+', we regret to inform you that your loan application of MK '+Number(app.loanAmount).toLocaleString()+' has been REJECTED. For inquiries call +265994016935.';
+    sendCustomerSMS(app.phone, msg);
+  }
+};
+
+function sendCustomerSMS(phone, message) {
+  // Using TextBelt free tier (1 SMS/day free, get paid key at textbelt.com)
+  var cleanPhone = phone.replace(/\s/g,'').replace(/^\+/, '');
+  if (!cleanPhone.startsWith('265')) cleanPhone = '265' + cleanPhone.replace(/^0/,'');
+  var img = new Image();
+  img.src = 'https://textbelt.com/text?phone=+'+cleanPhone+'&message='+encodeURIComponent(message)+'&key=textbelt';
+  console.log('SMS sent to:', '+'+cleanPhone);
+}
+
+// ── DUE DATE REMINDER CHECK ───────────────────────────────────
+function checkDueReminders() {
+  if (!sheetsLoaded) return;
+  var today = new Date();
+  sheetsApps.filter(function(a){ return a.status==='approved'; }).forEach(function(a) {
+    var due = getDueDate(a.submittedAt, a.repayPeriod);
+    if (isDueSoon(due)) {
+      var repaid = Number(localStorage.getItem('repaid_'+a.id))||0;
+      if (repaid < Number(a.totalRepayment)) {
+        showToast('Reminder: '+a.firstName+' '+a.lastName+' loan due '+due, 'info');
+      }
+    }
+  });
+}
 
 initAddressAutocomplete();
 
