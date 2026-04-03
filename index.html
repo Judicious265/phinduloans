@@ -630,8 +630,8 @@ var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL  = "https://script.google.com/macros/s/AKfycbx1bs3jiiaSX_a1-JOYBSX2aSPTXHmhg8U5106Pie-N-1P5K-AW2-j4eDueZZs22ELS/exec";
-var SHEETS_READ = "https://script.google.com/macros/s/AKfycbx1bs3jiiaSX_a1-JOYBSX2aSPTXHmhg8U5106Pie-N-1P5K-AW2-j4eDueZZs22ELS/exec?action=getAll";
+var SHEETS_URL  = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec";
+var SHEETS_READ = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec?action=getAll";
 var RATES       = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var PERIOD_TO_KEY = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
 var dashUnlocked    = false;
@@ -1015,20 +1015,34 @@ function loadFromSheets() {
     try{document.head.removeChild(script);}catch(e){}
     if(data&&data.rows){
       sheetsApps=data.rows.map(function(row){
-        var hasPurpose=row.length>=22&&row[21]!==undefined&&isNaN(Number(row[21]));
-        var o=hasPurpose?1:0;
+        // Fixed column mapping matching Google Sheets exactly:
+        // A=AppID B=First C=Last D=Phone E=Email F=NatID G=DOB H=Gender
+        // I=Address J=LoanType K=Amount L=Period M=Rate N=Total
+        // O=Employment P=Income Q=CollItem R=CollValue S=CollDesc
+        // T=PayMethod U=SubmittedAt V=Status
         return {
-          id:String(row[0]||''),firstName:String(row[1]||''),lastName:String(row[2]||''),
-          phone:String(row[3]||''),email:String(row[4]||''),nationalId:String(row[5]||''),
-          dob:String(row[6]||''),gender:String(row[7]||''),address:String(row[8]||''),
-          loanType:String(row[9]||''),loanAmount:row[10]||0,repayPeriod:String(row[11]||''),
-          interestRate:String(row[12]||''),totalRepayment:row[13]||0,
-          employment:String(row[14]||''),income:row[15]||0,
-          collateralItem:String(row[15+o+1]||''),collateralValue:row[15+o+2]||0,
-          collateralDesc:String(row[15+o+3]||''),
-          paymentInfo:String(row[15+o+4]||''),
-          submittedAt:String(row[15+o+5]||''),
-          status:String(row[15+o+6]||'pending').toLowerCase()
+          id            : String(row[0]||''),
+          firstName     : String(row[1]||''),
+          lastName      : String(row[2]||''),
+          phone         : String(row[3]||''),
+          email         : String(row[4]||''),
+          nationalId    : String(row[5]||''),
+          dob           : String(row[6]||''),
+          gender        : String(row[7]||''),
+          address       : String(row[8]||''),
+          loanType      : String(row[9]||''),
+          loanAmount    : row[10]||0,
+          repayPeriod   : String(row[11]||''),
+          interestRate  : String(row[12]||''),
+          totalRepayment: row[13]||0,
+          employment    : String(row[14]||''),
+          income        : row[15]||0,
+          collateralItem: String(row[16]||''),
+          collateralValue: row[17]||0,
+          collateralDesc: String(row[18]||''),
+          paymentInfo   : String(row[19]||''),
+          submittedAt   : String(row[20]||''),
+          status        : String(row[21]||'pending').toLowerCase()
         };
       });
       sheetsLoaded=true;renderTable();updateStats();
@@ -1095,7 +1109,7 @@ function updateStatus(id, status) {
   showToast('Saving '+label+' status...','info');
   var script=document.createElement('script');
   var cbName='_updateCb_'+Date.now();
-  var updateUrl=SHEETS_URL+'?action=updateStatus&app_id='+encodeURIComponent(id)+'&status='+encodeURIComponent(status)+'&callback='+cbName;
+  var updateUrl=SHEETS_URL+'?action=updateStatus&app_id='+encodeURIComponent(id)+'&status='+encodeURIComponent(status)+'&col=22&callback='+cbName;
   window[cbName]=function(data){
     try{document.head.removeChild(script);}catch(e){}delete window[cbName];
     showToast('Application '+label+' and saved.',status==='approved'?'success':'error');
