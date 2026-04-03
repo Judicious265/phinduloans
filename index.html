@@ -4,13 +4,9 @@
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Phindu Micro Finance - Fast. Simple. Trusted.</title>
-  <meta name="description" content="Phindu Micro Finance - Quick, transparent and flexible loans for every Malawian. Apply online in minutes using your National ID."/>
-  <meta name="keywords" content="loans Malawi, micro finance Malawi, quick loans, personal loan, business loan, emergency loan, Lilongwe"/>
+  <meta name="description" content="Phindu Micro Finance - Quick, transparent and flexible loans for every Malawian."/>
   <meta property="og:title" content="Phindu Micro Finance"/>
-  <meta property="og:description" content="Quick, transparent and flexible loans for every Malawian."/>
   <meta property="og:url" content="https://phindumicrofinance.netlify.app"/>
-  <meta property="og:type" content="website"/>
-  <link rel="canonical" href="https://phindumicrofinance.netlify.app"/>
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
   <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
   <style>
@@ -69,10 +65,6 @@
     .mini-stat{flex:1;background:var(--surface2);border-radius:8px;padding:0.7rem;text-align:center;}
     .mini-stat-val{font-weight:700;font-size:0.88rem;}
     .mini-stat-lbl{font-size:0.68rem;color:var(--text-muted);margin-top:1px;}
-
-    .back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:0.45rem 1rem;cursor:pointer;transition:all 0.2s;margin-bottom:1.5rem;}
-    .back-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.06);}
-    .back-btn-arrow{font-size:0.9rem;}
     .section-label{font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.7rem;}
     h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:0.8rem;}
     .section-desc{color:var(--text-muted);font-size:1rem;line-height:1.7;max-width:540px;}
@@ -131,11 +123,17 @@
     .field-error.show{display:block;}
     .collateral-note{font-size:0.75rem;color:var(--gold-light);margin-top:4px;background:rgba(201,168,76,0.08);padding:0.45rem 0.7rem;border-radius:6px;border-left:2px solid var(--gold);}
     .inline-calc-box{display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:0.9rem 1rem;margin-bottom:0.9rem;font-size:0.85rem;}
-    .submit-btn{width:100%;margin-top:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.95rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s;box-shadow:0 8px 28px rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;gap:8px;}
-    .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 36px rgba(201,168,76,0.4);}
-    .submit-btn:disabled{opacity:0.7;cursor:not-allowed;}
-    .spinner{width:16px;height:16px;border:2px solid rgba(10,15,30,0.3);border-top-color:var(--deep);border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
-    @keyframes spin{to{transform:rotate(360deg)}}
+    /* Payment method */
+    .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-bottom:0.9rem;}
+    .pay-card{border:2px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem;cursor:pointer;transition:all 0.2s;text-align:center;background:var(--surface2);}
+    .pay-card:hover{border-color:rgba(201,168,76,0.4);}
+    .pay-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.08);}
+    .pay-card-icon{font-size:1.6rem;margin-bottom:0.35rem;}
+    .pay-card-label{font-size:0.88rem;font-weight:600;}
+    .pay-card-sub{font-size:0.74rem;color:var(--text-muted);margin-top:2px;}
+    .pay-details{display:none;}
+    .pay-details.show{display:block;}
+    /* ID upload */
     .id-upload-area{border:2px dashed rgba(201,168,76,0.3);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;transition:border-color 0.2s,background 0.2s;background:rgba(201,168,76,0.03);position:relative;overflow:hidden;}
     .id-upload-area:hover{border-color:var(--gold);background:rgba(201,168,76,0.06);}
     .id-upload-area.has-file{border-color:var(--success);background:rgba(34,197,94,0.05);}
@@ -144,6 +142,18 @@
     .id-upload-label{font-size:0.85rem;color:var(--text-muted);}
     .id-upload-label strong{color:var(--gold-light);display:block;margin-bottom:2px;}
     .id-preview{max-width:100%;max-height:150px;border-radius:8px;margin-top:0.8rem;object-fit:cover;display:none;border:1px solid rgba(255,255,255,0.1);}
+    /* Address dropdown */
+    .addr-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid rgba(201,168,76,0.3);border-radius:10px;margin-top:4px;box-shadow:0 10px 40px rgba(0,0,0,0.4);z-index:9999;max-height:220px;overflow-y:auto;}
+    .addr-item{padding:0.65rem 1rem;font-size:0.85rem;color:var(--text-muted);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);}
+    .addr-item:hover{background:rgba(201,168,76,0.1);color:var(--text);}
+    .addr-item strong{color:var(--gold-light);}
+    .submit-btn{width:100%;margin-top:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.95rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,opacity 0.2s;box-shadow:0 8px 28px rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;gap:8px;-webkit-tap-highlight-color:transparent;touch-action:manipulation;}
+    .submit-btn:hover:not(:disabled){transform:translateY(-2px);box-shadow:0 12px 36px rgba(201,168,76,0.4);}
+    .submit-btn:disabled{opacity:0.7;cursor:not-allowed;}
+    .spinner{width:16px;height:16px;border:2px solid rgba(10,15,30,0.3);border-top-color:var(--deep);border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
+    @keyframes spin{to{transform:rotate(360deg)}}
+    .back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.82rem;font-weight:500;padding:0.45rem 1rem;cursor:pointer;transition:all 0.2s;margin-bottom:1.5rem;}
+    .back-btn:hover{border-color:var(--gold);color:var(--gold);background:rgba(201,168,76,0.06);}
     .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
     .contact-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.8rem;}
     .contact-card h3{font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--gold);}
@@ -206,7 +216,7 @@
     .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;overflow-y:scroll;-webkit-overflow-scrolling:touch;}
     .modal-overlay.open{display:block;}
     .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:16px;padding:1.5rem;max-width:640px;width:calc(100% - 2rem);position:relative;margin:1rem auto 3rem auto;}
-    .modal-close{position:absolute;top:1rem;right:1rem;background:none;border:none;color:var(--text-muted);font-size:1.3rem;cursor:pointer;}
+    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;color:var(--text);font-size:1.2rem;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;}
     .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.3rem;padding-right:2rem;}
     .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
     .modal-field{background:var(--surface2);border-radius:8px;padding:0.8rem;}
@@ -219,7 +229,7 @@
     .wa-float:hover{transform:scale(1.1);}
     .wa-tooltip{position:absolute;right:62px;background:var(--surface);color:var(--text);padding:0.35rem 0.85rem;border-radius:8px;font-size:0.78rem;white-space:nowrap;opacity:0;pointer-events:none;transition:opacity 0.2s;border:1px solid rgba(255,255,255,0.1);}
     .wa-float:hover .wa-tooltip{opacity:1;}
-    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);padding:0.85rem 1.4rem;border-radius:var(--radius);font-size:0.87rem;font-weight:500;z-index:999;opacity:0;transition:all 0.4s ease;display:flex;align-items:center;gap:8px;white-space:nowrap;}
+    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);padding:0.85rem 1.4rem;border-radius:var(--radius);font-size:0.87rem;font-weight:500;z-index:9999;opacity:0;transition:all 0.4s ease;display:flex;align-items:center;gap:8px;white-space:nowrap;max-width:90vw;}
     .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
     .toast.success{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;}
     .toast.error{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;}
@@ -230,21 +240,15 @@
     .footer-links{display:flex;gap:1.2rem;}
     .footer-links button{font-size:0.8rem;color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;}
     .footer-links button:hover{color:var(--gold);}
-    /* Address autocomplete dropdown */
-    .addr-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid rgba(201,168,76,0.3);border-radius:10px;margin-top:4px;box-shadow:0 10px 40px rgba(0,0,0,0.4);z-index:9999;max-height:220px;overflow-y:auto;}
-    .addr-item{padding:0.65rem 1rem;font-size:0.85rem;color:var(--text-muted);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);}
-    .addr-item:hover{background:rgba(201,168,76,0.1);color:var(--text);}
-    .addr-item strong{color:var(--gold-light);}
     @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
     .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
     .fade-up.visible{opacity:1;transform:translateY(0);}
     @media(max-width:960px){.hero-visual{display:none;}.apply-layout{grid-template-columns:1fr;}.contact-grid{grid-template-columns:1fr;}.modal-grid{grid-template-columns:1fr;}.calc-row{grid-template-columns:1fr;}}
-    @media(max-width:768px){.nav-links{display:none;}.nav-hamburger{display:block;}.form-row{grid-template-columns:1fr;}.hero-stats{gap:1.5rem;flex-wrap:wrap;}.apps-table th:nth-child(5),.apps-table td:nth-child(5){display:none;}}
+    @media(max-width:768px){.nav-links{display:none;}.nav-hamburger{display:block;}.form-row{grid-template-columns:1fr;}.hero-stats{gap:1.5rem;flex-wrap:wrap;}.apps-table th:nth-child(5),.apps-table td:nth-child(5){display:none;}.pay-grid{grid-template-columns:1fr 1fr;}}
     @media(max-width:480px){.apps-table th:nth-child(3),.apps-table td:nth-child(3){display:none;}.mini-stats{flex-direction:column;}}
   </style>
 </head>
 <body>
-
 <nav>
   <div class="logo" onclick="showPage('home')">
     <svg class="logo-shield" viewBox="0 0 80 100" xmlns="http://www.w3.org/2000/svg">
@@ -256,10 +260,7 @@
       <line x1="40" y1="18" x2="40" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
       <line x1="54" y1="18" x2="54" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
     </svg>
-    <div class="logo-text-wrap">
-      <span class="logo-name">Phindu</span>
-      <span class="logo-sub">Micro Finance</span>
-    </div>
+    <div class="logo-text-wrap"><span class="logo-name">Phindu</span><span class="logo-sub">Micro Finance</span></div>
   </div>
   <ul class="nav-links">
     <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
@@ -338,7 +339,7 @@
 <!-- LOAN TYPES -->
 <div class="page" id="page-loans">
   <div class="page-section">
-    <button class="back-btn" onclick="goBack()"><span class="back-btn-arrow">&#8592;</span> Back</button>
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
     <div class="section-label">Our Products</div><h2>All Loan Types</h2>
     <p class="section-desc">All loans require a valid National ID photo and collateral of higher value than the loan amount. Maximum repayment period is 2 months.</p>
     <div class="loans-grid" style="margin-top:2.5rem;">
@@ -353,7 +354,7 @@
 <!-- CALCULATOR -->
 <div class="page" id="page-calculator">
   <div class="page-section">
-    <button class="back-btn" onclick="goBack()"><span class="back-btn-arrow">&#8592;</span> Back</button>
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
     <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Tools</div><h2>Loan Repayment Calculator</h2><p class="section-desc" style="margin:0 auto;">Enter your loan amount and period to instantly see your total repayment.</p></div>
     <div class="calc-wrap fade-up">
       <div class="calc-row">
@@ -401,7 +402,7 @@
 <!-- APPLY -->
 <div class="page" id="page-apply">
   <div class="page-section">
-    <button class="back-btn" onclick="goBack()"><span class="back-btn-arrow">&#8592;</span> Back</button>
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
     <div class="apply-layout">
       <div class="fade-up">
         <div class="section-label">Apply Now</div><h2>Start Your Application</h2>
@@ -410,7 +411,7 @@
           <div class="info-point"><div class="info-point-icon">&#128282;</div><div class="info-point-text"><h4>National ID Photo Required</h4><p>Upload a clear front-page photo of your National ID card.</p></div></div>
           <div class="info-point"><div class="info-point-icon">&#127968;</div><div class="info-point-text"><h4>Collateral Required</h4><p>A valuable item exceeding the loan amount as security.</p></div></div>
           <div class="info-point"><div class="info-point-icon">&#9201;</div><div class="info-point-text"><h4>Max 2 Months</h4><p>Maximum repayment is 2 months at 50% interest.</p></div></div>
-          <div class="info-point"><div class="info-point-icon">&#9889;</div><div class="info-point-text"><h4>Fast Response</h4><p>Our team reviews applications within 24 hours.</p></div></div>
+          <div class="info-point"><div class="info-point-icon">&#128241;</div><div class="info-point-text"><h4>Payment Method</h4><p>Choose your preferred payment method for loan disbursement.</p></div></div>
         </div>
         <div style="margin-top:1.5rem;"><button class="btn-secondary" onclick="showPage('calculator')" style="font-size:0.85rem;padding:0.6rem 1.2rem;">&#129518; Open Calculator First</button></div>
       </div>
@@ -436,16 +437,15 @@
             <label>Home Address <span class="req">*</span></label>
             <div style="position:relative;">
               <input type="text" id="address" placeholder="Start typing your address..." autocomplete="off"/>
-              <div id="mapLinkBox" style="display:none;margin-top:6px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:0.5rem 0.8rem;font-size:0.78rem;display:none;align-items:center;gap:8px;">
-                <span style="font-size:1rem;">&#128205;</span>
-                <div>
-                  <div style="color:var(--gold-light);font-weight:600;" id="mapLinkText"></div>
-                  <a id="mapLink" href="#" target="_blank" style="color:var(--text-muted);font-size:0.72rem;text-decoration:none;">View on Google Maps &#8599;</a>
-                </div>
+              <div id="addrDropdown" class="addr-dropdown" style="display:none;"></div>
+              <div id="mapLinkBox" style="display:none;margin-top:6px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:0.5rem 0.8rem;font-size:0.78rem;align-items:center;gap:8px;">
+                <span>&#128205;</span>
+                <div><div style="color:var(--gold-light);font-weight:600;" id="mapLinkText"></div><a id="mapLink" href="#" target="_blank" style="color:var(--text-muted);font-size:0.72rem;text-decoration:none;">View on Google Maps &#8599;</a></div>
               </div>
             </div>
             <div class="field-error" id="err-address">Please enter your address</div>
           </div>
+
           <div class="form-section-heading">National ID Verification</div>
           <div class="field">
             <label>National ID &mdash; Front Page Photo <span class="req">*</span></label>
@@ -457,6 +457,7 @@
             </div>
             <div class="field-error" id="err-idPhoto">Please upload a photo of your National ID</div>
           </div>
+
           <div class="form-section-heading">Loan Details</div>
           <div class="form-row">
             <div class="field"><label>Loan Type <span class="req">*</span></label><select id="loanType"><option value="">Select loan type</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select><div class="field-error" id="err-loanType">Please select a loan type</div></div>
@@ -489,6 +490,37 @@
           </div>
           <div class="field"><label>Estimated Collateral Value (MK) <span class="req">*</span></label><input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkCollateral()"/><div class="field-error" id="err-collateralValue">Collateral value must exceed the loan amount</div></div>
           <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item in detail - make, model, condition, location..."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
+
+          <div class="form-section-heading">Payment Method</div>
+          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.9rem;">Choose how you want to receive your loan funds</p>
+          <div class="pay-grid">
+            <div class="pay-card" id="payCard-mobile" onclick="selectPayMethod('mobile')">
+              <div class="pay-card-icon">&#128241;</div>
+              <div class="pay-card-label">Mobile Wallet</div>
+              <div class="pay-card-sub">Airtel Money / TNM Mpamba</div>
+            </div>
+            <div class="pay-card" id="payCard-bank" onclick="selectPayMethod('bank')">
+              <div class="pay-card-icon">&#127970;</div>
+              <div class="pay-card-label">Bank Account</div>
+              <div class="pay-card-sub">Any Malawi bank</div>
+            </div>
+          </div>
+          <div class="field-error" id="err-payMethod">Please select a payment method</div>
+          <div class="pay-details" id="payBox-mobile">
+            <div class="form-row">
+              <div class="field"><label>Mobile Network <span class="req">*</span></label><select id="mobileNetwork"><option value="">Select network</option><option>Airtel Money</option><option>TNM Mpamba</option></select><div class="field-error" id="err-mobileNetwork">Please select a network</div></div>
+              <div class="field"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="mobileNumber" placeholder="e.g. 0999 123 456"/><div class="field-error" id="err-mobileNumber">Please enter mobile number</div></div>
+            </div>
+            <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" id="mobileAccName" placeholder="Name registered on mobile wallet"/><div class="field-error" id="err-mobileAccName">Please enter account name</div></div>
+          </div>
+          <div class="pay-details" id="payBox-bank">
+            <div class="form-row">
+              <div class="field"><label>Bank Name <span class="req">*</span></label><select id="bankName"><option value="">Select bank</option><option>National Bank of Malawi</option><option>Standard Bank</option><option>NBS Bank</option><option>FDH Bank</option><option>Ecobank</option><option>First Capital Bank</option><option>MyBucks Bank</option><option>Other</option></select><div class="field-error" id="err-bankName">Please select a bank</div></div>
+              <div class="field"><label>Account Number <span class="req">*</span></label><input type="text" id="bankAccount" placeholder="e.g. 1234567890"/><div class="field-error" id="err-bankAccount">Please enter account number</div></div>
+            </div>
+            <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" id="bankAccName" placeholder="Name on your bank account"/><div class="field-error" id="err-bankAccName">Please enter account name</div></div>
+          </div>
+
           <button type="button" class="submit-btn" id="submitBtn"><div class="spinner" id="spinner"></div><span id="btnText">Submit Application &rarr;</span></button>
         </form>
       </div>
@@ -500,7 +532,7 @@
 <!-- CONTACT -->
 <div class="page" id="page-contact">
   <div class="page-section">
-    <button class="back-btn" onclick="goBack()"><span class="back-btn-arrow">&#8592;</span> Back</button>
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
     <div class="section-label">Get In Touch</div><h2>Contact Us</h2>
     <p class="section-desc">We are here to help every step of the way. Reach out via phone, WhatsApp or visit our office in Lilongwe.</p>
     <div class="contact-grid">
@@ -518,7 +550,7 @@
         <h3>&#128205; Our Location</h3>
         <div class="contact-item"><div class="contact-icon">&#127970;</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
         <div class="contact-item"><div class="contact-icon">&#128336;</div><div class="contact-item-text"><strong>Business Hours</strong>Mon - Fri: 8:00 AM - 5:00 PM<br/>Saturday: 9:00 AM - 1:00 PM</div></div>
-        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="a2dbcdd7ccc5c6d7d5c3909497e2c5cfc3cbce8cc1cdcf">[email&#160;protected]</a></div></div>
+        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="235a4c564d444756544211151663444e424a4f0d404c4e">[email&#160;protected]</a></div></div>
         <div class="contact-item"><div class="contact-icon">&#127760;</div><div class="contact-item-text"><strong>Website</strong><a href="https://phindumicrofinance.netlify.app" target="_blank">phindumicrofinance.netlify.app</a></div></div>
         <div class="map-box"><span style="font-size:2rem;">&#128205;</span><p style="font-size:0.85rem;color:var(--text-muted);text-align:center;">Lilongwe, Malawi<br/><a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.8rem;">Open in Google Maps &rarr;</a></p></div>
       </div>
@@ -536,7 +568,6 @@
     <input type="password" class="dash-login-input" id="dashPasswordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkDashPassword()"/>
     <button class="dash-login-btn" onclick="checkDashPassword()">Unlock Dashboard</button>
     <div class="dash-login-error" id="dashLoginError">Incorrect password. Please try again.</div>
-
     <button onclick="goBack();document.getElementById('dashLoginOverlay').classList.remove('open');" style="background:none;border:none;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.82rem;cursor:pointer;margin-top:0.8rem;text-decoration:underline;">&#8592; Go Back</button>
   </div>
 </div>
@@ -544,7 +575,7 @@
 <!-- DASHBOARD -->
 <div class="page" id="page-dashboard">
   <div class="page-section">
-    <button class="back-btn" onclick="goBack()"><span class="back-btn-arrow">&#8592;</span> Back</button>
+    <button class="back-btn" onclick="goBack()">&#8592; Back</button>
     <div class="dash-header">
       <div><div class="section-label">Admin</div><h2>Applications Dashboard</h2></div>
       <div style="display:flex;gap:0.8rem;align-items:center;">
@@ -553,7 +584,7 @@
         <button class="dash-logout-btn" onclick="lockDashboard()">&#128274; Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications submitted on this device are stored here and also emailed automatically to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="d9a0b6acb7bebdacaeb8ebefec99beb4b8b0b5f7bab6b4">[email&#160;protected]</a></strong>.</span></div>
+    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications are stored in Google Sheets and also emailed automatically to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="0b72647e656c6f7e7c6a393d3e4b6c666a626725686466">[email&#160;protected]</a></strong>. Customers receive SMS when approved or rejected.</span></div>
     <div class="dash-stats">
       <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
       <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
@@ -580,7 +611,7 @@
 <!-- MODAL -->
 <div class="modal-overlay" id="appModal" onclick="handleOverlayClick(event)">
   <div class="modal" id="appModalBox">
-    <button class="modal-close" onclick="closeModal()" style="position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;color:var(--text);font-size:1.3rem;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;z-index:10;">&#10005;</button>
+    <button class="modal-close" onclick="closeModal()">&#10005;</button>
     <div class="modal-title" id="modalTitle">Application Details</div>
     <div class="modal-grid" id="modalBody"></div>
     <div class="modal-actions" id="modalActions"></div>
@@ -592,63 +623,63 @@
   <span class="wa-tooltip">Chat with us</span>
   <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
-
 <div class="toast" id="toast"></div>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
 var EMAILJS_SERVICE_ID  = "service_zunei3e";
 var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
 var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL   = "https://script.google.com/macros/s/AKfycbwdQiC0na71Tn6KqCoAl-_oanecA0iLvD7QZYJixE4VIKuGU4wUhhGVZhSfYr3G7Ooc/exec";
-var SHEETS_READ  = "https://script.google.com/macros/s/AKfycbwdQiC0na71Tn6KqCoAl-_oanecA0iLvD7QZYJixE4VIKuGU4wUhhGVZhSfYr3G7Ooc/exec?action=getAll";
-var sheetsApps   = [];
-var sheetsLoaded = false;
-var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
+var SHEETS_URL  = "https://script.google.com/macros/s/AKfycbx1bs3jiiaSX_a1-JOYBSX2aSPTXHmhg8U5106Pie-N-1P5K-AW2-j4eDueZZs22ELS/exec";
+var SHEETS_READ = "https://script.google.com/macros/s/AKfycbx1bs3jiiaSX_a1-JOYBSX2aSPTXHmhg8U5106Pie-N-1P5K-AW2-j4eDueZZs22ELS/exec?action=getAll";
+var RATES       = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var PERIOD_TO_KEY = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
-var dashUnlocked = false;
-var idPhotoBase64 = null;
-var pageHistory = [];
+var dashUnlocked    = false;
+var idPhotoBase64   = null;
+var sheetsApps      = [];
+var sheetsLoaded    = false;
+var pageHistory     = [];
+var selectedPayMethod = '';
+var selectedPlaceLat  = '';
+var selectedPlaceLng  = '';
+var selectedPlaceFull = '';
+var addrTimer       = null;
 
 emailjs.init(EMAILJS_PUBLIC_KEY);
+
+function showPage(name) {
+  var current = document.querySelector('.page.active');
+  if (current && current.id !== 'page-'+name) {
+    pageHistory.push(current.id.replace('page-',''));
+    if (pageHistory.length > 10) pageHistory.shift();
+  }
+  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+  document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(function(b){b.classList.remove('active');});
+  document.getElementById('page-'+name).classList.add('active');
+  var nb = document.getElementById('nav-'+name);
+  if (nb) nb.classList.add('active');
+  window.scrollTo(0,0);
+  if (name==='dashboard' && dashUnlocked) { loadFromSheets(); }
+  setTimeout(function(){
+    document.querySelectorAll('#page-'+name+' .fade-up').forEach(function(el){
+      if (!el.classList.contains('visible')) {
+        var o = new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
+        o.observe(el);
+      }
+    });
+  },60);
+}
 
 function goBack() {
   if (pageHistory.length > 0) {
     var prev = pageHistory.pop();
-    document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-    document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(function(b) { b.classList.remove('active'); });
-    document.getElementById('page-' + prev).classList.add('active');
-    var nb = document.getElementById('nav-' + prev);
+    document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
+    document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(function(b){b.classList.remove('active');});
+    document.getElementById('page-'+prev).classList.add('active');
+    var nb = document.getElementById('nav-'+prev);
     if (nb) nb.classList.add('active');
-    window.scrollTo(0, 0);
-  } else {
-    showPage('home');
-  }
-}
-
-function showPage(name) {
-  var current = document.querySelector('.page.active');
-  if (current && current.id !== 'page-' + name) {
-    pageHistory.push(current.id.replace('page-', ''));
-    if (pageHistory.length > 10) pageHistory.shift();
-  }
-  document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
-  document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(function(b) { b.classList.remove('active'); });
-  document.getElementById('page-' + name).classList.add('active');
-  var nb = document.getElementById('nav-' + name);
-  if (nb) nb.classList.add('active');
-  window.scrollTo(0, 0);
-  if (name === 'dashboard') { if (dashUnlocked) { loadFromSheets(); } }
-  setTimeout(function() {
-    document.querySelectorAll('#page-' + name + ' .fade-up').forEach(function(el) {
-      if (!el.classList.contains('visible')) {
-        var o = new IntersectionObserver(function(entries) {
-          entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add('visible'); });
-        }, {threshold:0.08});
-        o.observe(el);
-      }
-    });
-  }, 60);
+    window.scrollTo(0,0);
+  } else { showPage('home'); }
 }
 
 function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('open'); }
@@ -659,15 +690,12 @@ function openDashboard() {
     document.getElementById('dashPasswordInput').value = '';
     document.getElementById('dashLoginError').classList.remove('show');
     document.getElementById('dashLoginOverlay').classList.add('open');
-    setTimeout(function() { document.getElementById('dashPasswordInput').focus(); }, 150);
-  } else {
-    loadFromSheets();
+    setTimeout(function(){document.getElementById('dashPasswordInput').focus();},150);
   }
 }
 
 function checkDashPassword() {
-  var val = document.getElementById('dashPasswordInput').value;
-  if (val === ADMIN_PASSWORD) {
+  if (document.getElementById('dashPasswordInput').value === ADMIN_PASSWORD) {
     dashUnlocked = true;
     document.getElementById('dashLoginOverlay').classList.remove('open');
     loadFromSheets();
@@ -683,461 +711,367 @@ function lockDashboard() {
   document.getElementById('dashLoginOverlay').classList.add('open');
   document.getElementById('dashPasswordInput').value = '';
   document.getElementById('dashLoginError').classList.remove('show');
-  showToast('Dashboard locked.', 'info');
+  showToast('Dashboard locked.','info');
+}
+
+function selectPayMethod(method) {
+  selectedPayMethod = method;
+  document.querySelectorAll('.pay-card').forEach(function(c){c.classList.remove('selected');});
+  document.getElementById('payCard-'+method).classList.add('selected');
+  document.getElementById('payBox-mobile').classList.toggle('show', method==='mobile');
+  document.getElementById('payBox-bank').classList.toggle('show', method==='bank');
+  document.getElementById('err-payMethod').classList.remove('show');
 }
 
 function calculateLoan() {
   var amt = Number(document.getElementById('calcAmount').value);
   var period = document.getElementById('calcPeriod').value;
   var result = document.getElementById('calcResult');
-  if (!amt || !period || amt <= 0) { result.classList.remove('show'); return; }
-  var rate = RATES[period];
-  var interest = amt * rate;
-  var total = amt + interest;
-  var labels = {"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};
-  document.getElementById('res-principal').textContent = 'MK ' + amt.toLocaleString();
-  document.getElementById('res-interest').textContent  = 'MK ' + interest.toLocaleString();
-  document.getElementById('res-total').textContent     = 'MK ' + total.toLocaleString();
-  document.getElementById('res-rate').textContent      = (rate*100).toFixed(0) + '%';
-  document.getElementById('res-summary').textContent   = 'If you borrow MK ' + amt.toLocaleString() + ' for ' + labels[period] + ', you will repay a total of MK ' + total.toLocaleString() + ' (MK ' + interest.toLocaleString() + ' interest).';
-  document.querySelectorAll('#rateTable tbody tr').forEach(function(tr) {
-    tr.classList.toggle('active-row', tr.getAttribute('data-key') === period);
-  });
+  if (!amt||!period||amt<=0){result.classList.remove('show');return;}
+  var rate=RATES[period], interest=amt*rate, total=amt+interest;
+  var labels={"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};
+  document.getElementById('res-principal').textContent='MK '+amt.toLocaleString();
+  document.getElementById('res-interest').textContent='MK '+interest.toLocaleString();
+  document.getElementById('res-total').textContent='MK '+total.toLocaleString();
+  document.getElementById('res-rate').textContent=(rate*100).toFixed(0)+'%';
+  document.getElementById('res-summary').textContent='If you borrow MK '+amt.toLocaleString()+' for '+labels[period]+', you will repay MK '+total.toLocaleString()+' total.';
+  document.querySelectorAll('#rateTable tbody tr').forEach(function(tr){tr.classList.toggle('active-row',tr.getAttribute('data-key')===period);});
   result.classList.add('show');
 }
 
 function autoCalc() {
-  var amt = Number(document.getElementById('loanAmount').value);
-  var period = document.getElementById('repayPeriod').value;
-  var box = document.getElementById('inlineCalcBox');
-  var key = PERIOD_TO_KEY[period];
-  if (amt > 0 && key) {
-    var rate = RATES[key];
-    var total = amt + amt * rate;
-    document.getElementById('inlineCalcText').textContent = 'You will repay MK ' + total.toLocaleString() + ' total (MK ' + (amt*rate).toLocaleString() + ' interest at ' + (rate*100).toFixed(0) + '%)';
-    box.style.display = 'block';
-  } else { box.style.display = 'none'; }
+  var amt=Number(document.getElementById('loanAmount').value);
+  var period=document.getElementById('repayPeriod').value;
+  var box=document.getElementById('inlineCalcBox');
+  var key=PERIOD_TO_KEY[period];
+  if (amt>0&&key) {
+    var rate=RATES[key], total=amt+amt*rate;
+    document.getElementById('inlineCalcText').textContent='You will repay MK '+total.toLocaleString()+' total (MK '+(amt*rate).toLocaleString()+' interest at '+(rate*100).toFixed(0)+'%)';
+    box.style.display='block';
+  } else { box.style.display='none'; }
 }
 
 function updateCollateralHint() {
-  var amt = Number(document.getElementById('loanAmount').value);
-  document.getElementById('collateralNote').textContent = amt > 0
-    ? 'Your collateral must be worth MORE than MK ' + amt.toLocaleString()
-    : 'Collateral must be worth MORE than your loan amount.';
+  var amt=Number(document.getElementById('loanAmount').value);
+  document.getElementById('collateralNote').textContent=amt>0?'Your collateral must be worth MORE than MK '+amt.toLocaleString():'Collateral must be worth MORE than your loan amount.';
 }
 
 function checkCollateral() {
-  var loan = Number(document.getElementById('loanAmount').value);
-  var coll = Number(document.getElementById('collateralValue').value);
-  var err = document.getElementById('err-collateralValue');
-  var inp = document.getElementById('collateralValue');
-  if (loan > 0 && coll > 0 && coll <= loan) {
+  var loan=Number(document.getElementById('loanAmount').value);
+  var coll=Number(document.getElementById('collateralValue').value);
+  var err=document.getElementById('err-collateralValue');
+  var inp=document.getElementById('collateralValue');
+  if (loan>0&&coll>0&&coll<=loan) {
     inp.classList.add('error');
-    err.textContent = 'Collateral (MK ' + coll.toLocaleString() + ') must exceed loan (MK ' + loan.toLocaleString() + ')';
+    err.textContent='Collateral (MK '+coll.toLocaleString()+') must exceed loan (MK '+loan.toLocaleString()+')';
     err.classList.add('show');
   } else { inp.classList.remove('error'); err.classList.remove('show'); }
 }
 
 function handleIdUpload(e) {
-  var file = e.target.files[0];
+  var file=e.target.files[0];
   if (!file) return;
-  if (file.size > 5*1024*1024) { showToast('File too large. Max 5MB.', 'error'); return; }
-  var reader = new FileReader();
-  reader.onload = function(ev) {
-    idPhotoBase64 = ev.target.result;
-    var preview = document.getElementById('idPreview');
-    preview.src = idPhotoBase64;
-    preview.style.display = 'block';
+  if (file.size>5*1024*1024){showToast('File too large. Max 5MB.','error');return;}
+  var reader=new FileReader();
+  reader.onload=function(ev){
+    idPhotoBase64=ev.target.result;
+    var preview=document.getElementById('idPreview');
+    preview.src=idPhotoBase64; preview.style.display='block';
     document.getElementById('idUploadArea').classList.add('has-file');
-    document.querySelector('#idUploadArea .id-upload-label').innerHTML = '<strong style="color:var(--success)">ID photo uploaded successfully</strong>Click to change photo';
+    document.querySelector('#idUploadArea .id-upload-label').innerHTML='<strong style="color:var(--success)">ID photo uploaded successfully</strong>Click to change photo';
     document.getElementById('err-idPhoto').classList.remove('show');
   };
   reader.readAsDataURL(file);
 }
 
 function validate() {
-  var required = ['firstName','lastName','phone','nationalId','dob','address','loanType','loanAmount','repayPeriod','employment','income','collateralItem','collateralValue','collateralDesc'];
-  var valid = true;
-  required.forEach(function(id) {
-    var el = document.getElementById(id);
-    var err = document.getElementById('err-' + id);
-    if (!el || !el.value.trim()) {
-      if (el) el.classList.add('error');
-      if (err && id !== 'collateralValue') err.classList.add('show');
-      valid = false;
-    } else { el.classList.remove('error'); if (err) err.classList.remove('show'); }
+  var required=['firstName','lastName','phone','nationalId','dob','address','loanType','loanAmount','repayPeriod','employment','income','collateralItem','collateralValue','collateralDesc'];
+  var valid=true;
+  required.forEach(function(id){
+    var el=document.getElementById(id);
+    var err=document.getElementById('err-'+id);
+    if (!el||!el.value.trim()){
+      if(el)el.classList.add('error');
+      if(err&&id!=='collateralValue')err.classList.add('show');
+      valid=false;
+    } else { el.classList.remove('error'); if(err)err.classList.remove('show'); }
   });
-  // ID photo: required on desktop, optional on mobile (iOS camera issues)
-  var isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  if (!idPhotoBase64 && !isMobile) {
-    document.getElementById('err-idPhoto').classList.add('show');
-    valid = false;
-  } else if (idPhotoBase64) {
-    document.getElementById('err-idPhoto').classList.remove('show');
-  }
-  var loan = Number(document.getElementById('loanAmount').value);
-  var coll = Number(document.getElementById('collateralValue').value);
-  if (coll > 0 && loan > 0 && coll <= loan) {
+  var isMobile=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!idPhotoBase64&&!isMobile){document.getElementById('err-idPhoto').classList.add('show');valid=false;}
+  else if(idPhotoBase64){document.getElementById('err-idPhoto').classList.remove('show');}
+  var loan=Number(document.getElementById('loanAmount').value);
+  var coll=Number(document.getElementById('collateralValue').value);
+  if (coll>0&&loan>0&&coll<=loan){
     document.getElementById('collateralValue').classList.add('error');
-    var err = document.getElementById('err-collateralValue');
-    err.textContent = 'Collateral (MK ' + coll.toLocaleString() + ') must exceed loan (MK ' + loan.toLocaleString() + ')';
-    err.classList.add('show');
-    valid = false;
+    var err=document.getElementById('err-collateralValue');
+    err.textContent='Collateral (MK '+coll.toLocaleString()+') must exceed loan (MK '+loan.toLocaleString()+')';
+    err.classList.add('show'); valid=false;
+  }
+  if (!selectedPayMethod){document.getElementById('err-payMethod').classList.add('show');valid=false;}
+  else {document.getElementById('err-payMethod').classList.remove('show');}
+  if (selectedPayMethod==='mobile'){
+    var mNet=document.getElementById('mobileNetwork');
+    var mNum=document.getElementById('mobileNumber');
+    var mAcc=document.getElementById('mobileAccName');
+    if(!mNet.value){mNet.classList.add('error');document.getElementById('err-mobileNetwork').classList.add('show');valid=false;}
+    if(!mNum.value.trim()){mNum.classList.add('error');document.getElementById('err-mobileNumber').classList.add('show');valid=false;}
+    if(!mAcc.value.trim()){mAcc.classList.add('error');document.getElementById('err-mobileAccName').classList.add('show');valid=false;}
+  }
+  if (selectedPayMethod==='bank'){
+    var bName=document.getElementById('bankName');
+    var bAcc=document.getElementById('bankAccount');
+    var bAccName=document.getElementById('bankAccName');
+    if(!bName.value){bName.classList.add('error');document.getElementById('err-bankName').classList.add('show');valid=false;}
+    if(!bAcc.value.trim()){bAcc.classList.add('error');document.getElementById('err-bankAccount').classList.add('show');valid=false;}
+    if(!bAccName.value.trim()){bAccName.classList.add('error');document.getElementById('err-bankAccName').classList.add('show');valid=false;}
   }
   return valid;
 }
 
-function showToast(msg, type) {
-  var t = document.getElementById('toast');
-  t.textContent = (type==='success'?'OK: ':type==='info'?'INFO: ':'ERROR: ') + msg;
-  t.className = 'toast ' + type + ' show';
-  setTimeout(function() { t.classList.remove('show'); }, 5500);
+function showToast(msg,type){
+  var t=document.getElementById('toast');
+  t.textContent=(type==='success'?'OK: ':type==='info'?'INFO: ':'ERROR: ')+msg;
+  t.className='toast '+type+' show';
+  setTimeout(function(){t.classList.remove('show');},5500);
 }
 
-function getApps() { try { return JSON.parse(localStorage.getItem('phindu_apps')||'[]'); } catch(e) { return []; } }
-function saveApps(a) { localStorage.setItem('phindu_apps', JSON.stringify(a)); }
+function getApps(){try{return JSON.parse(localStorage.getItem('phindu_apps')||'[]');}catch(e){return[];}}
+function saveApps(a){try{localStorage.setItem('phindu_apps',JSON.stringify(a));}catch(e){}}
 
-function saveToSheets(app) {
-  // Use URL parameters via image trick to bypass CORS completely
-  var params = [
-    'app_id='        + encodeURIComponent(app.id),
-    'firstName='     + encodeURIComponent(app.firstName),
-    'lastName='      + encodeURIComponent(app.lastName),
-    'phone='         + encodeURIComponent(app.phone),
-    'email='         + encodeURIComponent(app.email),
-    'nationalId='    + encodeURIComponent(app.nationalId),
-    'dob='           + encodeURIComponent(app.dob),
-    'gender='        + encodeURIComponent(app.gender),
-    'address='       + encodeURIComponent(app.address),
-    'loanType='      + encodeURIComponent(app.loanType),
-    'loanAmount='    + encodeURIComponent(app.loanAmount),
-    'repayPeriod='   + encodeURIComponent(app.repayPeriod),
-    'interestRate='  + encodeURIComponent(app.interestRate),
-    'totalRepayment='+ encodeURIComponent(app.totalRepayment),
-    'employment='    + encodeURIComponent(app.employment),
-    'income='        + encodeURIComponent(app.income),
-
-    'collateralItem='+ encodeURIComponent(app.collateralItem),
-    'collateralValue='+ encodeURIComponent(app.collateralValue),
-    'collateralDesc='+ encodeURIComponent(app.collateralDesc),
-    'submittedAt='   + encodeURIComponent(app.submittedAt)
-  ].join('&');
-  // Use JSONP for reliable cross-origin saving
-  var script  = document.createElement('script');
-  var cbName  = '_saveCb_' + Date.now();
-  window[cbName] = function() {
-    try { document.head.removeChild(script); } catch(e) {}
-    delete window[cbName];
-  };
-  script.onerror = function() {
-    try { document.head.removeChild(script); } catch(e) {}
-    delete window[cbName];
-  };
-  script.src = SHEETS_URL + '?' + params + '&callback=' + cbName;
-  document.head.appendChild(script);
+function getDueDate(submittedAt, period) {
+  if (!submittedAt||!period) return 'Unknown';
+  var parts=String(submittedAt).split('/');
+  if (parts.length<3) return 'Unknown';
+  var d=new Date(parts[2].split(' ')[0],parts[1]-1,parts[0]);
+  var days={'1 Week':7,'2 Weeks':14,'3 Weeks':21,'1 Month':30,'2 Months':60}[period]||30;
+  d.setDate(d.getDate()+days);
+  return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();
 }
 
-// ── ADDRESS AUTOCOMPLETE (OpenStreetMap — 100% Free) ────────
-var selectedPlaceLat  = '';
-var selectedPlaceLng  = '';
-var selectedPlaceFull = '';
-var addrTimer = null;
-
-function initAddressAutocomplete() {
-  var input = document.getElementById('address');
-  if (!input) return;
-
-  // Create dropdown
-  var dropdown = document.createElement('div');
-  dropdown.className = 'addr-dropdown';
-  dropdown.id = 'addrDropdown';
-  dropdown.style.display = 'none';
-  input.parentNode.appendChild(dropdown);
-
-  input.addEventListener('input', function() {
-    var q = input.value.trim();
-    // Clear map link if user edits
-    selectedPlaceLat = ''; selectedPlaceLng = ''; selectedPlaceFull = '';
-    document.getElementById('mapLinkBox').style.display = 'none';
-    clearTimeout(addrTimer);
-    if (q.length < 3) { dropdown.style.display = 'none'; return; }
-    addrTimer = setTimeout(function() { searchAddress(q, dropdown, input); }, 400);
-  });
-
-  // Close dropdown when clicking outside
-  document.addEventListener('click', function(e) {
-    if (!input.parentNode.contains(e.target)) dropdown.style.display = 'none';
-  });
-}
-
-function searchAddress(q, dropdown, input) {
-  var url = 'https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=mw&q=' + encodeURIComponent(q);
-  fetch(url, { headers: { 'Accept-Language': 'en', 'User-Agent': 'PhinduMicroFinance/1.0' } })
-    .then(function(r) { return r.json(); })
-    .then(function(results) {
-      dropdown.innerHTML = '';
-      if (!results || results.length === 0) {
-        dropdown.innerHTML = '<div class="addr-item" style="color:var(--text-muted);">No results found. Try a different search.</div>';
-        dropdown.style.display = 'block';
-        return;
-      }
-      results.forEach(function(place) {
-        var item = document.createElement('div');
-        item.className = 'addr-item';
-        var name  = place.display_name.split(',')[0];
-        var rest  = place.display_name.split(',').slice(1).join(',').trim();
-        item.innerHTML = '<strong>' + name + '</strong><br><span style="font-size:0.75rem;">' + rest + '</span>';
-        item.addEventListener('click', function() {
-          input.value        = place.display_name;
-          selectedPlaceLat   = place.lat;
-          selectedPlaceLng   = place.lon;
-          selectedPlaceFull  = place.display_name;
-          dropdown.style.display = 'none';
-          // Show map link
-          var box = document.getElementById('mapLinkBox');
-          box.style.display = 'flex';
-          document.getElementById('mapLinkText').textContent = place.display_name.split(',').slice(0,3).join(',');
-          document.getElementById('mapLink').href = 'https://www.google.com/maps?q=' + place.lat + ',' + place.lon;
-          input.classList.remove('error');
-          document.getElementById('err-address').classList.remove('show');
-        });
-        dropdown.appendChild(item);
-      });
-      dropdown.style.display = 'block';
-    })
-    .catch(function() { dropdown.style.display = 'none'; });
+function sendCustomerSMS(phone, message) {
+  try {
+    var clean=String(phone).replace(/\s/g,'').replace(/^\+/,'');
+    if (!clean.startsWith('265')) clean='265'+clean.replace(/^0/,'');
+    var url='https://textbelt.com/text?phone=%2B'+clean+'&message='+encodeURIComponent(message)+'&key=textbelt';
+    var img=new Image(); img.src=url;
+    console.log('SMS attempted to +'+clean);
+  } catch(e){console.log('SMS error:',e);}
 }
 
 function resetBtn() {
-  var btn = document.getElementById('submitBtn');
-  var spinner = document.getElementById('spinner');
-  var btnText = document.getElementById('btnText');
-  if (btn) btn.disabled = false;
-  if (spinner) spinner.style.display = 'none';
-  if (btnText) btnText.textContent = 'Submit Application';
-  window._isSubmitting = false;
+  var btn=document.getElementById('submitBtn');
+  var spinner=document.getElementById('spinner');
+  var btnText=document.getElementById('btnText');
+  if(btn)btn.disabled=false;
+  if(spinner)spinner.style.display='none';
+  if(btnText)btnText.textContent='Submit Application';
+  window._isSubmitting=false;
 }
 
 function submitForm() {
-  // Prevent double submission
   if (window._isSubmitting) return;
-
-  // Validate first — if fails, do NOT lock the button at all
-  if (!validate()) {
-    var firstErr = document.querySelector('.field-error.show');
-    if (firstErr) firstErr.scrollIntoView({behavior:'smooth',block:'center'});
-    return; // button stays enabled, _isSubmitting stays false
+  if (!validate()){
+    var firstErr=document.querySelector('.field-error.show');
+    if(firstErr)firstErr.scrollIntoView({behavior:'smooth',block:'center'});
+    return;
   }
+  window._isSubmitting=true;
+  var btn=document.getElementById('submitBtn');
+  var spinner=document.getElementById('spinner');
+  var btnText=document.getElementById('btnText');
+  btn.disabled=true; spinner.style.display='block'; btnText.textContent='Submitting...';
 
-  // Lock button
-  window._isSubmitting = true;
-  var btn     = document.getElementById('submitBtn');
-  var spinner = document.getElementById('spinner');
-  var btnText = document.getElementById('btnText');
-  btn.disabled = true;
-  spinner.style.display = 'block';
-  btnText.textContent = 'Submitting...';
-
-  // Wrap everything in try-catch so button ALWAYS re-enables even if crash
   try {
-    var loanAmt    = Number(document.getElementById('loanAmount').value) || 0;
-    var periodVal  = document.getElementById('repayPeriod').value || '';
-    var rate       = RATES[PERIOD_TO_KEY[periodVal]] || 0;
-    var totalRepay = loanAmt + loanAmt * rate;
+    var loanAmt=Number(document.getElementById('loanAmount').value)||0;
+    var periodVal=document.getElementById('repayPeriod').value||'';
+    var rate=RATES[PERIOD_TO_KEY[periodVal]]||0;
+    var totalRepay=loanAmt+loanAmt*rate;
+    var now=new Date();
+    var submittedAt=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear()+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
 
-    // Safe date — works on ALL browsers including iOS Safari
-    var now = new Date();
-    var dd  = String(now.getDate()).padStart(2,'0');
-    var mm  = String(now.getMonth()+1).padStart(2,'0');
-    var yy  = now.getFullYear();
-    var hh  = String(now.getHours()).padStart(2,'0');
-    var min = String(now.getMinutes()).padStart(2,'0');
-    var submittedAt = dd+'/'+mm+'/'+yy+' '+hh+':'+min;
+    var paymentInfo = '';
+    if (selectedPayMethod==='mobile') {
+      paymentInfo = 'Mobile Wallet - '+(document.getElementById('mobileNetwork').value||'')+' - '+(document.getElementById('mobileNumber').value||'')+' - '+(document.getElementById('mobileAccName').value||'');
+    } else if (selectedPayMethod==='bank') {
+      paymentInfo = 'Bank - '+(document.getElementById('bankName').value||'')+' - Acc: '+(document.getElementById('bankAccount').value||'')+' - '+(document.getElementById('bankAccName').value||'');
+    }
 
-    var app = {
-      id            : 'PL-' + Date.now(),
-      firstName     : (document.getElementById('firstName').value||'').trim(),
-      lastName      : (document.getElementById('lastName').value||'').trim(),
-      phone         : (document.getElementById('phone').value||'').trim(),
-      email         : (document.getElementById('email').value||'').trim() || 'Not provided',
-      nationalId    : (document.getElementById('nationalId').value||'').trim(),
-      dob           : document.getElementById('dob').value || '',
-      gender        : document.getElementById('gender').value || 'Not specified',
-      address       : (document.getElementById('address').value||'').trim(),
-      loanType      : document.getElementById('loanType').value || '',
-      loanAmount    : loanAmt,
-      repayPeriod   : periodVal,
-      interestRate  : (rate*100).toFixed(0)+'%',
-      totalRepayment: totalRepay,
-      employment    : document.getElementById('employment').value || '',
-      income        : (document.getElementById('income').value||'').trim(),
-
-      collateralItem: (document.getElementById('collateralItem').value||'').trim(),
+    var app={
+      id:'PL-'+Date.now(),
+      firstName:(document.getElementById('firstName').value||'').trim(),
+      lastName:(document.getElementById('lastName').value||'').trim(),
+      phone:(document.getElementById('phone').value||'').trim(),
+      email:(document.getElementById('email').value||'').trim()||'Not provided',
+      nationalId:(document.getElementById('nationalId').value||'').trim(),
+      dob:document.getElementById('dob').value||'',
+      gender:document.getElementById('gender').value||'Not specified',
+      address:(document.getElementById('address').value||'').trim(),
+      loanType:document.getElementById('loanType').value||'',
+      loanAmount:loanAmt,
+      repayPeriod:periodVal,
+      interestRate:(rate*100).toFixed(0)+'%',
+      totalRepayment:totalRepay,
+      employment:document.getElementById('employment').value||'',
+      income:(document.getElementById('income').value||'').trim(),
+      collateralItem:(document.getElementById('collateralItem').value||'').trim(),
       collateralValue:(document.getElementById('collateralValue').value||'').trim(),
-      collateralDesc: (document.getElementById('collateralDesc').value||'').trim(),
-      idPhotoBase64 : idPhotoBase64 || '',
-      submittedAt   : submittedAt,
-      status        : 'pending',
-      latitude      : selectedPlaceLat || '',
-      longitude     : selectedPlaceLng || ''
+      collateralDesc:(document.getElementById('collateralDesc').value||'').trim(),
+      paymentMethod:selectedPayMethod,
+      paymentInfo:paymentInfo,
+      idPhotoBase64:idPhotoBase64||'',
+      submittedAt:submittedAt,
+      status:'pending',
+      latitude:selectedPlaceLat||'',
+      longitude:selectedPlaceLng||''
     };
 
-    var params = {
-      applicant_name  : app.firstName+' '+app.lastName,
-      national_id     : app.nationalId,
-      phone           : app.phone,
-      email           : app.email,
-      dob             : app.dob,
-      gender          : app.gender,
-      address         : app.address,
-      loan_type       : app.loanType,
-      loan_amount     : 'MK '+loanAmt.toLocaleString(),
-      repay_period    : periodVal,
-      interest_rate   : app.interestRate,
-      total_repayment : 'MK '+totalRepay.toLocaleString(),
-      employment      : app.employment,
-      income          : 'MK '+(Number(app.income)||0).toLocaleString(),
-
-      collateral_item : app.collateralItem,
-      collateral_value: 'MK '+(Number(app.collateralValue)||0).toLocaleString(),
-      collateral_desc : app.collateralDesc,
-      submitted_at    : app.submittedAt,
-      app_id          : app.id
+    var params={
+      applicant_name:app.firstName+' '+app.lastName,
+      national_id:app.nationalId, phone:app.phone, email:app.email,
+      dob:app.dob, gender:app.gender, address:app.address,
+      loan_type:app.loanType,
+      loan_amount:'MK '+loanAmt.toLocaleString(),
+      repay_period:periodVal,
+      interest_rate:app.interestRate,
+      total_repayment:'MK '+totalRepay.toLocaleString(),
+      employment:app.employment,
+      income:'MK '+(Number(app.income)||0).toLocaleString(),
+      collateral_item:app.collateralItem,
+      collateral_value:'MK '+(Number(app.collateralValue)||0).toLocaleString(),
+      collateral_desc:app.collateralDesc,
+      payment_method:paymentInfo,
+      submitted_at:app.submittedAt,
+      app_id:app.id
     };
 
-    // Save to localStorage
-    try {
-      var apps = getApps(); apps.unshift(app); saveApps(apps);
-    } catch(e1) { console.log('localStorage err:', e1); }
+    try{var apps=getApps();apps.unshift(app);saveApps(apps);}catch(e){}
+    try{saveToSheets(app);}catch(e){}
+    try{
+      emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,params)
+        .then(function(){console.log('Email OK');})
+        .catch(function(e){console.log('Email err:',e);});
+    }catch(e){}
 
-    // Save to Google Sheets
-    try { saveToSheets(app); } catch(e2) { console.log('Sheets err:', e2); }
+    showToast('Application submitted! We will contact you within 24 hours.','success');
 
-    // Send email in background
-    try {
-      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, params)
-        .then(function(){ console.log('Email OK'); })
-        .catch(function(e){ console.log('Email err:', e); });
-    } catch(e3) { console.log('EmailJS err:', e3); }
-
-    // Show success toast
-    showToast('Application submitted! We will contact you within 24 hours.', 'success');
-
-    // Reset form fields
-    document.getElementById('loanForm').reset();
-    idPhotoBase64 = null;
-    selectedPlaceLat = ''; selectedPlaceLng = ''; selectedPlaceFull = '';
-    try {
-      document.getElementById('idPreview').style.display = 'none';
+    try{
+      document.getElementById('loanForm').reset();
+      idPhotoBase64=null; selectedPayMethod=''; selectedPlaceLat=''; selectedPlaceLng=''; selectedPlaceFull='';
+      document.getElementById('idPreview').style.display='none';
       document.getElementById('idUploadArea').classList.remove('has-file');
-      document.querySelector('#idUploadArea .id-upload-label').innerHTML =
-        '<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';
-      document.getElementById('mapLinkBox').style.display = 'none';
+      document.querySelector('#idUploadArea .id-upload-label').innerHTML='<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';
+      document.getElementById('mapLinkBox').style.display='none';
+      document.querySelectorAll('.pay-card').forEach(function(c){c.classList.remove('selected');});
+      document.getElementById('payBox-mobile').classList.remove('show');
+      document.getElementById('payBox-bank').classList.remove('show');
       updateCollateralHint();
-      document.getElementById('inlineCalcBox').style.display = 'none';
-    } catch(e4) { console.log('Reset err:', e4); }
+      document.getElementById('inlineCalcBox').style.display='none';
+    }catch(e){}
+  }catch(fatal){console.log('Fatal:',fatal);}
 
-  } catch(fatal) {
-    console.log('Submit fatal error:', fatal);
-    showToast('Something went wrong. Please try again.', 'error');
-  }
-
-  // ALWAYS re-enable button — no matter what happened above
   resetBtn();
 }
 
-// Single click listener for submit button
-document.getElementById('submitBtn').addEventListener('click', function(e) {
-  e.preventDefault();
-  submitForm();
-});
+document.getElementById('submitBtn').addEventListener('click',function(e){e.preventDefault();submitForm();});
 
-function updateStats() {
-  var apps = sheetsLoaded ? sheetsApps : getApps();
-  document.getElementById('stat-total').textContent    = apps.length;
-  document.getElementById('stat-pending').textContent  = apps.filter(function(a){return (a.status||'pending').toLowerCase()==='pending';}).length;
-  document.getElementById('stat-approved').textContent = apps.filter(function(a){return (a.status||'').toLowerCase()==='approved';}).length;
-  document.getElementById('stat-rejected').textContent = apps.filter(function(a){return (a.status||'').toLowerCase()==='rejected';}).length;
-}
-
-function loadFromSheets() {
-  var tbody = document.getElementById('appsTableBody');
-  tbody.innerHTML = '<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading applications from database...</td></tr>';
-  var url = SHEETS_READ + '&t=' + Date.now();
-  var script = document.createElement('script');
-  window._sheetsCallback = function(data) {
-    document.head.removeChild(script);
-    if (data && data.rows) {
-      sheetsApps = data.rows.map(function(row) {
-        // Detect old records (22 cols with purpose) vs new records (21 cols without)
-        var hasPurpose = row.length >= 22 && row[21] !== undefined;
-        var base = hasPurpose ? 1 : 0; // offset for old records that had purpose col
-        return {
-          id             : String(row[0]||''),
-          firstName      : String(row[1]||''),
-          lastName       : String(row[2]||''),
-          phone          : String(row[3]||''),
-          email          : String(row[4]||''),
-          nationalId     : String(row[5]||''),
-          dob            : String(row[6]||''),
-          gender         : String(row[7]||''),
-          address        : String(row[8]||''),
-          loanType       : String(row[9]||''),
-          loanAmount     : row[10]||0,
-          repayPeriod    : String(row[11]||''),
-          interestRate   : String(row[12]||''),
-          totalRepayment : row[13]||0,
-          employment     : String(row[14]||''),
-          income         : row[15]||0,
-          collateralItem : String(row[15 + base + 1]||''),
-          collateralValue: row[15 + base + 2]||0,
-          collateralDesc : String(row[15 + base + 3]||''),
-          submittedAt    : String(row[15 + base + 4]||''),
-          status         : String(row[15 + base + 5]||'pending').toLowerCase()
-        };
-      });
-      sheetsLoaded = true;
-      renderTable();
-      updateStats();
-    } else {
-      sheetsLoaded = false;
-      renderTable();
-    }
-  };
-  script.src = SHEETS_READ.replace('?action=getAll','?action=getAll&callback=_sheetsCallback') + '&t=' + Date.now();
-  script.onerror = function() {
-    document.head.removeChild(script);
-    sheetsLoaded = false;
-    renderTable();
-    updateStats();
-  };
+function saveToSheets(app) {
+  var params=[
+    'app_id='+encodeURIComponent(app.id),
+    'firstName='+encodeURIComponent(app.firstName),
+    'lastName='+encodeURIComponent(app.lastName),
+    'phone='+encodeURIComponent(app.phone),
+    'email='+encodeURIComponent(app.email),
+    'nationalId='+encodeURIComponent(app.nationalId),
+    'dob='+encodeURIComponent(app.dob),
+    'gender='+encodeURIComponent(app.gender),
+    'address='+encodeURIComponent(app.address),
+    'loanType='+encodeURIComponent(app.loanType),
+    'loanAmount='+encodeURIComponent(app.loanAmount),
+    'repayPeriod='+encodeURIComponent(app.repayPeriod),
+    'interestRate='+encodeURIComponent(app.interestRate),
+    'totalRepayment='+encodeURIComponent(app.totalRepayment),
+    'employment='+encodeURIComponent(app.employment),
+    'income='+encodeURIComponent(app.income),
+    'collateralItem='+encodeURIComponent(app.collateralItem),
+    'collateralValue='+encodeURIComponent(app.collateralValue),
+    'collateralDesc='+encodeURIComponent(app.collateralDesc),
+    'paymentMethod='+encodeURIComponent(app.paymentInfo||app.paymentMethod||''),
+    'submittedAt='+encodeURIComponent(app.submittedAt)
+  ].join('&');
+  var script=document.createElement('script');
+  var cbName='_saveCb_'+Date.now();
+  window[cbName]=function(){try{document.head.removeChild(script);}catch(e){}delete window[cbName];};
+  script.onerror=function(){try{document.head.removeChild(script);}catch(e){}delete window[cbName];};
+  script.src=SHEETS_URL+'?'+params+'&callback='+cbName;
   document.head.appendChild(script);
 }
 
-function renderTable() {
-  var apps = sheetsLoaded ? sheetsApps : getApps();
-  var search = (document.getElementById('dashSearch').value||'').toLowerCase();
-  var typeF = document.getElementById('filterType').value;
-  var statusF = document.getElementById('filterStatus').value;
-  var dateF = document.getElementById('filterDate').value;
-  var now = new Date();
-  var filtered = apps.filter(function(a) {
-    var name = (a.firstName+' '+a.lastName).toLowerCase();
-    if (search && !name.includes(search) && !(a.nationalId||'').toLowerCase().includes(search) && !(a.phone||'').includes(search)) return false;
-    if (typeF && a.loanType !== typeF) return false;
-    if (statusF && a.status !== statusF) return false;
-    if (dateF) {
-      var d = new Date(a.submittedAt);
-      if (dateF==='today' && d.toDateString()!==now.toDateString()) return false;
-      if (dateF==='week'){var w=new Date(now);w.setDate(now.getDate()-7);if(d<w)return false;}
-      if (dateF==='month'){var m=new Date(now);m.setMonth(now.getMonth()-1);if(d<m)return false;}
+function loadFromSheets() {
+  var tbody=document.getElementById('appsTableBody');
+  if(tbody)tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading from database...</td></tr>';
+  var script=document.createElement('script');
+  var cbName='_sheetsCallback';
+  window[cbName]=function(data){
+    try{document.head.removeChild(script);}catch(e){}
+    if(data&&data.rows){
+      sheetsApps=data.rows.map(function(row){
+        var hasPurpose=row.length>=22&&row[21]!==undefined&&isNaN(Number(row[21]));
+        var o=hasPurpose?1:0;
+        return {
+          id:String(row[0]||''),firstName:String(row[1]||''),lastName:String(row[2]||''),
+          phone:String(row[3]||''),email:String(row[4]||''),nationalId:String(row[5]||''),
+          dob:String(row[6]||''),gender:String(row[7]||''),address:String(row[8]||''),
+          loanType:String(row[9]||''),loanAmount:row[10]||0,repayPeriod:String(row[11]||''),
+          interestRate:String(row[12]||''),totalRepayment:row[13]||0,
+          employment:String(row[14]||''),income:row[15]||0,
+          collateralItem:String(row[15+o+1]||''),collateralValue:row[15+o+2]||0,
+          collateralDesc:String(row[15+o+3]||''),
+          paymentInfo:String(row[15+o+4]||''),
+          submittedAt:String(row[15+o+5]||''),
+          status:String(row[15+o+6]||'pending').toLowerCase()
+        };
+      });
+      sheetsLoaded=true;renderTable();updateStats();
+    } else {sheetsLoaded=false;renderTable();}
+  };
+  script.onerror=function(){try{document.head.removeChild(script);}catch(e){}sheetsLoaded=false;renderTable();updateStats();};
+  script.src=SHEETS_READ.replace('?action=getAll','?action=getAll&callback=_sheetsCallback')+'&t='+Date.now();
+  document.head.appendChild(script);
+}
+
+function updateStats(){
+  var apps=sheetsLoaded?sheetsApps:getApps();
+  document.getElementById('stat-total').textContent=apps.length;
+  document.getElementById('stat-pending').textContent=apps.filter(function(a){return(a.status||'pending').toLowerCase()==='pending';}).length;
+  document.getElementById('stat-approved').textContent=apps.filter(function(a){return(a.status||'').toLowerCase()==='approved';}).length;
+  document.getElementById('stat-rejected').textContent=apps.filter(function(a){return(a.status||'').toLowerCase()==='rejected';}).length;
+}
+
+function renderTable(){
+  var apps=sheetsLoaded?sheetsApps:getApps();
+  var search=(document.getElementById('dashSearch').value||'').toLowerCase();
+  var typeF=document.getElementById('filterType').value;
+  var statusF=document.getElementById('filterStatus').value;
+  var dateF=document.getElementById('filterDate').value;
+  var now=new Date();
+  var filtered=apps.filter(function(a){
+    var name=(a.firstName+' '+a.lastName).toLowerCase();
+    if(search&&!name.includes(search)&&!(a.nationalId||'').toLowerCase().includes(search)&&!(a.phone||'').includes(search))return false;
+    if(typeF&&a.loanType!==typeF)return false;
+    if(statusF&&a.status!==statusF)return false;
+    if(dateF){
+      var d=new Date(a.submittedAt);
+      if(dateF==='today'&&d.toDateString()!==now.toDateString())return false;
+      if(dateF==='week'){var w=new Date(now);w.setDate(now.getDate()-7);if(d<w)return false;}
+      if(dateF==='month'){var m=new Date(now);m.setMonth(now.getMonth()-1);if(d<m)return false;}
     }
     return true;
   });
-  var tbody = document.getElementById('appsTableBody');
-  document.getElementById('noApps').style.display = filtered.length===0?'block':'none';
-  tbody.innerHTML = filtered.map(function(a,i) {
-    return '<tr><td style="color:var(--text-muted);font-size:0.76rem;">'+(i+1)+'</td>'+
+  var tbody=document.getElementById('appsTableBody');
+  document.getElementById('noApps').style.display=filtered.length===0?'block':'none';
+  tbody.innerHTML=filtered.map(function(a,i){
+    return '<tr>'+
+      '<td style="color:var(--text-muted);font-size:0.76rem;">'+(i+1)+'</td>'+
       '<td><div style="font-weight:600;font-size:0.88rem;">'+a.firstName+' '+a.lastName+'</div><div style="font-size:0.74rem;color:var(--text-muted);">'+a.phone+'</div></td>'+
       '<td style="font-size:0.82rem;">'+a.loanType+'</td>'+
       '<td style="font-weight:600;color:var(--gold-light);">MK '+Number(a.loanAmount).toLocaleString()+'</td>'+
@@ -1154,97 +1088,55 @@ function renderTable() {
 }
 
 function updateStatus(id, status) {
-  var label = status.charAt(0).toUpperCase() + status.slice(1);
-
-  // Update in memory immediately so UI reflects change instantly
-  if (sheetsLoaded) {
-    var sApp = sheetsApps.find(function(a){ return a.id === id; });
-    if (sApp) sApp.status = status;
-  }
-
-  // Update in localStorage
-  var apps = getApps();
-  var app  = apps.find(function(a){ return a.id === id; });
-  if (app) { app.status = status; saveApps(apps); }
-
-  // Re-render immediately so user sees the change
-  renderTable();
-  updateStats();
-  showToast('Saving ' + label + ' status to Google Sheets...', 'info');
-
-  // Update Google Sheets using JSONP (same reliable method as loadFromSheets)
-  var script    = document.createElement('script');
-  var cbName    = '_updateCb_' + Date.now();
-  var updateUrl = SHEETS_URL + '?action=updateStatus&app_id=' + encodeURIComponent(id) +
-                  '&status=' + encodeURIComponent(status) + '&callback=' + cbName;
-
-  window[cbName] = function(data) {
-    try { document.head.removeChild(script); } catch(e) {}
-    delete window[cbName];
-    if (data && data.status === 'updated') {
-      showToast('Application ' + label + ' and saved successfully.', status === 'approved' ? 'success' : 'error');
-    } else {
-      showToast('Status updated locally. Refresh to sync.', 'info');
-    }
+  var label=status.charAt(0).toUpperCase()+status.slice(1);
+  if(sheetsLoaded){var sApp=sheetsApps.find(function(a){return a.id===id;});if(sApp)sApp.status=status;}
+  var apps=getApps();var app=apps.find(function(a){return a.id===id;});if(app){app.status=status;saveApps(apps);}
+  renderTable();updateStats();
+  showToast('Saving '+label+' status...','info');
+  var script=document.createElement('script');
+  var cbName='_updateCb_'+Date.now();
+  var updateUrl=SHEETS_URL+'?action=updateStatus&app_id='+encodeURIComponent(id)+'&status='+encodeURIComponent(status)+'&callback='+cbName;
+  window[cbName]=function(data){
+    try{document.head.removeChild(script);}catch(e){}delete window[cbName];
+    showToast('Application '+label+' and saved.',status==='approved'?'success':'error');
   };
-
-  script.onerror = function() {
-    try { document.head.removeChild(script); } catch(e) {}
-    delete window[cbName];
-    showToast('Status updated locally. Check your connection.', 'info');
-  };
-
-  script.src = updateUrl;
+  script.onerror=function(){try{document.head.removeChild(script);}catch(e){}delete window[cbName];showToast('Status updated locally.','info');};
+  script.src=updateUrl;
   document.head.appendChild(script);
+  // Auto SMS to customer
+  var allApps=sheetsLoaded?sheetsApps:getApps();
+  var customer=allApps.find(function(a){return a.id===id;});
+  if(customer&&customer.phone){
+    var due=getDueDate(customer.submittedAt,customer.repayPeriod);
+    var msg=status==='approved'
+      ?'Phindu Micro Finance: Dear '+customer.firstName+', your loan of MK '+Number(customer.loanAmount).toLocaleString()+' has been APPROVED. Due date: '+due+'. Contact: +265994016935'
+      :'Phindu Micro Finance: Dear '+customer.firstName+', your loan application of MK '+Number(customer.loanAmount).toLocaleString()+' has been REJECTED. Contact: +265994016935';
+    sendCustomerSMS(customer.phone,msg);
+  }
 }
 
-function openAppModal(id) {
-  // Small delay ensures DOM is ready on slow mobile devices
-  setTimeout(function() { viewApp(id); }, 50);
-}
+function openAppModal(id){setTimeout(function(){viewApp(id);},50);}
 
-function viewApp(id) {
-  // Look in sheetsApps first (cross-device), fall back to localStorage
-  var app = null;
-  if (sheetsLoaded && sheetsApps.length > 0) {
-    app = sheetsApps.find(function(a){ return a.id === id; });
-  }
-  if (!app) {
-    app = getApps().find(function(a){ return a.id === id; });
-  }
-  if (!app) { showToast('Application not found. Please refresh.', 'error'); return; }
+function viewApp(id){
+  var app=null;
+  if(sheetsLoaded&&sheetsApps.length>0){app=sheetsApps.find(function(a){return a.id===id;});}
+  if(!app){app=getApps().find(function(a){return a.id===id;});}
+  if(!app){showToast('Application not found. Please refresh.','error');return;}
+  if(!app.idPhotoBase64){var local=getApps().find(function(a){return a.id===id;});if(local&&local.idPhotoBase64)app.idPhotoBase64=local.idPhotoBase64;}
+  document.getElementById('modalTitle').textContent=app.firstName+' '+app.lastName+' - Application';
 
-  // Always try to get ID photo from localStorage — Sheets cannot store images
-  // Even if app data came from Sheets, the photo may exist in local storage
-  if (!app.idPhotoBase64) {
-    var localApps = getApps();
-    var localApp  = localApps.find(function(a){ return a.id === id; });
-    if (localApp && localApp.idPhotoBase64) {
-      app.idPhotoBase64 = localApp.idPhotoBase64;
-    }
-  }
+  function fmtMK(v){var n=Number(v);return(isNaN(n)||n===0)?'Not provided':'MK '+n.toLocaleString();}
+  function fmtStr(v){var s=String(v||'').trim();return(s&&s!=='undefined'&&s!=='null')?s:'Not provided';}
+  function fmtDob(v){var s=String(v||'');return s.includes('T')?s.split('T')[0]:s||'Not provided';}
+  function fmtRate(v){if(!v||v==='undefined')return'Not provided';var s=String(v);if(s.includes('%'))return s;var n=parseFloat(s);return isNaN(n)?s:(n<1?(n*100).toFixed(0)+'%':n.toFixed(0)+'%');}
 
-  document.getElementById('modalTitle').textContent = app.firstName+' '+app.lastName+' - Application';
-  var totalRepay = app.totalRepayment || app.loanAmount || 0;
+  var sClass=(app.status||'pending').toLowerCase();
+  var sLabel=sClass.charAt(0).toUpperCase()+sClass.slice(1);
+  var mapLink=(app.latitude&&app.longitude)?'<br><a href="https://www.google.com/maps?q='+app.latitude+','+app.longitude+'" target="_blank" style="color:var(--gold-light);font-size:0.78rem;">&#128205; View on Google Maps</a>':'';
+  var photoHtml=app.idPhotoBase64?'<img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID"/>':'<div style="color:var(--text-muted);font-size:0.82rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px dashed rgba(255,255,255,0.1);">&#128282; Photo not available on this device.</div>';
+  var totalRepay=app.totalRepayment||app.loanAmount||0;
 
-  // Safe formatting helpers
-  function fmtMK(v) { var n=Number(v); return (isNaN(n)||n===0)?'Not provided':'MK '+n.toLocaleString(); }
-  function fmtStr(v) { var s=String(v||'').trim(); return (s&&s!=='undefined'&&s!=='null')?s:'Not provided'; }
-  function fmtDob(v) { var s=String(v||''); return s.includes('T')?s.split('T')[0]:s||'Not provided'; }
-  function fmtRate(v) {
-    if(!v||v==='undefined') return 'Not provided';
-    var s=String(v); if(s.includes('%')) return s;
-    var n=parseFloat(s); return isNaN(n)?s:(n<1?(n*100).toFixed(0)+'%':n.toFixed(0)+'%');
-  }
-
-  var sClass   = (app.status||'pending').toLowerCase();
-  var sLabel   = sClass.charAt(0).toUpperCase()+sClass.slice(1);
-  var mapLink  = (app.latitude&&app.longitude) ? '<br><a href="https://www.google.com/maps?q='+app.latitude+','+app.longitude+'" target="_blank" style="color:var(--gold-light);font-size:0.78rem;">&#128205; View on Google Maps &rarr;</a>' : '';
-  var photoHtml = app.idPhotoBase64
-    ? '<img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID" style="max-width:100%;border-radius:8px;margin-top:0.5rem;"/>'
-    : '<div style="color:var(--text-muted);font-size:0.82rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px dashed rgba(255,255,255,0.1);">&#128282; Photo not available on this device. View on the device used to submit the application.</div>';
-
-  document.getElementById('modalBody').innerHTML =
+  document.getElementById('modalBody').innerHTML=
     '<div class="modal-field"><div class="modal-field-label">App ID</div><div class="modal-field-value" style="font-size:0.78rem;">'+fmtStr(app.id)+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge '+sClass+'"><span class="status-dot"></span>'+sLabel+'</span></div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">'+fmtStr(app.firstName)+' '+fmtStr(app.lastName)+'</div></div>'+
@@ -1264,40 +1156,78 @@ function viewApp(id) {
     '<div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+fmtStr(app.collateralItem)+'</div></div>'+
     '<div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">'+fmtMK(app.collateralValue)+'</div></div>'+
     '<div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+fmtStr(app.collateralDesc)+'</div></div>'+
+    '<div class="modal-field full"><div class="modal-field-label">Payment Method</div><div class="modal-field-value">'+fmtStr(app.paymentInfo||app.paymentMethod||'Not specified')+'</div></div>'+
     '<div class="modal-field full"><div class="modal-field-label">National ID Photo</div>'+photoHtml+'</div>'+
     '<div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">'+fmtStr(app.submittedAt)+'</div></div>';
-  document.getElementById('modalActions').innerHTML =
+
+  document.getElementById('modalActions').innerHTML=
     '<button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'approved\');closeModal()">Approve</button>'+
     '<button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'rejected\');closeModal()">Reject</button>';
-  var overlay = document.getElementById('appModal');
+
+  var overlay=document.getElementById('appModal');
   overlay.classList.add('open');
-  overlay.scrollTop = 0;
-  document.body.style.position = 'fixed';
-  document.body.style.width = '100%';
+  overlay.scrollTop=0;
+  document.body.style.position='fixed';
+  document.body.style.width='100%';
 }
 
-function closeModal() {
-  document.getElementById('appModal').classList.remove('open');
-  document.body.style.position = '';
-  document.body.style.width = '';
+function closeModal(){document.getElementById('appModal').classList.remove('open');document.body.style.position='';document.body.style.width='';}
+function handleOverlayClick(e){var box=document.getElementById('appModalBox');if(box&&!box.contains(e.target))closeModal();}
+
+function exportCSV(){
+  var apps=sheetsLoaded?sheetsApps:getApps();
+  if(!apps.length){showToast('No applications to export.','error');return;}
+  var h=['ID','First Name','Last Name','Phone','Email','National ID','DOB','Gender','Address','Loan Type','Amount','Period','Interest Rate','Total Repayment','Employment','Income','Collateral Item','Collateral Value','Collateral Desc','Payment Method','Submitted','Status'];
+  var rows=apps.map(function(a){return[a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,'"'+a.address+'"',a.loanType,a.loanAmount,a.repayPeriod,a.interestRate,a.totalRepayment,a.employment,a.income,'"'+(a.collateralItem||'')+'"',a.collateralValue,'"'+(a.collateralDesc||'')+'"','"'+(a.paymentInfo||'')+'"',a.submittedAt,a.status].join(',');});
+  var csv=[h.join(',')].concat(rows).join('\n');
+  var blob=new Blob([csv],{type:'text/csv'});
+  var url=URL.createObjectURL(blob);
+  var a=document.createElement('a');a.href=url;a.download='phindu-loans-'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);
 }
 
-function handleOverlayClick(e) {
-  var box = document.getElementById('appModalBox');
-  if (box && !box.contains(e.target)) { closeModal(); }
+function initAddressAutocomplete(){
+  var input=document.getElementById('address');
+  if(!input)return;
+  var dropdown=document.getElementById('addrDropdown');
+  input.addEventListener('input',function(){
+    var q=input.value.trim();
+    selectedPlaceLat='';selectedPlaceLng='';selectedPlaceFull='';
+    document.getElementById('mapLinkBox').style.display='none';
+    clearTimeout(addrTimer);
+    if(q.length<3){dropdown.style.display='none';return;}
+    addrTimer=setTimeout(function(){searchAddress(q,dropdown,input);},400);
+  });
+  document.addEventListener('click',function(e){if(!input.parentNode.contains(e.target))dropdown.style.display='none';});
 }
 
-function exportCSV() {
-  var apps = getApps();
-  if (!apps.length){showToast('No applications to export.','error');return;}
-  var h = ['ID','First Name','Last Name','Phone','Email','National ID','DOB','Gender','Address','Loan Type','Amount','Period','Interest Rate','Total Repayment','Employment','Income','Purpose','Collateral Item','Collateral Value','Collateral Desc','Submitted','Status'];
-  var rows = apps.map(function(a){return[a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,'"'+a.address+'"',a.loanType,a.loanAmount,a.repayPeriod,a.interestRate||'',a.totalRepayment||'',a.employment,a.income,'"'+a.purpose+'"','"'+a.collateralItem+'"',a.collateralValue,'"'+a.collateralDesc+'"',a.submittedAt,a.status].join(',');});
-  var csv = [h.join(',')].concat(rows).join('\n');
-  var blob = new Blob([csv],{type:'text/csv'});
-  var url = URL.createObjectURL(blob);
-  var a = document.createElement('a');
-  a.href=url;a.download='phindu-loans-'+new Date().toISOString().slice(0,10)+'.csv';a.click();
-  URL.revokeObjectURL(url);
+function searchAddress(q,dropdown,input){
+  var url='https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=mw&q='+encodeURIComponent(q);
+  fetch(url,{headers:{'Accept-Language':'en'}})
+    .then(function(r){return r.json();})
+    .then(function(results){
+      dropdown.innerHTML='';
+      if(!results||results.length===0){dropdown.innerHTML='<div class="addr-item">No results found.</div>';dropdown.style.display='block';return;}
+      results.forEach(function(place){
+        var item=document.createElement('div');item.className='addr-item';
+        var name=place.display_name.split(',')[0];
+        var rest=place.display_name.split(',').slice(1).join(',').trim();
+        item.innerHTML='<strong>'+name+'</strong><br><span style="font-size:0.75rem;">'+rest+'</span>';
+        item.addEventListener('click',function(){
+          input.value=place.display_name;
+          selectedPlaceLat=place.lat;selectedPlaceLng=place.lon;selectedPlaceFull=place.display_name;
+          dropdown.style.display='none';
+          var box=document.getElementById('mapLinkBox');
+          box.style.display='flex';
+          document.getElementById('mapLinkText').textContent=place.display_name.split(',').slice(0,3).join(',');
+          document.getElementById('mapLink').href='https://www.google.com/maps?q='+place.lat+','+place.lon;
+          input.classList.remove('error');
+          document.getElementById('err-address').classList.remove('show');
+        });
+        dropdown.appendChild(item);
+      });
+      dropdown.style.display='block';
+    })
+    .catch(function(){dropdown.style.display='none';});
 }
 
 document.querySelectorAll('input,select,textarea').forEach(function(el){
@@ -1310,9 +1240,7 @@ document.querySelectorAll('input,select,textarea').forEach(function(el){
 
 initAddressAutocomplete();
 
-var globalObs = new IntersectionObserver(function(entries){
-  entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});
-},{threshold:0.08});
+var globalObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
 document.querySelectorAll('.fade-up').forEach(function(el){globalObs.observe(el);});
 </script>
 </body>
