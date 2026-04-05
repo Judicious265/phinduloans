@@ -267,7 +267,6 @@
     <li><button onclick="showPage('calculator')" id="nav-calculator">Calculator</button></li>
     <li><button onclick="showPage('apply')" id="nav-apply">Apply</button></li>
     <li><button onclick="showPage('contact')" id="nav-contact">Contact</button></li>
-    <li><button onclick="showPage('tracker')" id="nav-tracker">Repayments</button></li>
     <li><button onclick="openDashboard()" id="nav-dashboard">Dashboard</button></li>
     <li><button onclick="showPage('apply')" class="nav-cta">Apply Now</button></li>
   </ul>
@@ -279,7 +278,6 @@
   <button onclick="showPage('calculator');toggleMenu()">Calculator</button>
   <button onclick="showPage('apply');toggleMenu()">Apply Now</button>
   <button onclick="showPage('contact');toggleMenu()">Contact</button>
-  <button onclick="showPage('tracker');toggleMenu()">Repayments</button>
   <button onclick="openDashboard();toggleMenu()">Dashboard</button>
 </div>
 
@@ -460,7 +458,18 @@
             </div>
             <div class="field"><label>Employment Status <span class="req">*</span></label><select id="employment"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="field-error" id="err-employment">Please select employment status</div></div>
           </div>
-          <div class="inline-calc-box" id="inlineCalcBox"><strong style="color:var(--gold-light);">Estimated Repayment: </strong><span id="inlineCalcText" style="color:var(--text-muted);"></span></div>
+          <div class="inline-calc-box" id="inlineCalcBox">
+            <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
+              <div><strong style="color:var(--gold-light);">Total Repayment: </strong><span id="inlineCalcText" style="color:var(--text-muted);"></span></div>
+              <div style="display:flex;align-items:center;gap:6px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:0.35rem 0.75rem;">
+                <span style="font-size:1rem;">&#128197;</span>
+                <div>
+                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Repayment Due Date</div>
+                  <div id="inlineDueDate" style="font-weight:700;color:var(--gold-light);font-size:0.9rem;"></div>
+                </div>
+              </div>
+            </div>
+          </div>
           <div class="field"><label>Monthly Income (MK) <span class="req">*</span></label><input type="number" id="income" placeholder="e.g. 150000"/><div class="field-error" id="err-income">Please enter your monthly income</div></div>
           <div class="form-section-heading">Collateral Information</div>
           <div class="field"><label>Collateral Item <span class="req">*</span></label><input type="text" id="collateralItem" placeholder="e.g. Motor Vehicle, Land Title, Electronics"/><div class="collateral-note" id="collateralNote">Collateral must be worth MORE than your loan amount.</div><div class="field-error" id="err-collateralItem">Please describe your collateral item</div></div>
@@ -516,7 +525,7 @@
         <h3>&#128205; Our Location</h3>
         <div class="contact-item"><div class="contact-icon">&#127970;</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
         <div class="contact-item"><div class="contact-icon">&#128336;</div><div class="contact-item-text"><strong>Business Hours</strong>Mon-Fri: 8:00AM - 5:00PM<br/>Saturday: 9:00AM - 1:00PM</div></div>
-        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong>youngduwa265@gmail.com</div></div>
+        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f78e9882999093828096c5c1c2b7909a969e9bd994989a">[email&#160;protected]</a></div></div>
         <div class="contact-item"><div class="contact-icon">&#127760;</div><div class="contact-item-text"><strong>Website</strong><a href="https://phindumicrofinance.netlify.app" target="_blank">phindumicrofinance.netlify.app</a></div></div>
         <div style="background:var(--surface2);border-radius:var(--radius);height:120px;display:flex;align-items:center;justify-content:center;margin-top:1rem;border:1px dashed rgba(201,168,76,0.2);">
           <a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.85rem;text-decoration:none;">&#128205; Open in Google Maps &rarr;</a>
@@ -582,11 +591,12 @@
       <div><div class="section-label">Admin</div><h2>Applications Dashboard</h2></div>
       <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
         <button class="btn-secondary" onclick="loadFromSheets()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#8635; Refresh</button>
+        <button class="btn-primary" onclick="showPage('tracker')" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#128202; Repayment Tracker</button>
         <button class="btn-secondary" onclick="exportCSV()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#11015; Export CSV</button>
         <button class="dash-logout-btn" onclick="lockDashboard()">&#128274; Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications stored in Google Sheets and emailed to <strong>youngduwa265@gmail.com</strong>. Customers receive SMS when approved or rejected.</span></div>
+    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications stored in Google Sheets and emailed to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="354c5a405b5251404254070300755258545c591b565a58">[email&#160;protected]</a></strong>. Customers receive SMS when approved or rejected.</span></div>
     <div class="dash-stats">
       <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
       <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
@@ -649,7 +659,17 @@ function showPage(n){
   var nb=document.getElementById('nav-'+n); if(nb)nb.classList.add('active');
   window.scrollTo(0,0);
   if(n==='dashboard'&&dashUnlocked)loadFromSheets();
-  if(n==='tracker'){if(sheetsLoaded)loadTracker();else{loadFromSheets();setTimeout(loadTracker,2500);}}
+  if(n==='tracker'){
+    if(!dashUnlocked){
+      // Redirect to dashboard login first
+      document.getElementById('dashPasswordInput').value='';
+      document.getElementById('dashLoginError').classList.remove('show');
+      document.getElementById('dashLoginOverlay').classList.add('open');
+      setTimeout(function(){document.getElementById('dashPasswordInput').focus();},150);
+      return;
+    }
+    if(sheetsLoaded)loadTracker();else{loadFromSheets();setTimeout(loadTracker,2500);}
+  }
   setTimeout(function(){document.querySelectorAll('#page-'+n+' .fade-up').forEach(function(el){if(!el.classList.contains('visible')){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});o.observe(el);}});},60);
 }
 function goBack(){
@@ -661,7 +681,31 @@ function checkDashPassword(){if(document.getElementById('dashPasswordInput').val
 function lockDashboard(){dashUnlocked=false;document.getElementById('dashLoginOverlay').classList.add('open');document.getElementById('dashPasswordInput').value='';document.getElementById('dashLoginError').classList.remove('show');showToast('Dashboard locked.','info');}
 function selectPayMethod(m){selectedPayMethod=m;document.querySelectorAll('.pay-card').forEach(function(c){c.classList.remove('selected');});document.getElementById('payCard-'+m).classList.add('selected');document.getElementById('payBox-mobile').classList.toggle('show',m==='mobile');document.getElementById('payBox-bank').classList.toggle('show',m==='bank');document.getElementById('err-payMethod').classList.remove('show');}
 function calculateLoan(){var a=Number(document.getElementById('calcAmount').value),p=document.getElementById('calcPeriod').value,r=document.getElementById('calcResult');if(!a||!p||a<=0){r.classList.remove('show');return;}var rt=RATES[p],i=a*rt,t=a+i;var lb={"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};document.getElementById('res-principal').textContent='MK '+a.toLocaleString();document.getElementById('res-interest').textContent='MK '+i.toLocaleString();document.getElementById('res-total').textContent='MK '+t.toLocaleString();document.getElementById('res-rate').textContent=(rt*100).toFixed(0)+'%';document.getElementById('res-summary').textContent='If you borrow MK '+a.toLocaleString()+' for '+lb[p]+', you will repay MK '+t.toLocaleString()+' total.';document.querySelectorAll('#rateTable tbody tr').forEach(function(tr){tr.classList.toggle('active-row',tr.getAttribute('data-key')===p);});r.classList.add('show');}
-function autoCalc(){var a=Number(document.getElementById('loanAmount').value),p=document.getElementById('repayPeriod').value,b=document.getElementById('inlineCalcBox'),k=PERIOD_TO_KEY[p];if(a>0&&k){var rt=RATES[k],t=a+a*rt;document.getElementById('inlineCalcText').textContent='You will repay MK '+t.toLocaleString()+' total (MK '+(a*rt).toLocaleString()+' interest at '+(rt*100).toFixed(0)+'%)';b.style.display='block';}else{b.style.display='none';}}
+function autoCalc(){
+  var a=Number(document.getElementById('loanAmount').value);
+  var p=document.getElementById('repayPeriod').value;
+  var b=document.getElementById('inlineCalcBox');
+  var k=PERIOD_TO_KEY[p];
+  if(a>0&&k){
+    var rt=RATES[k],t=a+a*rt;
+    document.getElementById('inlineCalcText').textContent='MK '+t.toLocaleString()+' total (MK '+(a*rt).toLocaleString()+' interest at '+(rt*100).toFixed(0)+'%)';
+    // Calculate and show due date
+    var daysMap={'1 Week':7,'2 Weeks':14,'3 Weeks':21,'1 Month':30,'2 Months':60};
+    var days=daysMap[p]||0;
+    var due=new Date();
+    due.setDate(due.getDate()+days);
+    var dd=String(due.getDate()).padStart(2,'0');
+    var mm=String(due.getMonth()+1).padStart(2,'0');
+    var yyyy=due.getFullYear();
+    var dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var formatted=dayNames[due.getDay()]+', '+dd+' '+monthNames[due.getMonth()]+' '+yyyy;
+    document.getElementById('inlineDueDate').textContent=formatted;
+    b.style.display='block';
+  }else{
+    b.style.display='none';
+  }
+}
 function updateCollateralHint(){var a=Number(document.getElementById('loanAmount').value);document.getElementById('collateralNote').textContent=a>0?'Your collateral must be worth MORE than MK '+a.toLocaleString():'Collateral must be worth MORE than your loan amount.';}
 function checkCollateral(){var l=Number(document.getElementById('loanAmount').value),c=Number(document.getElementById('collateralValue').value),err=document.getElementById('err-collateralValue'),inp=document.getElementById('collateralValue');if(l>0&&c>0&&c<=l){inp.classList.add('error');err.textContent='Collateral (MK '+c.toLocaleString()+') must exceed loan (MK '+l.toLocaleString()+')';err.classList.add('show');}else{inp.classList.remove('error');err.classList.remove('show');}}
 function handleIdUpload(e){var f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){showToast('File too large. Max 5MB.','error');return;}var r=new FileReader();r.onload=function(ev){idPhotoBase64=ev.target.result;var p=document.getElementById('idPreview');p.src=idPhotoBase64;p.style.display='block';document.getElementById('idUploadArea').classList.add('has-file');document.querySelector('#idUploadArea .id-upload-label').innerHTML='<strong style="color:var(--success)">ID photo uploaded</strong>Click to change';document.getElementById('err-idPhoto').classList.remove('show');};r.readAsDataURL(f);}
