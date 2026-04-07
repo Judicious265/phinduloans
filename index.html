@@ -1,251 +1,264 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Phindu Micro Finance - Fast. Simple. Trusted.</title>
-  <meta name="description" content="Phindu Micro Finance - Quick, transparent and flexible loans for every Malawian."/>
-  <meta property="og:title" content="Phindu Micro Finance"/>
-  <meta property="og:url" content="https://phindumicrofinance.netlify.app"/>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
-  <script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
-  <style>
-    :root{--gold:#C9A84C;--gold-light:#E8C97A;--gold-dark:#9B7B2F;--deep:#0A0F1E;--deep2:#111827;--surface:#151D2E;--surface2:#1E2A3F;--text:#F0EDE6;--text-muted:#9CA3AF;--success:#22C55E;--error:#EF4444;--warning:#F59E0B;--radius:12px;--shadow:0 20px 60px rgba(0,0,0,0.4);}
-    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    body{font-family:'DM Sans',sans-serif;background:var(--deep);color:var(--text);overflow-x:hidden;}
-    .page{display:none;min-height:100vh;padding-top:72px;}
-    .page.active{display:block;}
-    nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(10,15,30,0.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,0.15);}
-    .logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
-    .logo-shield{width:38px;height:38px;}
-    .logo-text-wrap{display:flex;flex-direction:column;line-height:1;}
-    .logo-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--gold);}
-    .logo-sub{font-size:0.52rem;font-weight:600;letter-spacing:0.15em;color:var(--gold-dark);text-transform:uppercase;margin-top:2px;}
-    .nav-links{display:flex;gap:0.3rem;list-style:none;align-items:center;}
-    .nav-links button{color:var(--text-muted);font-size:0.85rem;font-weight:500;padding:0.45rem 0.85rem;border-radius:8px;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color 0.2s,background 0.2s;}
-    .nav-links button:hover{color:var(--text);background:rgba(255,255,255,0.06);}
-    .nav-links button.active{color:var(--gold);background:rgba(201,168,76,0.1);}
-    .nav-cta{background:linear-gradient(135deg,var(--gold),var(--gold-dark))!important;color:var(--deep)!important;font-weight:700!important;border-radius:50px!important;}
-    .nav-hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;}
-    .nav-mobile{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(10,15,30,0.98);border-bottom:1px solid rgba(201,168,76,0.15);padding:1rem 5%;flex-direction:column;gap:0.4rem;z-index:199;}
-    .nav-mobile.open{display:flex;}
-    .nav-mobile button{color:var(--text-muted);font-size:0.95rem;padding:0.7rem 1rem;border-radius:8px;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;}
-    .back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(255,255,255,0.12);border-radius:50px;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.82rem;padding:0.45rem 1rem;cursor:pointer;margin-bottom:1.5rem;transition:all 0.2s;}
-    .back-btn:hover{border-color:var(--gold);color:var(--gold);}
-    .hero-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;padding:4rem 5% 5rem;position:relative;overflow:hidden;}
-    .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(201,168,76,0.08) 0%,transparent 70%),linear-gradient(180deg,var(--deep) 0%,var(--deep2) 100%);}
-    .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,0.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,0.04) 1px,transparent 1px);background-size:60px 60px;}
-    .hero-content{position:relative;z-index:1;max-width:620px;}
-    .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);padding:0.4rem 1rem;border-radius:50px;font-size:0.8rem;color:var(--gold-light);margin-bottom:1.5rem;}
-    .badge-dot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
-    @keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:0.5;transform:scale(1.4);}}
-    h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem;}
-    h1 .highlight{background:linear-gradient(135deg,var(--gold-light),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
-    .hero-desc{font-size:1rem;color:var(--text-muted);line-height:1.7;margin-bottom:2rem;max-width:500px;}
-    .hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
-    .btn-primary{background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);padding:0.85rem 2rem;border-radius:50px;font-weight:700;font-size:0.95rem;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(201,168,76,0.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;touch-action:manipulation;transition:transform 0.2s,box-shadow 0.2s;}
-    .btn-primary:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,0.4);}
-    .btn-secondary{background:transparent;color:var(--text);padding:0.85rem 2rem;border-radius:50px;font-weight:600;font-size:0.95rem;border:1px solid rgba(240,237,230,0.2);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color 0.2s,background 0.2s;}
-    .btn-secondary:hover{border-color:var(--gold);background:rgba(201,168,76,0.06);}
-    .hero-stats{display:flex;gap:2.5rem;margin-top:3.5rem;flex-wrap:wrap;}
-    .stat-number{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold);}
-    .stat-label{font-size:0.78rem;color:var(--text-muted);}
-    .section-label{font-size:0.75rem;font-weight:600;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);margin-bottom:0.7rem;}
-    h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:0.8rem;}
-    .section-desc{color:var(--text-muted);font-size:1rem;line-height:1.7;max-width:540px;}
-    .page-section{padding:4rem 5%;}
-    .page-section.alt{background:var(--deep2);}
-    .loans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;}
-    .loan-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.8rem;transition:transform 0.3s,border-color 0.3s;cursor:pointer;position:relative;overflow:hidden;}
-    .loan-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-dark),var(--gold-light));transform:scaleX(0);transform-origin:left;transition:transform 0.3s;}
-    .loan-card:hover{transform:translateY(-5px);border-color:rgba(201,168,76,0.3);}
-    .loan-card:hover::after{transform:scaleX(1);}
-    .loan-icon{width:48px;height:48px;border-radius:10px;background:rgba(201,168,76,0.12);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1rem;}
-    .loan-card h3{font-size:1.1rem;font-weight:600;margin-bottom:0.4rem;}
-    .loan-card p{font-size:0.85rem;color:var(--text-muted);line-height:1.6;margin-bottom:1rem;}
-    .loan-meta{display:flex;gap:0.7rem;flex-wrap:wrap;}
-    .loan-meta span{font-size:0.75rem;font-weight:600;background:rgba(201,168,76,0.1);color:var(--gold-light);padding:0.22rem 0.65rem;border-radius:50px;}
-    .steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:2.5rem;}
-    .step{text-align:center;padding:1.8rem 1.3rem;background:var(--surface);border-radius:var(--radius);border:1px solid rgba(255,255,255,0.06);}
-    .step-num{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
-    .step h3{font-size:0.95rem;font-weight:600;margin-bottom:0.4rem;}
-    .step p{font-size:0.82rem;color:var(--text-muted);line-height:1.6;}
-    .calc-wrap{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2rem;max-width:720px;margin:0 auto;}
-    .calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
-    .calc-result{background:rgba(201,168,76,0.07);border:1px solid rgba(201,168,76,0.2);border-radius:14px;padding:1.5rem;margin-top:1.2rem;display:none;}
-    .calc-result.show{display:block;}
-    .calc-result-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:0.9rem;margin-bottom:1rem;}
-    .calc-item{background:var(--surface2);border-radius:10px;padding:0.9rem;text-align:center;}
-    .calc-item-val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold-light);}
-    .calc-item-lbl{font-size:0.72rem;color:var(--text-muted);margin-top:3px;}
-    .rate-table{width:100%;border-collapse:collapse;margin-top:1.5rem;font-size:0.83rem;}
-    .rate-table th{background:rgba(201,168,76,0.1);color:var(--gold-light);padding:0.7rem 1rem;text-align:left;font-weight:600;}
-    .rate-table td{padding:0.65rem 1rem;border-bottom:1px solid rgba(255,255,255,0.05);color:var(--text-muted);}
-    .rate-table .active-row td{color:var(--gold-light);font-weight:600;background:rgba(201,168,76,0.06);}
-    .apply-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:3.5rem;align-items:start;}
-    .form-info-points{display:flex;flex-direction:column;gap:1rem;margin-top:1.8rem;}
-    .info-point{display:flex;gap:10px;align-items:flex-start;}
-    .info-point-icon{width:34px;height:34px;flex-shrink:0;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:0.9rem;}
-    .info-point-text h4{font-size:0.9rem;font-weight:600;margin-bottom:0.15rem;}
-    .info-point-text p{font-size:0.8rem;color:var(--text-muted);line-height:1.5;}
-    .form-card{background:var(--surface);border:1px solid rgba(201,168,76,0.15);border-radius:20px;padding:2.2rem;box-shadow:var(--shadow);}
-    .form-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:0.2rem;}
-    .form-subtitle{font-size:0.82rem;color:var(--text-muted);margin-bottom:1.8rem;}
-    .form-section-heading{font-size:0.72rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--gold);margin-bottom:0.9rem;margin-top:1.6rem;}
-    .form-row{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;}
-    .field{display:flex;flex-direction:column;gap:5px;margin-bottom:0.9rem;}
-    .field label{font-size:0.8rem;font-weight:500;color:var(--text-muted);}
-    .field label .req{color:var(--gold);margin-left:2px;}
-    .field input,.field select,.field textarea{background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.7rem 0.9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;width:100%;transition:border-color 0.2s;}
-    .field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,0.12);}
-    .field input.error,.field select.error,.field textarea.error{border-color:var(--error);}
-    .field select option{background:var(--surface2);}
-    .field textarea{resize:vertical;min-height:75px;}
-    .field-error{font-size:0.75rem;color:var(--error);margin-top:1px;display:none;}
-    .field-error.show{display:block;}
-    .collateral-note{font-size:0.75rem;color:var(--gold-light);margin-top:4px;background:rgba(201,168,76,0.08);padding:0.45rem 0.7rem;border-radius:6px;border-left:2px solid var(--gold);}
-    .inline-calc-box{display:none;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:0.9rem 1rem;margin-bottom:0.9rem;font-size:0.85rem;}
-    .pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.9rem;margin-bottom:0.9rem;}
-    .pay-card{border:2px solid rgba(255,255,255,0.1);border-radius:12px;padding:1rem;cursor:pointer;text-align:center;background:var(--surface2);transition:all 0.2s;}
-    .pay-card:hover{border-color:rgba(201,168,76,0.4);}
-    .pay-card.selected{border-color:var(--gold);background:rgba(201,168,76,0.08);}
-    .pay-card-icon{font-size:1.6rem;margin-bottom:0.35rem;}
-    .pay-card-label{font-size:0.88rem;font-weight:600;}
-    .pay-card-sub{font-size:0.74rem;color:var(--text-muted);margin-top:2px;}
-    .pay-details{display:none;}
-    .pay-details.show{display:block;}
-    .id-upload-area{border:2px dashed rgba(201,168,76,0.3);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;background:rgba(201,168,76,0.03);position:relative;overflow:hidden;transition:all 0.2s;}
-    .id-upload-area:hover{border-color:var(--gold);}
-    .id-upload-area.has-file{border-color:var(--success);}
-    .id-upload-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
-    .id-upload-icon{font-size:1.8rem;margin-bottom:0.4rem;}
-    .id-upload-label{font-size:0.85rem;color:var(--text-muted);}
-    .id-upload-label strong{color:var(--gold-light);display:block;margin-bottom:2px;}
-    .id-preview{max-width:100%;max-height:150px;border-radius:8px;margin-top:0.8rem;object-fit:cover;display:none;}
-    .addr-dropdown{position:absolute;top:100%;left:0;right:0;background:var(--surface2);border:1px solid rgba(201,168,76,0.3);border-radius:10px;margin-top:4px;box-shadow:0 10px 40px rgba(0,0,0,0.4);z-index:9999;max-height:220px;overflow-y:auto;}
-    .addr-item{padding:0.65rem 1rem;font-size:0.85rem;color:var(--text-muted);cursor:pointer;border-bottom:1px solid rgba(255,255,255,0.04);}
-    .addr-item:hover{background:rgba(201,168,76,0.1);color:var(--text);}
-    .submit-btn{width:100%;margin-top:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.95rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(201,168,76,0.3);display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;}
-    .submit-btn:disabled{opacity:0.7;cursor:not-allowed;}
-    .spinner{width:16px;height:16px;border:2px solid rgba(10,15,30,0.3);border-top-color:var(--deep);border-radius:50%;animation:spin 0.7s linear infinite;display:none;}
-    @keyframes spin{to{transform:rotate(360deg)}}
-    .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
-    .contact-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.8rem;}
-    .contact-card h3{font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--gold);}
-    .contact-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:1rem;}
-    .contact-icon{width:36px;height:36px;flex-shrink:0;background:rgba(201,168,76,0.12);border-radius:8px;display:flex;align-items:center;justify-content:center;}
-    .contact-item-text{font-size:0.88rem;line-height:1.6;}
-    .contact-item-text strong{display:block;font-weight:600;margin-bottom:2px;}
-    .contact-item-text a{color:var(--gold-light);text-decoration:none;}
-    .wa-btn-big{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:0.85rem 1.8rem;border-radius:50px;font-weight:700;font-size:0.9rem;text-decoration:none;margin-top:1.2rem;transition:transform 0.2s;}
-    .dash-login-overlay{position:fixed;inset:0;background:rgba(10,15,30,0.97);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem;}
-    .dash-login-overlay.open{display:flex;}
-    .dash-login-box{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center;}
-    .dash-login-icon{font-size:2.5rem;margin-bottom:1rem;}
-    .dash-login-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:0.3rem;}
-    .dash-login-sub{font-size:0.85rem;color:var(--text-muted);margin-bottom:1.8rem;}
-    .dash-login-input{width:100%;background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.8rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.95rem;outline:none;margin-bottom:1rem;text-align:center;letter-spacing:0.1em;}
-    .dash-login-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-dark));color:var(--deep);border:none;border-radius:50px;padding:0.9rem;font-family:'DM Sans',sans-serif;font-size:0.95rem;font-weight:700;cursor:pointer;}
-    .dash-login-error{color:var(--error);font-size:0.82rem;margin-top:0.6rem;display:none;}
-    .dash-login-error.show{display:block;}
-    .dash-logout-btn{background:none;border:1px solid rgba(255,255,255,0.12);border-radius:8px;color:var(--text-muted);padding:0.4rem 0.9rem;font-size:0.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
-    .dash-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.8rem;flex-wrap:wrap;gap:1rem;}
-    .dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.8rem;}
-    .dash-stat{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.3rem;position:relative;overflow:hidden;}
-    .dash-stat::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
-    .dash-stat.total::before{background:var(--gold);}
-    .dash-stat.pending::before{background:var(--warning);}
-    .dash-stat.approved::before{background:var(--success);}
-    .dash-stat.rejected::before{background:var(--error);}
-    .dash-stat-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:2px;}
-    .dash-stat.total .dash-stat-num{color:var(--gold);}
-    .dash-stat.pending .dash-stat-num{color:var(--warning);}
-    .dash-stat.approved .dash-stat-num{color:var(--success);}
-    .dash-stat.rejected .dash-stat-num{color:var(--error);}
-    .dash-stat-label{font-size:0.78rem;color:var(--text-muted);}
-    .dash-controls{display:flex;gap:0.8rem;flex-wrap:wrap;margin-bottom:1.3rem;}
-    .dash-search{flex:1;min-width:180px;background:var(--surface);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.65rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;}
-    .dash-filter{background:var(--surface);border:1px solid rgba(255,255,255,0.1);border-radius:10px;padding:0.65rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:0.88rem;outline:none;cursor:pointer;}
-    .table-wrap{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);overflow:hidden;overflow-x:auto;}
-    .apps-table{width:100%;border-collapse:collapse;}
-    .apps-table th{font-size:0.73rem;font-weight:600;color:var(--text-muted);text-transform:uppercase;padding:0.8rem 1rem;text-align:left;border-bottom:1px solid rgba(255,255,255,0.07);}
-    .apps-table td{padding:0.85rem 1rem;font-size:0.85rem;border-bottom:1px solid rgba(255,255,255,0.04);vertical-align:middle;}
-    .status-badge{display:inline-flex;align-items:center;gap:5px;padding:0.22rem 0.7rem;border-radius:50px;font-size:0.73rem;font-weight:600;}
-    .status-badge.pending{background:rgba(245,158,11,0.15);color:var(--warning);}
-    .status-badge.approved{background:rgba(34,197,94,0.15);color:var(--success);}
-    .status-badge.rejected{background:rgba(239,68,68,0.15);color:var(--error);}
-    .status-dot{width:5px;height:5px;border-radius:50%;background:currentColor;}
-    .action-btn{background:none;border:1px solid rgba(255,255,255,0.12);border-radius:6px;color:var(--text-muted);padding:0.28rem 0.6rem;font-size:0.73rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;}
-    .action-btn:hover{border-color:var(--gold);color:var(--gold);}
-    .action-btn.approve:hover{border-color:var(--success);color:var(--success);}
-    .action-btn.reject:hover{border-color:var(--error);color:var(--error);}
-    .no-apps{text-align:center;padding:3rem;color:var(--text-muted);}
-    .dash-note{background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.2);border-radius:10px;padding:1rem 1.3rem;font-size:0.83rem;color:var(--gold-light);margin-bottom:1.5rem;display:flex;gap:10px;}
-    .modal-overlay{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.88);z-index:99999;display:none;overflow-y:scroll;}
-    .modal-overlay.open{display:block;}
-    .modal{background:var(--surface);border:1px solid rgba(201,168,76,0.2);border-radius:16px;padding:1.5rem;max-width:640px;width:calc(100% - 2rem);position:relative;margin:1rem auto 3rem auto;}
-    .modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,0.1);border:none;color:var(--text);font-size:1.2rem;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-    .modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.3rem;padding-right:2rem;}
-    .modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem;}
-    .modal-field{background:var(--surface2);border-radius:8px;padding:0.8rem;}
-    .modal-field-label{font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;margin-bottom:3px;}
-    .modal-field-value{font-size:0.88rem;font-weight:500;word-break:break-word;}
-    .modal-field.full{grid-column:1/-1;}
-    .modal-actions{display:flex;gap:0.8rem;margin-top:1.2rem;justify-content:flex-end;}
-    .id-img-modal{max-width:100%;border-radius:8px;margin-top:0.5rem;}
-    .wa-float{position:fixed;bottom:1.8rem;right:1.8rem;z-index:300;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,0.4);text-decoration:none;transition:transform 0.2s;}
-    .wa-float:hover{transform:scale(1.1);}
-    .toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);padding:0.85rem 1.4rem;border-radius:var(--radius);font-size:0.87rem;font-weight:500;z-index:9999;opacity:0;transition:all 0.4s ease;display:flex;align-items:center;gap:8px;max-width:90vw;}
-    .toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
-    .toast.success{background:rgba(34,197,94,0.15);border:1px solid rgba(34,197,94,0.4);color:#86efac;}
-    .toast.error{background:rgba(239,68,68,0.15);border:1px solid rgba(239,68,68,0.4);color:#fca5a5;}
-    .toast.info{background:rgba(59,130,246,0.15);border:1px solid rgba(59,130,246,0.4);color:#93c5fd;}
-    footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,0.06);padding:2rem 5%;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between;}
-    .footer-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:700;}
-    .footer-copy{font-size:0.8rem;color:var(--text-muted);}
-    .footer-links button{font-size:0.8rem;color:var(--text-muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-right:1rem;}
-    /* Tracker */
-    .tracker-tabs{display:flex;gap:0.5rem;background:var(--surface2);border-radius:10px;padding:4px;margin-bottom:1.5rem;overflow-x:auto;}
-    .tracker-tab{flex:1;min-width:80px;padding:0.55rem 0.5rem;border:none;background:none;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.78rem;font-weight:500;cursor:pointer;border-radius:7px;transition:all 0.2s;white-space:nowrap;}
-    .tracker-tab.active{background:var(--surface);color:var(--gold);box-shadow:0 2px 8px rgba(0,0,0,0.2);}
-    .tracker-panel{display:none;}
-    .tracker-panel.active{display:block;}
-    .tracker-card{background:var(--surface);border:1px solid rgba(255,255,255,0.07);border-radius:var(--radius);padding:1.3rem;margin-bottom:1rem;border-left:4px solid transparent;}
-    .tracker-card.overdue{border-left-color:var(--error);}
-    .tracker-card.due-soon{border-left-color:var(--warning);}
-    .tracker-card.on-track{border-left-color:var(--success);}
-    .tracker-card.paid{border-left-color:var(--text-muted);}
-    .tracker-card-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:0.8rem;gap:0.5rem;}
-    .tracker-name{font-weight:600;font-size:0.95rem;margin-bottom:2px;}
-    .tracker-meta{font-size:0.75rem;color:var(--text-muted);}
-    .tracker-badge{font-size:0.72rem;font-weight:600;padding:0.2rem 0.7rem;border-radius:50px;white-space:nowrap;}
-    .tracker-badge.overdue{background:rgba(239,68,68,0.15);color:var(--error);}
-    .tracker-badge.due-soon{background:rgba(245,158,11,0.15);color:var(--warning);}
-    .tracker-badge.on-track{background:rgba(34,197,94,0.15);color:var(--success);}
-    .tracker-badge.paid{background:rgba(156,163,175,0.15);color:var(--text-muted);}
-    .tracker-progress-bar{background:rgba(255,255,255,0.07);height:6px;border-radius:3px;overflow:hidden;margin:0.6rem 0;}
-    .tracker-progress-fill{height:100%;border-radius:3px;transition:width 0.5s ease;}
-    .tracker-progress-fill.overdue{background:var(--error);}
-    .tracker-progress-fill.due-soon{background:var(--warning);}
-    .tracker-progress-fill.on-track{background:var(--success);}
-    .tracker-progress-fill.paid{background:var(--text-muted);}
-    .tracker-amounts{display:grid;grid-template-columns:repeat(3,1fr);gap:0.5rem;margin-bottom:0.8rem;}
-    .tracker-amount-item{background:var(--surface2);border-radius:8px;padding:0.6rem;text-align:center;}
-    .tracker-amount-val{font-size:0.82rem;font-weight:700;color:var(--gold-light);}
-    .tracker-amount-lbl{font-size:0.68rem;color:var(--text-muted);margin-top:2px;}
-    .tracker-actions{display:flex;gap:0.6rem;align-items:center;flex-wrap:wrap;margin-top:0.8rem;}
-    .tracker-input{flex:1;min-width:130px;background:var(--surface2);border:1px solid rgba(255,255,255,0.1);border-radius:8px;padding:0.5rem 0.8rem;color:var(--text);font-size:0.82rem;outline:none;font-family:'DM Sans',sans-serif;}
-    .tracker-input:focus{border-color:var(--gold);}
-    .empty-state{text-align:center;padding:3rem;color:var(--text-muted);}
-    .reminder-log{background:var(--surface2);border-radius:8px;padding:0.8rem;margin-top:0.6rem;font-size:0.77rem;color:var(--text-muted);max-height:100px;overflow-y:auto;}
-    .reminder-log-item{padding:0.25rem 0;border-bottom:1px solid rgba(255,255,255,0.04);}
-    @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
-    .fade-up{opacity:0;transform:translateY(24px);transition:opacity 0.6s ease,transform 0.6s ease;}
-    .fade-up.visible{opacity:1;transform:translateY(0);}
-    @media(max-width:960px){.apply-layout{grid-template-columns:1fr;}.contact-grid{grid-template-columns:1fr;}.modal-grid{grid-template-columns:1fr;}.calc-row{grid-template-columns:1fr;}}
-    @media(max-width:768px){.nav-links{display:none;}.nav-hamburger{display:block;}.form-row{grid-template-columns:1fr;}.hero-stats{gap:1.5rem;}.apps-table th:nth-child(5),.apps-table td:nth-child(5){display:none;}.tracker-amounts{grid-template-columns:1fr 1fr;}}
-    @media(max-width:480px){.apps-table th:nth-child(3),.apps-table td:nth-child(3){display:none;}}
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Phindu Micro Finance - Fast. Simple. Trusted.</title>
+<meta name="description" content="Phindu Micro Finance - Quick loans for every Malawian."/>
+<meta property="og:url" content="https://phindumicrofinance.netlify.app"/>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<script data-cfasync="false" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<style>
+:root{--gold:#C9A84C;--gold-l:#E8C97A;--gold-d:#9B7B2F;--deep:#0A0F1E;--deep2:#111827;--surf:#151D2E;--surf2:#1E2A3F;--text:#F0EDE6;--muted:#9CA3AF;--ok:#22C55E;--err:#EF4444;--warn:#F59E0B;--r:12px;--sh:0 20px 60px rgba(0,0,0,0.4);}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--deep);color:var(--text);overflow-x:hidden;}
+.page{display:none;min-height:100vh;padding-top:72px;}.page.active{display:block;}
+nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:center;justify-content:space-between;padding:1rem 5%;background:rgba(10,15,30,.95);backdrop-filter:blur(18px);border-bottom:1px solid rgba(201,168,76,.15);}
+.logo{display:flex;align-items:center;gap:10px;cursor:pointer;}
+.logo-shield{width:38px;height:38px;}
+.logo-txt{display:flex;flex-direction:column;line-height:1;}
+.logo-name{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--gold);}
+.logo-sub{font-size:.52rem;font-weight:600;letter-spacing:.15em;color:var(--gold-d);text-transform:uppercase;margin-top:2px;}
+.nav-links{display:flex;gap:.3rem;list-style:none;align-items:center;}
+.nav-links button{color:var(--muted);font-size:.85rem;font-weight:500;padding:.45rem .85rem;border-radius:8px;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:color .2s,background .2s;}
+.nav-links button:hover{color:var(--text);background:rgba(255,255,255,.06);}
+.nav-links button.active{color:var(--gold);background:rgba(201,168,76,.1);}
+.nav-cta{background:linear-gradient(135deg,var(--gold),var(--gold-d))!important;color:var(--deep)!important;font-weight:700!important;border-radius:50px!important;}
+.hamburger{display:none;background:none;border:none;color:var(--text);font-size:1.4rem;cursor:pointer;}
+.mob-nav{display:none;position:fixed;top:72px;left:0;right:0;background:rgba(10,15,30,.98);border-bottom:1px solid rgba(201,168,76,.15);padding:1rem 5%;flex-direction:column;gap:.4rem;z-index:199;}
+.mob-nav.open{display:flex;}
+.mob-nav button{color:var(--muted);font-size:.95rem;padding:.7rem 1rem;border-radius:8px;border:none;background:none;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:left;}
+.back-btn{display:inline-flex;align-items:center;gap:6px;background:none;border:1px solid rgba(255,255,255,.12);border-radius:50px;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.82rem;padding:.45rem 1rem;cursor:pointer;margin-bottom:1.5rem;transition:all .2s;}
+.back-btn:hover{border-color:var(--gold);color:var(--gold);}
+/* Hero */
+.hero-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;padding:4rem 5% 5rem;position:relative;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(201,168,76,.08) 0%,transparent 70%),linear-gradient(180deg,var(--deep) 0%,var(--deep2) 100%);}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);background-size:60px 60px;}
+.hero-content{position:relative;z-index:1;max-width:620px;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);padding:.4rem 1rem;border-radius:50px;font-size:.8rem;color:var(--gold-l);margin-bottom:1.5rem;}
+.bdot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
+@keyframes pulse{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(1.4);}}
+h1{font-family:'Playfair Display',serif;font-size:clamp(2.2rem,5vw,4rem);font-weight:900;line-height:1.1;margin-bottom:1.2rem;}
+h1 .hl{background:linear-gradient(135deg,var(--gold-l),var(--gold));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.hero-desc{font-size:1rem;color:var(--muted);line-height:1.7;margin-bottom:2rem;max-width:500px;}
+.hero-acts{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-p{background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--deep);padding:.85rem 2rem;border-radius:50px;font-weight:700;font-size:.95rem;border:none;cursor:pointer;box-shadow:0 8px 32px rgba(201,168,76,.3);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;touch-action:manipulation;transition:transform .2s,box-shadow .2s;}
+.btn-p:hover{transform:translateY(-2px);box-shadow:0 12px 40px rgba(201,168,76,.4);}
+.btn-s{background:transparent;color:var(--text);padding:.85rem 2rem;border-radius:50px;font-weight:600;font-size:.95rem;border:1px solid rgba(240,237,230,.2);display:inline-flex;align-items:center;gap:8px;font-family:'DM Sans',sans-serif;cursor:pointer;transition:border-color .2s,background .2s;}
+.btn-s:hover{border-color:var(--gold);background:rgba(201,168,76,.06);}
+.hero-stats{display:flex;gap:2.5rem;margin-top:3.5rem;flex-wrap:wrap;}
+.sn{font-family:'Playfair Display',serif;font-size:1.9rem;font-weight:700;color:var(--gold);}
+.sl{font-size:.78rem;color:var(--muted);}
+/* Common */
+.sec-lbl{font-size:.75rem;font-weight:600;letter-spacing:.15em;text-transform:uppercase;color:var(--gold);margin-bottom:.7rem;}
+h2{font-family:'Playfair Display',serif;font-size:clamp(1.8rem,3.5vw,2.8rem);font-weight:700;line-height:1.2;margin-bottom:.8rem;}
+.sec-desc{color:var(--muted);font-size:1rem;line-height:1.7;max-width:540px;}
+.sec{padding:4rem 5%;}.sec.alt{background:var(--deep2);}
+/* Cards */
+.loans-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.3rem;}
+.loan-card{background:var(--surf);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:1.8rem;transition:transform .3s,border-color .3s;cursor:pointer;position:relative;overflow:hidden;}
+.loan-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:3px;background:linear-gradient(90deg,var(--gold-d),var(--gold-l));transform:scaleX(0);transform-origin:left;transition:transform .3s;}
+.loan-card:hover{transform:translateY(-5px);border-color:rgba(201,168,76,.3);}
+.loan-card:hover::after{transform:scaleX(1);}
+.loan-icon{width:48px;height:48px;border-radius:10px;background:rgba(201,168,76,.12);display:flex;align-items:center;justify-content:center;font-size:1.4rem;margin-bottom:1rem;}
+.loan-card h3{font-size:1.1rem;font-weight:600;margin-bottom:.4rem;}
+.loan-card p{font-size:.85rem;color:var(--muted);line-height:1.6;margin-bottom:1rem;}
+.loan-meta{display:flex;gap:.7rem;flex-wrap:wrap;}
+.loan-meta span{font-size:.75rem;font-weight:600;background:rgba(201,168,76,.1);color:var(--gold-l);padding:.22rem .65rem;border-radius:50px;}
+.steps-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:1.5rem;margin-top:2.5rem;}
+.step{text-align:center;padding:1.8rem 1.3rem;background:var(--surf);border-radius:var(--r);border:1px solid rgba(255,255,255,.06);}
+.step-n{width:44px;height:44px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--deep);font-family:'Playfair Display',serif;font-weight:700;font-size:1.1rem;display:flex;align-items:center;justify-content:center;margin:0 auto 1rem;}
+.step h3{font-size:.95rem;font-weight:600;margin-bottom:.4rem;}
+.step p{font-size:.82rem;color:var(--muted);line-height:1.6;}
+/* Calculator */
+.calc-wrap{background:var(--surf);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:2rem;max-width:720px;margin:0 auto;}
+.calc-row{display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;}
+.calc-res{background:rgba(201,168,76,.07);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:1.5rem;margin-top:1.2rem;display:none;}
+.calc-res.show{display:block;}
+.calc-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.9rem;margin-bottom:1rem;}
+.ci{background:var(--surf2);border-radius:10px;padding:.9rem;text-align:center;}
+.ci-val{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;color:var(--gold-l);}
+.ci-lbl{font-size:.72rem;color:var(--muted);margin-top:3px;}
+.rate-tbl{width:100%;border-collapse:collapse;margin-top:1.5rem;font-size:.83rem;}
+.rate-tbl th{background:rgba(201,168,76,.1);color:var(--gold-l);padding:.7rem 1rem;text-align:left;font-weight:600;}
+.rate-tbl td{padding:.65rem 1rem;border-bottom:1px solid rgba(255,255,255,.05);color:var(--muted);}
+.rate-tbl .ar td{color:var(--gold-l);font-weight:600;background:rgba(201,168,76,.06);}
+/* Form */
+.apply-layout{display:grid;grid-template-columns:1fr 1.6fr;gap:3.5rem;align-items:start;}
+.info-pts{display:flex;flex-direction:column;gap:1rem;margin-top:1.8rem;}
+.ipt{display:flex;gap:10px;align-items:flex-start;}
+.ipt-icon{width:34px;height:34px;flex-shrink:0;background:rgba(201,168,76,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:.9rem;}
+.ipt-txt h4{font-size:.9rem;font-weight:600;margin-bottom:.15rem;}
+.ipt-txt p{font-size:.8rem;color:var(--muted);line-height:1.5;}
+.form-card{background:var(--surf);border:1px solid rgba(201,168,76,.15);border-radius:20px;padding:2.2rem;box-shadow:var(--sh);}
+.form-title{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:700;margin-bottom:.2rem;}
+.form-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.8rem;}
+.fsec{font-size:.72rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:var(--gold);margin-bottom:.9rem;margin-top:1.6rem;}
+.fsec:first-of-type{margin-top:0;}
+.frow{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.field{display:flex;flex-direction:column;gap:5px;margin-bottom:.9rem;}
+.field label{font-size:.8rem;font-weight:500;color:var(--muted);}
+.req{color:var(--gold);margin-left:2px;}
+.field input,.field select,.field textarea{background:var(--surf2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.7rem .9rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;width:100%;transition:border-color .2s;}
+.field input:focus,.field select:focus,.field textarea:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.12);}
+.field input.err,.field select.err,.field textarea.err{border-color:var(--err);}
+.field select option{background:var(--surf2);}
+.field textarea{resize:vertical;min-height:75px;}
+.ferr{font-size:.75rem;color:var(--err);margin-top:1px;display:none;}
+.ferr.show{display:block;}
+.coll-note{font-size:.75rem;color:var(--gold-l);margin-top:4px;background:rgba(201,168,76,.08);padding:.45rem .7rem;border-radius:6px;border-left:2px solid var(--gold);}
+.calc-inline{display:none;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:.9rem 1rem;margin-bottom:.9rem;font-size:.85rem;}
+/* Payment method */
+.pay-grid{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;margin-bottom:.9rem;}
+.pay-card{border:2px solid rgba(255,255,255,.1);border-radius:12px;padding:1rem;cursor:pointer;text-align:center;background:var(--surf2);transition:all .2s;}
+.pay-card:hover{border-color:rgba(201,168,76,.4);}
+.pay-card.sel{border-color:var(--gold);background:rgba(201,168,76,.08);}
+.pay-icon{font-size:1.6rem;margin-bottom:.35rem;}
+.pay-lbl{font-size:.88rem;font-weight:600;}
+.pay-sub{font-size:.74rem;color:var(--muted);margin-top:2px;}
+.pay-det{display:none;}.pay-det.show{display:block;}
+/* ID Upload */
+.id-area{border:2px dashed rgba(201,168,76,.3);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer;background:rgba(201,168,76,.03);position:relative;overflow:hidden;transition:all .2s;}
+.id-area:hover{border-color:var(--gold);}
+.id-area.has-file{border-color:var(--ok);}
+.id-area input[type="file"]{position:absolute;inset:0;opacity:0;cursor:pointer;width:100%;height:100%;}
+.id-icon{font-size:1.8rem;margin-bottom:.4rem;}
+.id-lbl{font-size:.85rem;color:var(--muted);}
+.id-lbl strong{color:var(--gold-l);display:block;margin-bottom:2px;}
+.id-prev{max-width:100%;max-height:150px;border-radius:8px;margin-top:.8rem;object-fit:cover;display:none;}
+/* Address */
+.addr-dd{position:absolute;top:100%;left:0;right:0;background:var(--surf2);border:1px solid rgba(201,168,76,.3);border-radius:10px;margin-top:4px;box-shadow:0 10px 40px rgba(0,0,0,.4);z-index:9999;max-height:220px;overflow-y:auto;}
+.addr-item{padding:.65rem 1rem;font-size:.85rem;color:var(--muted);cursor:pointer;border-bottom:1px solid rgba(255,255,255,.04);}
+.addr-item:hover{background:rgba(201,168,76,.1);color:var(--text);}
+/* Submit */
+.sub-btn{width:100%;margin-top:1.3rem;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--deep);border:none;border-radius:50px;padding:.95rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;box-shadow:0 8px 28px rgba(201,168,76,.3);display:flex;align-items:center;justify-content:center;gap:8px;touch-action:manipulation;}
+.sub-btn:disabled{opacity:.7;cursor:not-allowed;}
+.spin{width:16px;height:16px;border:2px solid rgba(10,15,30,.3);border-top-color:var(--deep);border-radius:50%;animation:spin .7s linear infinite;display:none;}
+@keyframes spin{to{transform:rotate(360deg)}}
+/* Contact */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:2rem;margin-top:2.5rem;}
+.c-card{background:var(--surf);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:1.8rem;}
+.c-card h3{font-size:1rem;font-weight:600;margin-bottom:1rem;color:var(--gold);}
+.c-item{display:flex;gap:12px;align-items:flex-start;margin-bottom:1rem;}
+.c-icon{width:36px;height:36px;flex-shrink:0;background:rgba(201,168,76,.12);border-radius:8px;display:flex;align-items:center;justify-content:center;}
+.c-txt{font-size:.88rem;line-height:1.6;}
+.c-txt strong{display:block;font-weight:600;margin-bottom:2px;}
+.c-txt a{color:var(--gold-l);text-decoration:none;}
+.wa-big{display:inline-flex;align-items:center;gap:10px;background:#25D366;color:#fff;padding:.85rem 1.8rem;border-radius:50px;font-weight:700;font-size:.9rem;text-decoration:none;margin-top:1.2rem;transition:transform .2s;}
+/* Dashboard */
+.dash-login-ov{position:fixed;inset:0;background:rgba(10,15,30,.97);z-index:400;display:none;align-items:center;justify-content:center;padding:1rem;}
+.dash-login-ov.open{display:flex;}
+.dash-login-box{background:var(--surf);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:2.5rem;width:100%;max-width:380px;text-align:center;}
+.dash-login-icon{font-size:2.5rem;margin-bottom:1rem;}
+.dash-login-title{font-family:'Playfair Display',serif;font-size:1.5rem;font-weight:700;margin-bottom:.3rem;}
+.dash-login-sub{font-size:.85rem;color:var(--muted);margin-bottom:1.8rem;}
+.dash-pw{width:100%;background:var(--surf2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.8rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.95rem;outline:none;margin-bottom:1rem;text-align:center;letter-spacing:.1em;}
+.dash-pw:focus{border-color:var(--gold);}
+.dash-pw-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--deep);border:none;border-radius:50px;padding:.9rem;font-family:'DM Sans',sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;}
+.dash-pw-err{color:var(--err);font-size:.82rem;margin-top:.6rem;display:none;}
+.dash-pw-err.show{display:block;}
+.dash-lock-btn{background:none;border:1px solid rgba(255,255,255,.12);border-radius:8px;color:var(--muted);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:'DM Sans',sans-serif;}
+.dash-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.8rem;flex-wrap:wrap;gap:1rem;}
+.dash-stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:1rem;margin-bottom:1.8rem;}
+.ds{background:var(--surf);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:1.3rem;position:relative;overflow:hidden;}
+.ds::before{content:'';position:absolute;top:0;left:0;right:0;height:3px;}
+.ds.tot::before{background:var(--gold);}
+.ds.pend::before{background:var(--warn);}
+.ds.appr::before{background:var(--ok);}
+.ds.rej::before{background:var(--err);}
+.ds-num{font-family:'Playfair Display',serif;font-size:2rem;font-weight:700;margin-bottom:2px;}
+.ds.tot .ds-num{color:var(--gold);}
+.ds.pend .ds-num{color:var(--warn);}
+.ds.appr .ds-num{color:var(--ok);}
+.ds.rej .ds-num{color:var(--err);}
+.ds-lbl{font-size:.78rem;color:var(--muted);}
+.dash-ctrl{display:flex;gap:.8rem;flex-wrap:wrap;margin-bottom:1.3rem;}
+.dash-srch{flex:1;min-width:180px;background:var(--surf);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.65rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;}
+.dash-srch:focus{border-color:var(--gold);}
+.dash-flt{background:var(--surf);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.65rem 1rem;color:var(--text);font-family:'DM Sans',sans-serif;font-size:.88rem;outline:none;cursor:pointer;}
+.dash-flt option{background:var(--surf2);}
+.tbl-wrap{background:var(--surf);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);overflow:hidden;overflow-x:auto;}
+.apps-tbl{width:100%;border-collapse:collapse;}
+.apps-tbl th{font-size:.73rem;font-weight:600;color:var(--muted);text-transform:uppercase;padding:.8rem 1rem;text-align:left;border-bottom:1px solid rgba(255,255,255,.07);}
+.apps-tbl td{padding:.85rem 1rem;font-size:.85rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle;}
+.apps-tbl tr:hover td{background:rgba(255,255,255,.02);}
+.sbadge{display:inline-flex;align-items:center;gap:5px;padding:.22rem .7rem;border-radius:50px;font-size:.73rem;font-weight:600;}
+.sbadge.pending{background:rgba(245,158,11,.15);color:var(--warn);}
+.sbadge.approved{background:rgba(34,197,94,.15);color:var(--ok);}
+.sbadge.rejected{background:rgba(239,68,68,.15);color:var(--err);}
+.sdot{width:5px;height:5px;border-radius:50%;background:currentColor;}
+.act-btn{background:none;border:1px solid rgba(255,255,255,.12);border-radius:6px;color:var(--muted);padding:.28rem .6rem;font-size:.73rem;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all .2s;}
+.act-btn:hover{border-color:var(--gold);color:var(--gold);}
+.act-btn.ap:hover{border-color:var(--ok);color:var(--ok);}
+.act-btn.rj:hover{border-color:var(--err);color:var(--err);}
+.no-apps{text-align:center;padding:3rem;color:var(--muted);}
+.dash-note{background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.2);border-radius:10px;padding:1rem 1.3rem;font-size:.83rem;color:var(--gold-l);margin-bottom:1.5rem;display:flex;gap:10px;}
+/* Modal */
+.modal-ov{position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.88);z-index:99999;display:none;overflow-y:scroll;}
+.modal-ov.open{display:block;}
+.modal{background:var(--surf);border:1px solid rgba(201,168,76,.2);border-radius:16px;padding:1.5rem;max-width:640px;width:calc(100% - 2rem);position:relative;margin:1rem auto 3rem auto;}
+.modal-close{position:absolute;top:1rem;right:1rem;background:rgba(255,255,255,.1);border:none;color:var(--text);font-size:1.2rem;cursor:pointer;width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
+.modal-title{font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:700;margin-bottom:1.3rem;padding-right:2rem;}
+.modal-grid{display:grid;grid-template-columns:1fr 1fr;gap:.8rem;}
+.mf{background:var(--surf2);border-radius:8px;padding:.8rem;}
+.mf-lbl{font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+.mf-val{font-size:.88rem;font-weight:500;word-break:break-word;}
+.mf.full{grid-column:1/-1;}
+.modal-acts{display:flex;gap:.8rem;margin-top:1.2rem;justify-content:flex-end;}
+/* Tracker */
+.tr-tabs{display:flex;gap:.5rem;background:var(--surf2);border-radius:10px;padding:4px;margin-bottom:1.5rem;overflow-x:auto;}
+.tr-tab{flex:1;min-width:80px;padding:.55rem .5rem;border:none;background:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.78rem;font-weight:500;cursor:pointer;border-radius:7px;transition:all .2s;white-space:nowrap;}
+.tr-tab.active{background:var(--surf);color:var(--gold);box-shadow:0 2px 8px rgba(0,0,0,.2);}
+.tr-panel{display:none;}.tr-panel.active{display:block;}
+.tr-card{background:var(--surf);border:1px solid rgba(255,255,255,.07);border-radius:var(--r);padding:1.3rem;margin-bottom:1rem;border-left:4px solid transparent;}
+.tr-card.overdue{border-left-color:var(--err);}
+.tr-card.due-soon{border-left-color:var(--warn);}
+.tr-card.on-track{border-left-color:var(--ok);}
+.tr-card.paid{border-left-color:var(--muted);}
+.tr-hdr{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:.8rem;gap:.5rem;}
+.tr-name{font-weight:600;font-size:.95rem;margin-bottom:2px;}
+.tr-meta{font-size:.75rem;color:var(--muted);}
+.tr-badge{font-size:.72rem;font-weight:600;padding:.2rem .7rem;border-radius:50px;white-space:nowrap;}
+.tr-badge.overdue{background:rgba(239,68,68,.15);color:var(--err);}
+.tr-badge.due-soon{background:rgba(245,158,11,.15);color:var(--warn);}
+.tr-badge.on-track{background:rgba(34,197,94,.15);color:var(--ok);}
+.tr-badge.paid{background:rgba(156,163,175,.15);color:var(--muted);}
+.tr-prog{background:rgba(255,255,255,.07);height:6px;border-radius:3px;overflow:hidden;margin:.6rem 0;}
+.tr-fill{height:100%;border-radius:3px;transition:width .5s ease;}
+.tr-fill.overdue{background:var(--err);}
+.tr-fill.due-soon{background:var(--warn);}
+.tr-fill.on-track{background:var(--ok);}
+.tr-fill.paid{background:var(--muted);}
+.tr-amts{display:grid;grid-template-columns:repeat(3,1fr);gap:.5rem;margin-bottom:.8rem;}
+.tr-amt{background:var(--surf2);border-radius:8px;padding:.6rem;text-align:center;}
+.tr-amt-val{font-size:.82rem;font-weight:700;color:var(--gold-l);}
+.tr-amt-lbl{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.tr-acts{display:flex;gap:.6rem;align-items:center;flex-wrap:wrap;margin-top:.8rem;}
+.tr-inp{flex:1;min-width:130px;background:var(--surf2);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:.5rem .8rem;color:var(--text);font-size:.82rem;outline:none;font-family:'DM Sans',sans-serif;}
+.tr-inp:focus{border-color:var(--gold);}
+.empty-st{text-align:center;padding:3rem;color:var(--muted);}
+.rem-log{background:var(--surf2);border-radius:8px;padding:.8rem;margin-top:.6rem;font-size:.77rem;color:var(--muted);max-height:100px;overflow-y:auto;}
+.rem-log-item{padding:.25rem 0;border-bottom:1px solid rgba(255,255,255,.04);}
+/* Toast / Float */
+.wa-float{position:fixed;bottom:1.8rem;right:1.8rem;z-index:300;width:54px;height:54px;background:#25D366;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);text-decoration:none;transition:transform .2s;}
+.wa-float:hover{transform:scale(1.1);}
+.toast{position:fixed;bottom:2rem;left:50%;transform:translateX(-50%) translateY(20px);padding:.85rem 1.4rem;border-radius:var(--r);font-size:.87rem;font-weight:500;z-index:9999;opacity:0;transition:all .4s ease;display:flex;align-items:center;gap:8px;max-width:90vw;white-space:nowrap;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.toast.success{background:rgba(34,197,94,.15);border:1px solid rgba(34,197,94,.4);color:#86efac;}
+.toast.error{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.4);color:#fca5a5;}
+.toast.info{background:rgba(59,130,246,.15);border:1px solid rgba(59,130,246,.4);color:#93c5fd;}
+footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);padding:2rem 5%;display:flex;flex-wrap:wrap;gap:1.5rem;align-items:center;justify-content:space-between;}
+.ft-logo{font-family:'Playfair Display',serif;font-size:1.2rem;color:var(--gold);font-weight:700;}
+.ft-copy{font-size:.8rem;color:var(--muted);}
+.ft-links button{font-size:.8rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-right:1rem;}
+.ft-links button:hover{color:var(--gold);}
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+.fu{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
+.fu.vis{opacity:1;transform:translateY(0);}
+@media(max-width:960px){.apply-layout{grid-template-columns:1fr;}.contact-grid{grid-template-columns:1fr;}.modal-grid{grid-template-columns:1fr;}.calc-row{grid-template-columns:1fr;}}
+@media(max-width:768px){.nav-links{display:none;}.hamburger{display:block;}.frow{grid-template-columns:1fr;}.hero-stats{gap:1.5rem;}.apps-tbl th:nth-child(5),.apps-tbl td:nth-child(5){display:none;}.tr-amts{grid-template-columns:1fr 1fr;}}
+@media(max-width:480px){.apps-tbl th:nth-child(3),.apps-tbl td:nth-child(3){display:none;}}
+</style>
 </head>
 <body>
 <nav>
@@ -259,7 +272,7 @@
       <line x1="40" y1="18" x2="40" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
       <line x1="54" y1="18" x2="54" y2="28" stroke="#C9A84C" stroke-width="2.2" stroke-linecap="round"/>
     </svg>
-    <div class="logo-text-wrap"><span class="logo-name">Phindu</span><span class="logo-sub">Micro Finance</span></div>
+    <div class="logo-txt"><span class="logo-name">Phindu</span><span class="logo-sub">Micro Finance</span></div>
   </div>
   <ul class="nav-links">
     <li><button onclick="showPage('home')" id="nav-home" class="active">Home</button></li>
@@ -270,9 +283,9 @@
     <li><button onclick="openDashboard()" id="nav-dashboard">Dashboard</button></li>
     <li><button onclick="showPage('apply')" class="nav-cta">Apply Now</button></li>
   </ul>
-  <button class="nav-hamburger" onclick="toggleMenu()">&#9776;</button>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
 </nav>
-<div class="nav-mobile" id="mobileMenu">
+<div class="mob-nav" id="mobNav">
   <button onclick="showPage('home');toggleMenu()">Home</button>
   <button onclick="showPage('loans');toggleMenu()">Loan Types</button>
   <button onclick="showPage('calculator');toggleMenu()">Calculator</button>
@@ -286,165 +299,165 @@
   <div class="hero-wrap">
     <div class="hero-bg"></div><div class="hero-grid"></div>
     <div class="hero-content">
-      <div class="hero-badge"><div class="badge-dot"></div>Fast Approvals &middot; Trusted in Malawi</div>
-      <h1>Finance Your <span class="highlight">Dreams</span> With Phindu Micro Finance</h1>
+      <div class="hero-badge"><div class="bdot"></div>Fast Approvals &middot; Trusted in Malawi</div>
+      <h1>Finance Your <span class="hl">Dreams</span> With Phindu Micro Finance</h1>
       <p class="hero-desc">Quick, transparent and flexible loans for every Malawian. Apply in minutes using your National ID &mdash; no lengthy paperwork, no hidden fees.</p>
-      <div class="hero-actions">
-        <button class="btn-primary" onclick="showPage('apply')">Apply Now &rarr;</button>
-        <button class="btn-secondary" onclick="showPage('calculator')">Loan Calculator</button>
+      <div class="hero-acts">
+        <button class="btn-p" onclick="showPage('apply')">Apply Now &rarr;</button>
+        <button class="btn-s" onclick="showPage('calculator')">Loan Calculator</button>
       </div>
       <div class="hero-stats">
-        <div><div class="stat-number">5K+</div><div class="stat-label">Loans Disbursed</div></div>
-        <div><div class="stat-number">24h</div><div class="stat-label">Avg. Approval</div></div>
-        <div><div class="stat-number">98%</div><div class="stat-label">Satisfaction</div></div>
+        <div><div class="sn">5K+</div><div class="sl">Loans Disbursed</div></div>
+        <div><div class="sn">24h</div><div class="sl">Avg. Approval</div></div>
+        <div><div class="sn">98%</div><div class="sl">Satisfaction</div></div>
       </div>
     </div>
   </div>
-  <div class="page-section alt">
-    <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Our Products</div><h2>Loans For Every Need</h2></div>
+  <div class="sec alt">
+    <div style="text-align:center;margin-bottom:2.5rem;"><div class="sec-lbl">Our Products</div><h2>Loans For Every Need</h2></div>
     <div class="loans-grid">
-      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">&#128100;</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, or any personal need.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div></div>
-      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">&#127962;</div><h3>Business Loan</h3><p>Grow your business with working capital or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>From 10%</span></div></div>
-      <div class="loan-card fade-up" onclick="showPage('apply')"><div class="loan-icon">&#128680;</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial emergency.</p><div class="loan-meta"><span>Up to MK 500K</span><span>From 10%</span></div></div>
+      <div class="loan-card fu" onclick="showPage('apply')"><div class="loan-icon">&#128100;</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, or any personal need.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div></div>
+      <div class="loan-card fu" onclick="showPage('apply')"><div class="loan-icon">&#127962;</div><h3>Business Loan</h3><p>Grow your business with working capital or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>From 10%</span></div></div>
+      <div class="loan-card fu" onclick="showPage('apply')"><div class="loan-icon">&#128680;</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial emergency.</p><div class="loan-meta"><span>Up to MK 500K</span><span>From 10%</span></div></div>
     </div>
-    <div style="text-align:center;margin-top:2rem;"><button class="btn-secondary" onclick="showPage('calculator')">Try Loan Calculator &rarr;</button></div>
+    <div style="text-align:center;margin-top:2rem;"><button class="btn-s" onclick="showPage('calculator')">Try Loan Calculator &rarr;</button></div>
   </div>
-  <div class="page-section">
-    <div class="section-label">Process</div><h2>Simple 4-Step Process</h2>
+  <div class="sec">
+    <div class="sec-lbl">Process</div><h2>Simple 4-Step Process</h2>
     <div class="steps-grid">
-      <div class="step fade-up"><div class="step-num">1</div><h3>Fill the Form</h3><p>Complete the application with your details, National ID photo and collateral.</p></div>
-      <div class="step fade-up"><div class="step-num">2</div><h3>We Review</h3><p>Our team verifies your identity and collateral value within 24 hours.</p></div>
-      <div class="step fade-up"><div class="step-num">3</div><h3>Get Approval</h3><p>Receive your approval notification via phone or email.</p></div>
-      <div class="step fade-up"><div class="step-num">4</div><h3>Receive Funds</h3><p>Funds disbursed directly to your mobile wallet or bank account.</p></div>
+      <div class="step fu"><div class="step-n">1</div><h3>Fill the Form</h3><p>Complete the application with your details, National ID photo and collateral.</p></div>
+      <div class="step fu"><div class="step-n">2</div><h3>We Review</h3><p>Our team verifies your identity and collateral value within 24 hours.</p></div>
+      <div class="step fu"><div class="step-n">3</div><h3>Get Approval</h3><p>Receive your approval notification via phone or email.</p></div>
+      <div class="step fu"><div class="step-n">4</div><h3>Receive Funds</h3><p>Funds disbursed directly to your mobile wallet or bank account.</p></div>
     </div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved. Lilongwe, Malawi.</div><div class="footer-links"><button onclick="showPage('contact')">Contact</button><button onclick="showPage('apply')">Apply</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved. Lilongwe, Malawi.</div><div class="ft-links"><button onclick="showPage('contact')">Contact</button><button onclick="showPage('apply')">Apply</button></div></footer>
 </div>
 
 <!-- LOAN TYPES -->
 <div class="page" id="page-loans">
-  <div class="page-section">
+  <div class="sec">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <div class="section-label">Our Products</div><h2>All Loan Types</h2>
-    <p class="section-desc">All loans require a valid National ID photo and collateral of higher value than the loan amount. Maximum repayment period is 2 months.</p>
+    <div class="sec-lbl">Our Products</div><h2>All Loan Types</h2>
+    <p class="sec-desc">All loans require a valid National ID photo and collateral of higher value than the loan amount. Maximum repayment period is 2 months.</p>
     <div class="loans-grid" style="margin-top:2.5rem;">
-      <div class="loan-card fade-up"><div class="loan-icon">&#128100;</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, travel or medical bills.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
-      <div class="loan-card fade-up"><div class="loan-icon">&#127962;</div><h3>Business Loan</h3><p>Grow your business with working capital or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>From 10%</span></div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
-      <div class="loan-card fade-up"><div class="loan-icon">&#128680;</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial crisis.</p><div class="loan-meta"><span>Up to MK 500K</span><span>From 10%</span></div><button class="btn-primary" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
+      <div class="loan-card fu"><div class="loan-icon">&#128100;</div><h3>Personal Loan</h3><p>For personal expenses, home improvements, travel or medical bills.</p><div class="loan-meta"><span>Up to MK 2M</span><span>From 10%</span></div><button class="btn-p" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
+      <div class="loan-card fu"><div class="loan-icon">&#127962;</div><h3>Business Loan</h3><p>Grow your business with working capital or expansion funds.</p><div class="loan-meta"><span>Up to MK 10M</span><span>From 10%</span></div><button class="btn-p" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
+      <div class="loan-card fu"><div class="loan-icon">&#128680;</div><h3>Emergency Loan</h3><p>Access urgent funds within hours during a financial crisis.</p><div class="loan-meta"><span>Up to MK 500K</span><span>From 10%</span></div><button class="btn-p" style="margin-top:1.2rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply Now</button></div>
     </div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
 </div>
 
 <!-- CALCULATOR -->
 <div class="page" id="page-calculator">
-  <div class="page-section">
+  <div class="sec">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <div style="text-align:center;margin-bottom:2.5rem;"><div class="section-label">Tools</div><h2>Loan Repayment Calculator</h2></div>
-    <div class="calc-wrap fade-up">
+    <div style="text-align:center;margin-bottom:2.5rem;"><div class="sec-lbl">Tools</div><h2>Loan Repayment Calculator</h2></div>
+    <div class="calc-wrap fu">
       <div class="calc-row">
-        <div class="field" style="margin-bottom:0"><label>Loan Amount (MK)</label><input type="number" id="calcAmount" placeholder="e.g. 200000" oninput="calculateLoan()" min="1000"/></div>
+        <div class="field" style="margin-bottom:0"><label>Loan Amount (MK)</label><input type="number" id="calcAmt" placeholder="e.g. 200000" oninput="calcLoan()" min="1000"/></div>
         <div class="field" style="margin-bottom:0"><label>Repayment Period</label>
-          <select id="calcPeriod" onchange="calculateLoan()">
+          <select id="calcPer" onchange="calcLoan()">
             <option value="">Select period</option>
             <option value="1week">1 Week - 10% interest</option>
             <option value="2weeks">2 Weeks - 20% interest</option>
             <option value="3weeks">3 Weeks - 30% interest</option>
             <option value="1month">1 Month - 35% interest</option>
-            <option value="2months">2 Months - 50% interest (Max)</option>
+            <option value="2months">2 Months - 50% (Max)</option>
           </select>
         </div>
       </div>
-      <div class="calc-result" id="calcResult">
-        <div class="calc-result-grid">
-          <div class="calc-item"><div class="calc-item-val" id="res-principal">-</div><div class="calc-item-lbl">Loan Amount</div></div>
-          <div class="calc-item"><div class="calc-item-val" id="res-interest">-</div><div class="calc-item-lbl">Interest</div></div>
-          <div class="calc-item"><div class="calc-item-val" id="res-total">-</div><div class="calc-item-lbl">Total Repayment</div></div>
-          <div class="calc-item"><div class="calc-item-val" id="res-rate">-</div><div class="calc-item-lbl">Interest Rate</div></div>
+      <div class="calc-res" id="calcRes">
+        <div class="calc-grid">
+          <div class="ci"><div class="ci-val" id="r-prin">-</div><div class="ci-lbl">Loan Amount</div></div>
+          <div class="ci"><div class="ci-val" id="r-int">-</div><div class="ci-lbl">Interest</div></div>
+          <div class="ci"><div class="ci-val" id="r-tot">-</div><div class="ci-lbl">Total Repayment</div></div>
+          <div class="ci"><div class="ci-val" id="r-rate">-</div><div class="ci-lbl">Interest Rate</div></div>
         </div>
-        <div style="background:var(--surface2);border-radius:10px;padding:1rem;font-size:0.85rem;color:var(--text-muted);" id="res-summary"></div>
-        <button class="btn-primary" style="margin-top:1rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply For This Loan &rarr;</button>
+        <div style="background:var(--surf2);border-radius:10px;padding:1rem;font-size:.85rem;color:var(--muted);" id="r-sum"></div>
+        <button class="btn-p" style="margin-top:1rem;width:100%;justify-content:center;" onclick="showPage('apply')">Apply For This Loan &rarr;</button>
       </div>
       <div style="margin-top:2rem;">
-        <div class="section-label" style="margin-bottom:0.8rem;">Interest Rate Schedule</div>
-        <table class="rate-table" id="rateTable">
+        <div class="sec-lbl" style="margin-bottom:.8rem;">Interest Rate Schedule</div>
+        <table class="rate-tbl" id="rateTbl">
           <thead><tr><th>Period</th><th>Rate</th><th>On MK 100,000</th><th>Total Repay</th></tr></thead>
           <tbody>
-            <tr data-key="1week"><td>1 Week</td><td>10%</td><td>MK 10,000</td><td>MK 110,000</td></tr>
-            <tr data-key="2weeks"><td>2 Weeks</td><td>20%</td><td>MK 20,000</td><td>MK 120,000</td></tr>
-            <tr data-key="3weeks"><td>3 Weeks</td><td>30%</td><td>MK 30,000</td><td>MK 130,000</td></tr>
-            <tr data-key="1month"><td>1 Month</td><td>35%</td><td>MK 35,000</td><td>MK 135,000</td></tr>
-            <tr data-key="2months"><td>2 Months (Max)</td><td>50%</td><td>MK 50,000</td><td>MK 150,000</td></tr>
+            <tr data-k="1week"><td>1 Week</td><td>10%</td><td>MK 10,000</td><td>MK 110,000</td></tr>
+            <tr data-k="2weeks"><td>2 Weeks</td><td>20%</td><td>MK 20,000</td><td>MK 120,000</td></tr>
+            <tr data-k="3weeks"><td>3 Weeks</td><td>30%</td><td>MK 30,000</td><td>MK 130,000</td></tr>
+            <tr data-k="1month"><td>1 Month</td><td>35%</td><td>MK 35,000</td><td>MK 135,000</td></tr>
+            <tr data-k="2months"><td>2 Months (Max)</td><td>50%</td><td>MK 50,000</td><td>MK 150,000</td></tr>
           </tbody>
         </table>
       </div>
     </div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
 </div>
 
 <!-- APPLY -->
 <div class="page" id="page-apply">
-  <div class="page-section">
+  <div class="sec">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
     <div class="apply-layout">
-      <div class="fade-up">
-        <div class="section-label">Apply Now</div><h2>Start Your Application</h2>
-        <p class="section-desc">Fill in the form and our team will contact you within 24 hours.</p>
-        <div class="form-info-points">
-          <div class="info-point"><div class="info-point-icon">&#128282;</div><div class="info-point-text"><h4>National ID Photo Required</h4><p>Upload a clear front-page photo of your National ID card.</p></div></div>
-          <div class="info-point"><div class="info-point-icon">&#127968;</div><div class="info-point-text"><h4>Collateral Required</h4><p>A valuable item exceeding the loan amount as security.</p></div></div>
-          <div class="info-point"><div class="info-point-icon">&#9201;</div><div class="info-point-text"><h4>Max 2 Months</h4><p>Maximum repayment is 2 months at 50% interest.</p></div></div>
-          <div class="info-point"><div class="info-point-icon">&#128241;</div><div class="info-point-text"><h4>Choose Payment Method</h4><p>Mobile wallet or bank account for fund disbursement.</p></div></div>
+      <div class="fu">
+        <div class="sec-lbl">Apply Now</div><h2>Start Your Application</h2>
+        <p class="sec-desc">Fill in the form and our team will contact you within 24 hours.</p>
+        <div class="info-pts">
+          <div class="ipt"><div class="ipt-icon">&#128282;</div><div class="ipt-txt"><h4>National ID Photo Required</h4><p>Upload a clear front-page photo of your National ID card.</p></div></div>
+          <div class="ipt"><div class="ipt-icon">&#127968;</div><div class="ipt-txt"><h4>Collateral Required</h4><p>A valuable item exceeding the loan amount as security.</p></div></div>
+          <div class="ipt"><div class="ipt-icon">&#9201;</div><div class="ipt-txt"><h4>Max 2 Months</h4><p>Maximum repayment is 2 months at 50% interest.</p></div></div>
+          <div class="ipt"><div class="ipt-icon">&#128241;</div><div class="ipt-txt"><h4>Choose Payment Method</h4><p>Mobile wallet or bank account for fund disbursement.</p></div></div>
         </div>
-        <div style="margin-top:1.5rem;"><button class="btn-secondary" onclick="showPage('calculator')" style="font-size:0.85rem;padding:0.6rem 1.2rem;">&#129518; Open Calculator First</button></div>
+        <div style="margin-top:1.5rem;"><button class="btn-s" onclick="showPage('calculator')" style="font-size:.85rem;padding:.6rem 1.2rem;">&#129518; Open Calculator First</button></div>
       </div>
-      <div class="form-card fade-up">
+      <div class="form-card fu">
         <div class="form-title">Loan Application Form</div>
-        <div class="form-subtitle">Fields marked <span style="color:var(--gold)">*</span> are required</div>
+        <div class="form-sub">Fields marked <span style="color:var(--gold)">*</span> are required</div>
         <form id="loanForm" novalidate>
-          <div class="form-section-heading">Personal Information</div>
-          <div class="form-row">
-            <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="firstName" placeholder="e.g. Chisomo"/><div class="field-error" id="err-firstName">Please enter your first name</div></div>
-            <div class="field"><label>Last Name <span class="req">*</span></label><input type="text" id="lastName" placeholder="e.g. Banda"/><div class="field-error" id="err-lastName">Please enter your last name</div></div>
+          <div class="fsec">Personal Information</div>
+          <div class="frow">
+            <div class="field"><label>First Name <span class="req">*</span></label><input type="text" id="firstName" placeholder="e.g. Chisomo"/><div class="ferr" id="err-firstName">Please enter your first name</div></div>
+            <div class="field"><label>Last Name <span class="req">*</span></label><input type="text" id="lastName" placeholder="e.g. Banda"/><div class="ferr" id="err-lastName">Please enter your last name</div></div>
           </div>
-          <div class="form-row">
-            <div class="field"><label>Phone Number <span class="req">*</span></label><input type="tel" id="phone" placeholder="e.g. +265 999 123 456"/><div class="field-error" id="err-phone">Enter a valid phone number</div></div>
+          <div class="frow">
+            <div class="field"><label>Phone Number <span class="req">*</span></label><input type="tel" id="phone" placeholder="e.g. +265 999 123 456"/><div class="ferr" id="err-phone">Enter a valid phone number</div></div>
             <div class="field"><label>Email Address</label><input type="email" id="email" placeholder="yourname@email.com"/></div>
           </div>
-          <div class="field"><label>National ID Number <span class="req">*</span></label><input type="text" id="nationalId" placeholder="e.g. MW-1234-5678-9012"/><div class="field-error" id="err-nationalId">Please enter your National ID number</div></div>
-          <div class="form-row">
-            <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" id="dob"/><div class="field-error" id="err-dob">Please select your date of birth</div></div>
+          <div class="field"><label>National ID Number <span class="req">*</span></label><input type="text" id="nationalId" placeholder="e.g. MW-1234-5678-9012"/><div class="ferr" id="err-nationalId">Please enter your National ID number</div></div>
+          <div class="frow">
+            <div class="field"><label>Date of Birth <span class="req">*</span></label><input type="date" id="dob"/><div class="ferr" id="err-dob">Please select your date of birth</div></div>
             <div class="field"><label>Gender</label><select id="gender"><option value="">Select gender</option><option>Male</option><option>Female</option><option>Prefer not to say</option></select></div>
           </div>
           <div class="field">
             <label>Home Address <span class="req">*</span></label>
             <div style="position:relative;">
               <input type="text" id="address" placeholder="Start typing your address..." autocomplete="off"/>
-              <div id="addrDropdown" class="addr-dropdown" style="display:none;"></div>
-              <div id="mapLinkBox" style="display:none;margin-top:6px;background:rgba(201,168,76,0.08);border:1px solid rgba(201,168,76,0.25);border-radius:8px;padding:0.5rem 0.8rem;font-size:0.78rem;align-items:center;gap:8px;">
-                <span>&#128205;</span><div><div style="color:var(--gold-light);font-weight:600;" id="mapLinkText"></div><a id="mapLink" href="#" target="_blank" style="color:var(--text-muted);font-size:0.72rem;text-decoration:none;">View on Google Maps &#8599;</a></div>
+              <div id="addrDD" class="addr-dd" style="display:none;"></div>
+              <div id="mapBox" style="display:none;margin-top:6px;background:rgba(201,168,76,.08);border:1px solid rgba(201,168,76,.25);border-radius:8px;padding:.5rem .8rem;font-size:.78rem;align-items:center;gap:8px;">
+                <span>&#128205;</span><div><div style="color:var(--gold-l);font-weight:600;" id="mapTxt"></div><a id="mapLink" href="#" target="_blank" style="color:var(--muted);font-size:.72rem;text-decoration:none;">View on Google Maps &#8599;</a></div>
               </div>
             </div>
-            <div class="field-error" id="err-address">Please enter your address</div>
+            <div class="ferr" id="err-address">Please enter your address</div>
           </div>
-          <div class="form-section-heading">National ID Verification</div>
+          <div class="fsec">National ID Verification</div>
           <div class="field">
             <label>National ID - Front Page Photo <span class="req">*</span></label>
-            <div class="id-upload-area" id="idUploadArea">
+            <div class="id-area" id="idArea">
               <input type="file" id="idPhoto" accept="image/*" onchange="handleIdUpload(event)"/>
-              <div class="id-upload-icon">&#128282;</div>
-              <div class="id-upload-label"><strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB</div>
-              <img class="id-preview" id="idPreview" alt="ID Preview"/>
+              <div class="id-icon">&#128282;</div>
+              <div class="id-lbl"><strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB</div>
+              <img class="id-prev" id="idPrev" alt="ID Preview"/>
             </div>
-            <div class="field-error" id="err-idPhoto">Please upload a photo of your National ID</div>
+            <div class="ferr" id="err-idPhoto">Please upload a photo of your National ID</div>
           </div>
-          <div class="form-section-heading">Loan Details</div>
-          <div class="form-row">
-            <div class="field"><label>Loan Type <span class="req">*</span></label><select id="loanType"><option value="">Select loan type</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select><div class="field-error" id="err-loanType">Please select a loan type</div></div>
-            <div class="field"><label>Loan Amount (MK) <span class="req">*</span></label><input type="number" id="loanAmount" placeholder="e.g. 200000" min="1000" oninput="updateCollateralHint();autoCalc()"/><div class="field-error" id="err-loanAmount">Please enter the loan amount</div></div>
+          <div class="fsec">Loan Details</div>
+          <div class="frow">
+            <div class="field"><label>Loan Type <span class="req">*</span></label><select id="loanType"><option value="">Select loan type</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select><div class="ferr" id="err-loanType">Please select a loan type</div></div>
+            <div class="field"><label>Loan Amount (MK) <span class="req">*</span></label><input type="number" id="loanAmount" placeholder="e.g. 200000" min="1000" oninput="updateCollNote();autoCalc()"/><div class="ferr" id="err-loanAmount">Please enter the loan amount</div></div>
           </div>
-          <div class="form-row">
+          <div class="frow">
             <div class="field"><label>Repayment Period <span class="req">*</span></label>
               <select id="repayPeriod" onchange="autoCalc()">
                 <option value="">Select period</option>
@@ -454,179 +467,179 @@
                 <option value="1 Month">1 Month (35% interest)</option>
                 <option value="2 Months">2 Months - Max (50% interest)</option>
               </select>
-              <div class="field-error" id="err-repayPeriod">Please select a repayment period</div>
+              <div class="ferr" id="err-repayPeriod">Please select a repayment period</div>
             </div>
-            <div class="field"><label>Employment Status <span class="req">*</span></label><select id="employment"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="field-error" id="err-employment">Please select employment status</div></div>
+            <div class="field"><label>Employment Status <span class="req">*</span></label><select id="employment"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="ferr" id="err-employment">Please select employment status</div></div>
           </div>
-          <div class="inline-calc-box" id="inlineCalcBox">
+          <div class="calc-inline" id="calcInline">
             <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
-              <div><strong style="color:var(--gold-light);">Total Repayment: </strong><span id="inlineCalcText" style="color:var(--text-muted);"></span></div>
-              <div style="display:flex;align-items:center;gap:6px;background:rgba(201,168,76,0.12);border:1px solid rgba(201,168,76,0.3);border-radius:8px;padding:0.35rem 0.75rem;">
-                <span style="font-size:1rem;">&#128197;</span>
+              <div><strong style="color:var(--gold-l);">Total Repayment: </strong><span id="calcInlineTxt" style="color:var(--muted);"></span></div>
+              <div style="display:flex;align-items:center;gap:6px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);border-radius:8px;padding:.35rem .75rem;">
+                <span>&#128197;</span>
                 <div>
-                  <div style="font-size:0.7rem;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.08em;">Repayment Due Date</div>
-                  <div id="inlineDueDate" style="font-weight:700;color:var(--gold-light);font-size:0.9rem;"></div>
+                  <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:.08em;">Due Date</div>
+                  <div id="calcDueDate" style="font-weight:700;color:var(--gold-l);font-size:.9rem;"></div>
                 </div>
               </div>
             </div>
           </div>
-          <div class="field"><label>Monthly Income (MK) <span class="req">*</span></label><input type="number" id="income" placeholder="e.g. 150000"/><div class="field-error" id="err-income">Please enter your monthly income</div></div>
-          <div class="form-section-heading">Collateral Information</div>
-          <div class="field"><label>Collateral Item <span class="req">*</span></label><input type="text" id="collateralItem" placeholder="e.g. Motor Vehicle, Land Title, Electronics"/><div class="collateral-note" id="collateralNote">Collateral must be worth MORE than your loan amount.</div><div class="field-error" id="err-collateralItem">Please describe your collateral item</div></div>
-          <div class="field"><label>Estimated Collateral Value (MK) <span class="req">*</span></label><input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkCollateral()"/><div class="field-error" id="err-collateralValue">Collateral value must exceed the loan amount</div></div>
-          <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item - make, model, condition, location..."></textarea><div class="field-error" id="err-collateralDesc">Please describe your collateral</div></div>
-          <div class="form-section-heading">Payment Method</div>
-          <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:0.9rem;">Choose how you want to receive your loan funds</p>
+          <div class="field"><label>Monthly Income (MK) <span class="req">*</span></label><input type="number" id="income" placeholder="e.g. 150000"/><div class="ferr" id="err-income">Please enter your monthly income</div></div>
+          <div class="fsec">Collateral Information</div>
+          <div class="field"><label>Collateral Item <span class="req">*</span></label><input type="text" id="collateralItem" placeholder="e.g. Motor Vehicle, Land Title, Electronics"/><div class="coll-note" id="collNote">Collateral must be worth MORE than your loan amount.</div><div class="ferr" id="err-collateralItem">Please describe your collateral item</div></div>
+          <div class="field"><label>Estimated Collateral Value (MK) <span class="req">*</span></label><input type="number" id="collateralValue" placeholder="e.g. 300000" oninput="checkColl()"/><div class="ferr" id="err-collateralValue">Collateral value must exceed the loan amount</div></div>
+          <div class="field"><label>Collateral Description <span class="req">*</span></label><textarea id="collateralDesc" placeholder="Describe the item - make, model, condition, location..."></textarea><div class="ferr" id="err-collateralDesc">Please describe your collateral</div></div>
+          <div class="fsec">Payment Method</div>
+          <p style="font-size:.82rem;color:var(--muted);margin-bottom:.9rem;">Choose how you want to receive your loan funds</p>
           <div class="pay-grid">
-            <div class="pay-card" id="payCard-mobile" onclick="selectPayMethod('mobile')"><div class="pay-card-icon">&#128241;</div><div class="pay-card-label">Mobile Wallet</div><div class="pay-card-sub">Airtel Money / TNM Mpamba</div></div>
-            <div class="pay-card" id="payCard-bank" onclick="selectPayMethod('bank')"><div class="pay-card-icon">&#127970;</div><div class="pay-card-label">Bank Account</div><div class="pay-card-sub">Any Malawi bank</div></div>
+            <div class="pay-card" id="pc-mobile" onclick="selPay('mobile')"><div class="pay-icon">&#128241;</div><div class="pay-lbl">Mobile Wallet</div><div class="pay-sub">Airtel Money / TNM Mpamba</div></div>
+            <div class="pay-card" id="pc-bank" onclick="selPay('bank')"><div class="pay-icon">&#127970;</div><div class="pay-lbl">Bank Account</div><div class="pay-sub">Any Malawi bank</div></div>
           </div>
-          <div class="field-error" id="err-payMethod">Please select a payment method</div>
-          <div class="pay-details" id="payBox-mobile">
-            <div class="form-row">
-              <div class="field"><label>Mobile Network <span class="req">*</span></label><select id="mobileNetwork"><option value="">Select network</option><option>Airtel Money</option><option>TNM Mpamba</option></select><div class="field-error" id="err-mobileNetwork">Please select a network</div></div>
-              <div class="field"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="mobileNumber" placeholder="e.g. 0999 123 456"/><div class="field-error" id="err-mobileNumber">Please enter mobile number</div></div>
+          <div class="ferr" id="err-payMethod">Please select a payment method</div>
+          <div class="pay-det" id="pd-mobile">
+            <div class="frow">
+              <div class="field"><label>Mobile Network <span class="req">*</span></label><select id="mobileNetwork"><option value="">Select network</option><option>Airtel Money</option><option>TNM Mpamba</option></select><div class="ferr" id="err-mobileNetwork">Please select a network</div></div>
+              <div class="field"><label>Mobile Number <span class="req">*</span></label><input type="tel" id="mobileNumber" placeholder="e.g. 0999 123 456"/><div class="ferr" id="err-mobileNumber">Please enter mobile number</div></div>
             </div>
-            <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" id="mobileAccName" placeholder="Name on mobile wallet"/><div class="field-error" id="err-mobileAccName">Please enter account name</div></div>
+            <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" id="mobileAccName" placeholder="Name on mobile wallet"/><div class="ferr" id="err-mobileAccName">Please enter account name</div></div>
           </div>
-          <div class="pay-details" id="payBox-bank">
-            <div class="form-row">
-              <div class="field"><label>Bank Name <span class="req">*</span></label><select id="bankName"><option value="">Select bank</option><option>National Bank of Malawi</option><option>Standard Bank</option><option>NBS Bank</option><option>FDH Bank</option><option>Ecobank</option><option>First Capital Bank</option><option>MyBucks Bank</option><option>Other</option></select><div class="field-error" id="err-bankName">Please select a bank</div></div>
-              <div class="field"><label>Account Number <span class="req">*</span></label><input type="text" id="bankAccount" placeholder="e.g. 1234567890"/><div class="field-error" id="err-bankAccount">Please enter account number</div></div>
+          <div class="pay-det" id="pd-bank">
+            <div class="frow">
+              <div class="field"><label>Bank Name <span class="req">*</span></label><select id="bankName"><option value="">Select bank</option><option>National Bank of Malawi</option><option>Standard Bank</option><option>NBS Bank</option><option>FDH Bank</option><option>Ecobank</option><option>First Capital Bank</option><option>MyBucks Bank</option><option>Other</option></select><div class="ferr" id="err-bankName">Please select a bank</div></div>
+              <div class="field"><label>Account Number <span class="req">*</span></label><input type="text" id="bankAccount" placeholder="e.g. 1234567890"/><div class="ferr" id="err-bankAccount">Please enter account number</div></div>
             </div>
-            <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" id="bankAccName" placeholder="Name on bank account"/><div class="field-error" id="err-bankAccName">Please enter account name</div></div>
+            <div class="field"><label>Account Name <span class="req">*</span></label><input type="text" id="bankAccName" placeholder="Name on bank account"/><div class="ferr" id="err-bankAccName">Please enter account name</div></div>
           </div>
-          <button type="button" class="submit-btn" id="submitBtn"><div class="spinner" id="spinner"></div><span id="btnText">Submit Application &rarr;</span></button>
+          <button type="button" class="sub-btn" id="subBtn"><div class="spin" id="spin"></div><span id="subTxt">Submit Application &rarr;</span></button>
         </form>
       </div>
     </div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="footer-links"><button onclick="showPage('contact')">Contact</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="showPage('contact')">Contact</button></div></footer>
 </div>
 
 <!-- CONTACT -->
 <div class="page" id="page-contact">
-  <div class="page-section">
+  <div class="sec">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <div class="section-label">Get In Touch</div><h2>Contact Us</h2>
-    <p class="section-desc">Reach out via phone, WhatsApp or visit our office in Lilongwe.</p>
+    <div class="sec-lbl">Get In Touch</div><h2>Contact Us</h2>
+    <p class="sec-desc">Reach out via phone, WhatsApp or visit our office in Lilongwe.</p>
     <div class="contact-grid">
-      <div class="contact-card fade-up">
+      <div class="c-card fu">
         <h3>&#128222; Phone and WhatsApp</h3>
-        <div class="contact-item"><div class="contact-icon">&#128241;</div><div class="contact-item-text"><strong>Phone Line 1</strong><a href="tel:+265994016935">+265 994 016 935</a></div></div>
-        <div class="contact-item"><div class="contact-icon">&#128241;</div><div class="contact-item-text"><strong>Phone Line 2</strong><a href="tel:+265996275586">+265 996 275 586</a></div></div>
-        <div class="contact-item"><div class="contact-icon">&#128172;</div><div class="contact-item-text"><strong>WhatsApp</strong><a href="https://wa.me/265998337818" target="_blank">+265 998 337 818</a></div></div>
-        <a href="https://wa.me/265998337818" target="_blank" class="wa-btn-big">
+        <div class="c-item"><div class="c-icon">&#128241;</div><div class="c-txt"><strong>Phone Line 1</strong><a href="tel:+265994016935">+265 994 016 935</a></div></div>
+        <div class="c-item"><div class="c-icon">&#128241;</div><div class="c-txt"><strong>Phone Line 2</strong><a href="tel:+265996275586">+265 996 275 586</a></div></div>
+        <div class="c-item"><div class="c-icon">&#128172;</div><div class="c-txt"><strong>WhatsApp</strong><a href="https://wa.me/265998337818" target="_blank">+265 998 337 818</a></div></div>
+        <a href="https://wa.me/265998337818" target="_blank" class="wa-big">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
           Chat on WhatsApp
         </a>
       </div>
-      <div class="contact-card fade-up">
+      <div class="c-card fu">
         <h3>&#128205; Our Location</h3>
-        <div class="contact-item"><div class="contact-icon">&#127970;</div><div class="contact-item-text"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
-        <div class="contact-item"><div class="contact-icon">&#128336;</div><div class="contact-item-text"><strong>Business Hours</strong>Mon-Fri: 8:00AM - 5:00PM<br/>Saturday: 9:00AM - 1:00PM</div></div>
-        <div class="contact-item"><div class="contact-icon">&#128140;</div><div class="contact-item-text"><strong>Email</strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f78e9882999093828096c5c1c2b7909a969e9bd994989a">[email&#160;protected]</a></div></div>
-        <div class="contact-item"><div class="contact-icon">&#127760;</div><div class="contact-item-text"><strong>Website</strong><a href="https://phindumicrofinance.netlify.app" target="_blank">phindumicrofinance.netlify.app</a></div></div>
-        <div style="background:var(--surface2);border-radius:var(--radius);height:120px;display:flex;align-items:center;justify-content:center;margin-top:1rem;border:1px dashed rgba(201,168,76,0.2);">
-          <a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-light);font-size:0.85rem;text-decoration:none;">&#128205; Open in Google Maps &rarr;</a>
+        <div class="c-item"><div class="c-icon">&#127970;</div><div class="c-txt"><strong>Office Address</strong>Lilongwe, Malawi</div></div>
+        <div class="c-item"><div class="c-icon">&#128336;</div><div class="c-txt"><strong>Business Hours</strong>Mon-Fri: 8:00AM - 5:00PM<br/>Saturday: 9:00AM - 1:00PM</div></div>
+        <div class="c-item"><div class="c-icon">&#128140;</div><div class="c-txt"><strong>Email</strong>youngduwa265@gmail.com</div></div>
+        <div class="c-item"><div class="c-icon">&#127760;</div><div class="c-txt"><strong>Website</strong><a href="https://phindumicrofinance.netlify.app" target="_blank">phindumicrofinance.netlify.app</a></div></div>
+        <div style="background:var(--surf2);border-radius:var(--r);height:100px;display:flex;align-items:center;justify-content:center;margin-top:1rem;border:1px dashed rgba(201,168,76,.2);">
+          <a href="https://maps.google.com/?q=Lilongwe,Malawi" target="_blank" style="color:var(--gold-l);font-size:.85rem;text-decoration:none;">&#128205; Open in Google Maps &rarr;</a>
         </div>
       </div>
     </div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved. Lilongwe, Malawi.</div><div class="footer-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved. Lilongwe, Malawi.</div><div class="ft-links"><button onclick="showPage('apply')">Apply Now</button></div></footer>
 </div>
 
 <!-- REPAYMENT TRACKER -->
 <div class="page" id="page-tracker">
-  <div class="page-section">
+  <div class="sec">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <div class="dash-header">
-      <div><div class="section-label">Admin Tool</div><h2>Repayment Tracker</h2></div>
-      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
-        <button class="btn-secondary" onclick="loadTracker()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#8635; Refresh</button>
-        <button class="btn-primary" onclick="sendAllReminders()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#128241; Send All Reminders</button>
+    <div class="dash-hdr">
+      <div><div class="sec-lbl">Admin Tool</div><h2>Repayment Tracker</h2></div>
+      <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
+        <button class="btn-s" onclick="loadTracker()" style="font-size:.85rem;padding:.6rem 1.3rem;">&#8635; Refresh</button>
+        <button class="btn-p" onclick="sendAllReminders()" style="font-size:.85rem;padding:.6rem 1.3rem;">&#128241; Send All Reminders</button>
       </div>
     </div>
-    <div class="dash-note"><span>&#8505;&#65039;</span><span>Tracks repayment due dates for all approved loans. Customers due within 5 days are highlighted. Use the Remind button to send them an SMS reminder.</span></div>
+    <div class="dash-note"><span>&#8505;&#65039;</span><span>Tracks repayment due dates for all approved loans. Customers due within 5 days are highlighted. Use the Remind button to send an SMS reminder.</span></div>
     <div class="dash-stats" style="margin-bottom:1.5rem;">
-      <div class="dash-stat total"><div class="dash-stat-num" id="tr-total">0</div><div class="dash-stat-label">Active Loans</div></div>
-      <div class="dash-stat approved"><div class="dash-stat-num" id="tr-ontrack">0</div><div class="dash-stat-label">On Track</div></div>
-      <div class="dash-stat pending"><div class="dash-stat-num" id="tr-duesoon">0</div><div class="dash-stat-label">Due in 5 Days</div></div>
-      <div class="dash-stat rejected"><div class="dash-stat-num" id="tr-overdue">0</div><div class="dash-stat-label">Overdue</div></div>
+      <div class="ds tot"><div class="ds-num" id="tr-tot">0</div><div class="ds-lbl">Active Loans</div></div>
+      <div class="ds appr"><div class="ds-num" id="tr-ok">0</div><div class="ds-lbl">On Track</div></div>
+      <div class="ds pend"><div class="ds-num" id="tr-ds">0</div><div class="ds-lbl">Due in 5 Days</div></div>
+      <div class="ds rej"><div class="ds-num" id="tr-ov">0</div><div class="ds-lbl">Overdue</div></div>
     </div>
-    <div class="tracker-tabs">
-      <button class="tracker-tab active" onclick="switchTrackerTab('all',this)">All Loans</button>
-      <button class="tracker-tab" onclick="switchTrackerTab('due-soon',this)">Due Soon &#9888;</button>
-      <button class="tracker-tab" onclick="switchTrackerTab('overdue',this)">Overdue &#128680;</button>
-      <button class="tracker-tab" onclick="switchTrackerTab('on-track',this)">On Track &#10003;</button>
-      <button class="tracker-tab" onclick="switchTrackerTab('paid',this)">Fully Paid</button>
+    <div class="tr-tabs">
+      <button class="tr-tab active" onclick="switchTrTab('all',this)">All Loans</button>
+      <button class="tr-tab" onclick="switchTrTab('due-soon',this)">Due Soon &#9888;</button>
+      <button class="tr-tab" onclick="switchTrTab('overdue',this)">Overdue &#128680;</button>
+      <button class="tr-tab" onclick="switchTrTab('on-track',this)">On Track &#10003;</button>
+      <button class="tr-tab" onclick="switchTrTab('paid',this)">Fully Paid</button>
     </div>
-    <div class="tracker-panel active" id="tp-all"></div>
-    <div class="tracker-panel" id="tp-due-soon"></div>
-    <div class="tracker-panel" id="tp-overdue"></div>
-    <div class="tracker-panel" id="tp-on-track"></div>
-    <div class="tracker-panel" id="tp-paid"></div>
+    <div class="tr-panel active" id="tp-all"></div>
+    <div class="tr-panel" id="tp-due-soon"></div>
+    <div class="tr-panel" id="tp-overdue"></div>
+    <div class="tr-panel" id="tp-on-track"></div>
+    <div class="tr-panel" id="tp-paid"></div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="footer-links"><button onclick="openDashboard()">Dashboard</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="openDashboard()">Dashboard</button></div></footer>
 </div>
 
 <!-- DASHBOARD LOGIN -->
-<div class="dash-login-overlay" id="dashLoginOverlay">
+<div class="dash-login-ov" id="dashLoginOv">
   <div class="dash-login-box">
     <div class="dash-login-icon">&#128272;</div>
     <div class="dash-login-title">Admin Access Only</div>
     <div class="dash-login-sub">Enter the admin password to view loan applications</div>
-    <input type="password" class="dash-login-input" id="dashPasswordInput" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkDashPassword()"/>
-    <button class="dash-login-btn" onclick="checkDashPassword()">Unlock Dashboard</button>
-    <div class="dash-login-error" id="dashLoginError">Incorrect password. Please try again.</div>
-    <button onclick="goBack();document.getElementById('dashLoginOverlay').classList.remove('open');" style="background:none;border:none;color:var(--text-muted);font-family:'DM Sans',sans-serif;font-size:0.82rem;cursor:pointer;margin-top:0.8rem;text-decoration:underline;">&#8592; Go Back</button>
+    <input type="password" class="dash-pw" id="dashPwIn" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkPw()"/>
+    <button class="dash-pw-btn" onclick="checkPw()">Unlock Dashboard</button>
+    <div class="dash-pw-err" id="dashPwErr">Incorrect password. Please try again.</div>
+    <button onclick="goBack();document.getElementById('dashLoginOv').classList.remove('open');" style="background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.82rem;cursor:pointer;margin-top:.8rem;text-decoration:underline;">&#8592; Go Back</button>
   </div>
 </div>
 
 <!-- DASHBOARD -->
 <div class="page" id="page-dashboard">
-  <div class="page-section">
+  <div class="sec">
     <button class="back-btn" onclick="goBack()">&#8592; Back</button>
-    <div class="dash-header">
-      <div><div class="section-label">Admin</div><h2>Applications Dashboard</h2></div>
-      <div style="display:flex;gap:0.8rem;flex-wrap:wrap;">
-        <button class="btn-secondary" onclick="loadFromSheets()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#8635; Refresh</button>
-        <button class="btn-primary" onclick="showPage('tracker')" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#128202; Repayment Tracker</button>
-        <button class="btn-secondary" onclick="exportCSV()" style="font-size:0.85rem;padding:0.6rem 1.3rem;">&#11015; Export CSV</button>
-        <button class="dash-logout-btn" onclick="lockDashboard()">&#128274; Lock</button>
+    <div class="dash-hdr">
+      <div><div class="sec-lbl">Admin</div><h2>Applications Dashboard</h2></div>
+      <div style="display:flex;gap:.8rem;flex-wrap:wrap;">
+        <button class="btn-s" onclick="loadFromSheets()" style="font-size:.85rem;padding:.6rem 1.3rem;">&#8635; Refresh</button>
+        <button class="btn-p" onclick="showPage('tracker')" style="font-size:.85rem;padding:.6rem 1.3rem;">&#128202; Repayment Tracker</button>
+        <button class="btn-s" onclick="exportCSV()" style="font-size:.85rem;padding:.6rem 1.3rem;">&#11015; Export CSV</button>
+        <button class="dash-lock-btn" onclick="lockDash()">&#128274; Lock</button>
       </div>
     </div>
-    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications stored in Google Sheets and emailed to <strong><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="354c5a405b5251404254070300755258545c591b565a58">[email&#160;protected]</a></strong>. Customers receive SMS when approved or rejected.</span></div>
+    <div class="dash-note"><span>&#8505;&#65039;</span><span>Applications stored in Google Sheets and emailed to <strong>youngduwa265@gmail.com</strong>. Customers receive SMS when approved or rejected.</span></div>
     <div class="dash-stats">
-      <div class="dash-stat total"><div class="dash-stat-num" id="stat-total">0</div><div class="dash-stat-label">Total Applications</div></div>
-      <div class="dash-stat pending"><div class="dash-stat-num" id="stat-pending">0</div><div class="dash-stat-label">Pending</div></div>
-      <div class="dash-stat approved"><div class="dash-stat-num" id="stat-approved">0</div><div class="dash-stat-label">Approved</div></div>
-      <div class="dash-stat rejected"><div class="dash-stat-num" id="stat-rejected">0</div><div class="dash-stat-label">Rejected</div></div>
+      <div class="ds tot"><div class="ds-num" id="st-tot">0</div><div class="ds-lbl">Total Applications</div></div>
+      <div class="ds pend"><div class="ds-num" id="st-pend">0</div><div class="ds-lbl">Pending</div></div>
+      <div class="ds appr"><div class="ds-num" id="st-appr">0</div><div class="ds-lbl">Approved</div></div>
+      <div class="ds rej"><div class="ds-num" id="st-rej">0</div><div class="ds-lbl">Rejected</div></div>
     </div>
-    <div class="dash-controls">
-      <input class="dash-search" type="text" id="dashSearch" placeholder="Search by name, ID, phone..." oninput="renderTable()"/>
-      <select class="dash-filter" id="filterType" onchange="renderTable()"><option value="">All Loan Types</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select>
-      <select class="dash-filter" id="filterStatus" onchange="renderTable()"><option value="">All Statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
-      <select class="dash-filter" id="filterDate" onchange="renderTable()"><option value="">All Time</option><option value="today">Today</option><option value="week">This Week</option><option value="month">This Month</option></select>
+    <div class="dash-ctrl">
+      <input class="dash-srch" type="text" id="dashSrch" placeholder="Search by name, ID, phone..." oninput="renderTable()"/>
+      <select class="dash-flt" id="fltType" onchange="renderTable()"><option value="">All Loan Types</option><option>Personal Loan</option><option>Business Loan</option><option>Emergency Loan</option></select>
+      <select class="dash-flt" id="fltStatus" onchange="renderTable()"><option value="">All Statuses</option><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option></select>
+      <select class="dash-flt" id="fltDate" onchange="renderTable()"><option value="">All Time</option><option value="today">Today</option><option value="week">This Week</option><option value="month">This Month</option></select>
     </div>
-    <div class="table-wrap">
-      <table class="apps-table">
-        <thead><tr><th>#</th><th>Applicant</th><th>Loan Type</th><th>Amount</th><th>Period</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
-        <tbody id="appsTableBody"></tbody>
+    <div class="tbl-wrap">
+      <table class="apps-tbl">
+        <thead><tr><th>#</th><th>Applicant</th><th>Loan Type</th><th>Amount</th><th>Period</th><th>Submitted</th><th>Status</th><th>Actions</th></tr></thead>
+        <tbody id="appsTbody"></tbody>
       </table>
-      <div class="no-apps" id="noApps" style="display:none;"><div style="font-size:2.5rem;margin-bottom:0.8rem;">&#128203;</div><p>No applications found.</p></div>
+      <div class="no-apps" id="noApps" style="display:none;"><div style="font-size:2.5rem;margin-bottom:.8rem;">&#128203;</div><p>No applications found.</p></div>
     </div>
   </div>
-  <footer><div class="footer-logo">Phindu Micro Finance</div><div class="footer-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="footer-links"><button onclick="showPage('home')">Home</button></div></footer>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="showPage('home')">Home</button></div></footer>
 </div>
 
 <!-- MODAL -->
-<div class="modal-overlay" id="appModal" onclick="handleOverlayClick(event)">
+<div class="modal-ov" id="appModal" onclick="handleOvClick(event)">
   <div class="modal" id="appModalBox">
     <button class="modal-close" onclick="closeModal()">&#10005;</button>
     <div class="modal-title" id="modalTitle">Application Details</div>
     <div class="modal-grid" id="modalBody"></div>
-    <div class="modal-actions" id="modalActions"></div>
+    <div class="modal-acts" id="modalActs"></div>
   </div>
 </div>
 
@@ -635,145 +648,819 @@
   <svg width="26" height="26" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
 </a>
 <div class="toast" id="toast"></div>
+
 <script data-cfasync="false">
-var EMAILJS_PUBLIC_KEY  = "LqW2mAfvnN9B_leO1";
-var EMAILJS_SERVICE_ID  = "service_zunei3e";
-var EMAILJS_TEMPLATE_ID = "template_4m5wthi";
-var ADMIN_PASSWORD      = "phindu2026";
-var SHEETS_URL  = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec";
-var SHEETS_READ = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec?action=getAll";
-var RATES = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
-var PERIOD_TO_KEY = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
-var dashUnlocked=false, idPhotoBase64=null, sheetsApps=[], sheetsLoaded=false;
-var pageHistory=[], selectedPayMethod='', addrTimer=null;
-var selectedPlaceLat='', selectedPlaceLng='', selectedPlaceFull='';
+// ── CONFIG ────────────────────────────────────────────────────
+var EJS_KEY  = "LqW2mAfvnN9B_leO1";
+var EJS_SVC  = "service_zunei3e";
+var EJS_TPL  = "template_4m5wthi";
+var ADMIN_PW = "phindu2026";
+var SH_URL   = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec";
+var SH_READ  = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec?action=getAll";
+var RATES    = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
+var P2K      = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
+var DAYSMAP  = {"1 Week":7,"2 Weeks":14,"3 Weeks":21,"1 Month":30,"2 Months":60};
+var DAYNAMES = ["Sunday","Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"];
+var MONTHS   = ["January","February","March","April","May","June","July","August","September","October","November","December"];
 
-emailjs.init(EMAILJS_PUBLIC_KEY);
+emailjs.init(EJS_KEY);
 
-function showPage(n){
-  var cur=document.querySelector('.page.active');
-  if(cur&&cur.id!=='page-'+n){pageHistory.push(cur.id.replace('page-',''));if(pageHistory.length>10)pageHistory.shift();}
-  document.querySelectorAll('.page').forEach(function(p){p.classList.remove('active');});
-  document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(function(b){b.classList.remove('active');});
-  document.getElementById('page-'+n).classList.add('active');
-  var nb=document.getElementById('nav-'+n); if(nb)nb.classList.add('active');
-  window.scrollTo(0,0);
-  if(n==='dashboard'&&dashUnlocked)loadFromSheets();
-  if(n==='tracker'){
-    if(!dashUnlocked){
-      // Redirect to dashboard login first
-      document.getElementById('dashPasswordInput').value='';
-      document.getElementById('dashLoginError').classList.remove('show');
-      document.getElementById('dashLoginOverlay').classList.add('open');
-      setTimeout(function(){document.getElementById('dashPasswordInput').focus();},150);
+// ── STATE ─────────────────────────────────────────────────────
+var dashUnlocked = false;
+var idPhotoB64   = null;
+var sheetsApps   = [];
+var sheetsLoaded = false;
+var pageHistory  = [];
+var selPay_      = "";
+var addrTimer    = null;
+var selLat       = "";
+var selLng       = "";
+
+// ── NAVIGATION ────────────────────────────────────────────────
+function showPage(n) {
+  var cur = document.querySelector(".page.active");
+  if (cur && cur.id !== "page-" + n) {
+    pageHistory.push(cur.id.replace("page-", ""));
+    if (pageHistory.length > 10) pageHistory.shift();
+  }
+  document.querySelectorAll(".page").forEach(function(p) { p.classList.remove("active"); });
+  document.querySelectorAll(".nav-links button[id^='nav-']").forEach(function(b) { b.classList.remove("active"); });
+  document.getElementById("page-" + n).classList.add("active");
+  var nb = document.getElementById("nav-" + n);
+  if (nb) nb.classList.add("active");
+  window.scrollTo(0, 0);
+  if (n === "dashboard" && dashUnlocked) loadFromSheets();
+  if (n === "tracker") {
+    if (!dashUnlocked) {
+      document.getElementById("dashPwIn").value = "";
+      document.getElementById("dashPwErr").classList.remove("show");
+      document.getElementById("dashLoginOv").classList.add("open");
       return;
     }
-    if(sheetsLoaded)loadTracker();else{loadFromSheets();setTimeout(loadTracker,2500);}
+    if (sheetsLoaded) loadTracker();
+    else { loadFromSheets(); setTimeout(loadTracker, 2500); }
   }
-  setTimeout(function(){document.querySelectorAll('#page-'+n+' .fade-up').forEach(function(el){if(!el.classList.contains('visible')){var o=new IntersectionObserver(function(e){e.forEach(function(x){if(x.isIntersecting)x.target.classList.add('visible');});},{threshold:0.08});o.observe(el);}});},60);
+  setTimeout(function() {
+    document.querySelectorAll("#page-" + n + " .fu").forEach(function(el) {
+      if (!el.classList.contains("vis")) {
+        var o = new IntersectionObserver(function(e) { e.forEach(function(x) { if (x.isIntersecting) x.target.classList.add("vis"); }); }, {threshold:0.08});
+        o.observe(el);
+      }
+    });
+  }, 60);
 }
-function goBack(){
-  if(pageHistory.length>0){var p=pageHistory.pop();document.querySelectorAll('.page').forEach(function(x){x.classList.remove('active');});document.querySelectorAll('.nav-links button[id^="nav-"]').forEach(function(b){b.classList.remove('active');});document.getElementById('page-'+p).classList.add('active');var nb=document.getElementById('nav-'+p);if(nb)nb.classList.add('active');window.scrollTo(0,0);}else{showPage('home');}
+function goBack() {
+  if (pageHistory.length > 0) {
+    var p = pageHistory.pop();
+    document.querySelectorAll(".page").forEach(function(x) { x.classList.remove("active"); });
+    document.querySelectorAll(".nav-links button[id^='nav-']").forEach(function(b) { b.classList.remove("active"); });
+    document.getElementById("page-" + p).classList.add("active");
+    var nb = document.getElementById("nav-" + p);
+    if (nb) nb.classList.add("active");
+    window.scrollTo(0, 0);
+  } else { showPage("home"); }
 }
-function toggleMenu(){document.getElementById('mobileMenu').classList.toggle('open');}
-function openDashboard(){showPage('dashboard');if(!dashUnlocked){document.getElementById('dashPasswordInput').value='';document.getElementById('dashLoginError').classList.remove('show');document.getElementById('dashLoginOverlay').classList.add('open');setTimeout(function(){document.getElementById('dashPasswordInput').focus();},150);}}
-function checkDashPassword(){if(document.getElementById('dashPasswordInput').value===ADMIN_PASSWORD){dashUnlocked=true;document.getElementById('dashLoginOverlay').classList.remove('open');loadFromSheets();}else{document.getElementById('dashLoginError').classList.add('show');document.getElementById('dashPasswordInput').value='';}}
-function lockDashboard(){dashUnlocked=false;document.getElementById('dashLoginOverlay').classList.add('open');document.getElementById('dashPasswordInput').value='';document.getElementById('dashLoginError').classList.remove('show');showToast('Dashboard locked.','info');}
-function selectPayMethod(m){selectedPayMethod=m;document.querySelectorAll('.pay-card').forEach(function(c){c.classList.remove('selected');});document.getElementById('payCard-'+m).classList.add('selected');document.getElementById('payBox-mobile').classList.toggle('show',m==='mobile');document.getElementById('payBox-bank').classList.toggle('show',m==='bank');document.getElementById('err-payMethod').classList.remove('show');}
-function calculateLoan(){var a=Number(document.getElementById('calcAmount').value),p=document.getElementById('calcPeriod').value,r=document.getElementById('calcResult');if(!a||!p||a<=0){r.classList.remove('show');return;}var rt=RATES[p],i=a*rt,t=a+i;var lb={"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};document.getElementById('res-principal').textContent='MK '+a.toLocaleString();document.getElementById('res-interest').textContent='MK '+i.toLocaleString();document.getElementById('res-total').textContent='MK '+t.toLocaleString();document.getElementById('res-rate').textContent=(rt*100).toFixed(0)+'%';document.getElementById('res-summary').textContent='If you borrow MK '+a.toLocaleString()+' for '+lb[p]+', you will repay MK '+t.toLocaleString()+' total.';document.querySelectorAll('#rateTable tbody tr').forEach(function(tr){tr.classList.toggle('active-row',tr.getAttribute('data-key')===p);});r.classList.add('show');}
-function autoCalc(){
-  var a=Number(document.getElementById('loanAmount').value);
-  var p=document.getElementById('repayPeriod').value;
-  var b=document.getElementById('inlineCalcBox');
-  var k=PERIOD_TO_KEY[p];
-  if(a>0&&k){
-    var rt=RATES[k],t=a+a*rt;
-    document.getElementById('inlineCalcText').textContent='MK '+t.toLocaleString()+' total (MK '+(a*rt).toLocaleString()+' interest at '+(rt*100).toFixed(0)+'%)';
-    // Calculate and show due date
-    var daysMap={'1 Week':7,'2 Weeks':14,'3 Weeks':21,'1 Month':30,'2 Months':60};
-    var days=daysMap[p]||0;
-    var due=new Date();
-    due.setDate(due.getDate()+days);
-    var dd=String(due.getDate()).padStart(2,'0');
-    var mm=String(due.getMonth()+1).padStart(2,'0');
-    var yyyy=due.getFullYear();
-    var dayNames=['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
-    var monthNames=['January','February','March','April','May','June','July','August','September','October','November','December'];
-    var formatted=dayNames[due.getDay()]+', '+dd+' '+monthNames[due.getMonth()]+' '+yyyy;
-    document.getElementById('inlineDueDate').textContent=formatted;
-    b.style.display='block';
-  }else{
-    b.style.display='none';
+function toggleMenu() { document.getElementById("mobNav").classList.toggle("open"); }
+
+// ── DASHBOARD AUTH ────────────────────────────────────────────
+function openDashboard() {
+  showPage("dashboard");
+  if (!dashUnlocked) {
+    document.getElementById("dashPwIn").value = "";
+    document.getElementById("dashPwErr").classList.remove("show");
+    document.getElementById("dashLoginOv").classList.add("open");
+    setTimeout(function() { document.getElementById("dashPwIn").focus(); }, 150);
   }
 }
-function updateCollateralHint(){var a=Number(document.getElementById('loanAmount').value);document.getElementById('collateralNote').textContent=a>0?'Your collateral must be worth MORE than MK '+a.toLocaleString():'Collateral must be worth MORE than your loan amount.';}
-function checkCollateral(){var l=Number(document.getElementById('loanAmount').value),c=Number(document.getElementById('collateralValue').value),err=document.getElementById('err-collateralValue'),inp=document.getElementById('collateralValue');if(l>0&&c>0&&c<=l){inp.classList.add('error');err.textContent='Collateral (MK '+c.toLocaleString()+') must exceed loan (MK '+l.toLocaleString()+')';err.classList.add('show');}else{inp.classList.remove('error');err.classList.remove('show');}}
-function handleIdUpload(e){var f=e.target.files[0];if(!f)return;if(f.size>5*1024*1024){showToast('File too large. Max 5MB.','error');return;}var r=new FileReader();r.onload=function(ev){idPhotoBase64=ev.target.result;var p=document.getElementById('idPreview');p.src=idPhotoBase64;p.style.display='block';document.getElementById('idUploadArea').classList.add('has-file');document.querySelector('#idUploadArea .id-upload-label').innerHTML='<strong style="color:var(--success)">ID photo uploaded</strong>Click to change';document.getElementById('err-idPhoto').classList.remove('show');};r.readAsDataURL(f);}
-function validate(){var req=['firstName','lastName','phone','nationalId','dob','address','loanType','loanAmount','repayPeriod','employment','income','collateralItem','collateralValue','collateralDesc'],ok=true;req.forEach(function(id){var el=document.getElementById(id),err=document.getElementById('err-'+id);if(!el||!el.value.trim()){if(el)el.classList.add('error');if(err&&id!=='collateralValue')err.classList.add('show');ok=false;}else{el.classList.remove('error');if(err)err.classList.remove('show');}});var mob=/iPhone|iPad|iPod|Android/i.test(navigator.userAgent);if(!idPhotoBase64&&!mob){document.getElementById('err-idPhoto').classList.add('show');ok=false;}else if(idPhotoBase64){document.getElementById('err-idPhoto').classList.remove('show');}var l=Number(document.getElementById('loanAmount').value),c=Number(document.getElementById('collateralValue').value);if(c>0&&l>0&&c<=l){document.getElementById('collateralValue').classList.add('error');var e=document.getElementById('err-collateralValue');e.textContent='Collateral (MK '+c.toLocaleString()+') must exceed loan (MK '+l.toLocaleString()+')';e.classList.add('show');ok=false;}if(!selectedPayMethod){document.getElementById('err-payMethod').classList.add('show');ok=false;}else{document.getElementById('err-payMethod').classList.remove('show');}if(selectedPayMethod==='mobile'){var mN=document.getElementById('mobileNetwork'),mNu=document.getElementById('mobileNumber'),mA=document.getElementById('mobileAccName');if(!mN.value){mN.classList.add('error');document.getElementById('err-mobileNetwork').classList.add('show');ok=false;}if(!mNu.value.trim()){mNu.classList.add('error');document.getElementById('err-mobileNumber').classList.add('show');ok=false;}if(!mA.value.trim()){mA.classList.add('error');document.getElementById('err-mobileAccName').classList.add('show');ok=false;}}if(selectedPayMethod==='bank'){var bN=document.getElementById('bankName'),bA=document.getElementById('bankAccount'),bAN=document.getElementById('bankAccName');if(!bN.value){bN.classList.add('error');document.getElementById('err-bankName').classList.add('show');ok=false;}if(!bA.value.trim()){bA.classList.add('error');document.getElementById('err-bankAccount').classList.add('show');ok=false;}if(!bAN.value.trim()){bAN.classList.add('error');document.getElementById('err-bankAccName').classList.add('show');ok=false;}}return ok;}
-function showToast(msg,type){var t=document.getElementById('toast');t.textContent=(type==='success'?'OK: ':type==='info'?'INFO: ':'ERROR: ')+msg;t.className='toast '+type+' show';setTimeout(function(){t.classList.remove('show');},5500);}
-function getApps(){try{return JSON.parse(localStorage.getItem('phindu_apps')||'[]');}catch(e){return[];}}
-function saveApps(a){try{localStorage.setItem('phindu_apps',JSON.stringify(a));}catch(e){}}
-function resetBtn(){var b=document.getElementById('submitBtn'),s=document.getElementById('spinner'),t=document.getElementById('btnText');if(b)b.disabled=false;if(s)s.style.display='none';if(t)t.textContent='Submit Application';window._isSubmitting=false;}
-function submitForm(){
-  if(window._isSubmitting)return;
-  if(!validate()){var f=document.querySelector('.field-error.show');if(f)f.scrollIntoView({behavior:'smooth',block:'center'});return;}
-  window._isSubmitting=true;
-  var btn=document.getElementById('submitBtn'),sp=document.getElementById('spinner'),bt=document.getElementById('btnText');
-  btn.disabled=true;sp.style.display='block';bt.textContent='Submitting...';
-  try{
-    var la=Number(document.getElementById('loanAmount').value)||0,pv=document.getElementById('repayPeriod').value||'',rt=RATES[PERIOD_TO_KEY[pv]]||0,tr=la+la*rt;
-    var now=new Date(),sat=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear()+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');
-    var pi='';
-    if(selectedPayMethod==='mobile')pi='Mobile Wallet - '+(document.getElementById('mobileNetwork').value||'')+' - '+(document.getElementById('mobileNumber').value||'')+' - '+(document.getElementById('mobileAccName').value||'');
-    else if(selectedPayMethod==='bank')pi='Bank - '+(document.getElementById('bankName').value||'')+' - Acc: '+(document.getElementById('bankAccount').value||'')+' - '+(document.getElementById('bankAccName').value||'');
-    var app={id:'PL-'+Date.now(),firstName:(document.getElementById('firstName').value||'').trim(),lastName:(document.getElementById('lastName').value||'').trim(),phone:(document.getElementById('phone').value||'').trim(),email:(document.getElementById('email').value||'').trim()||'Not provided',nationalId:(document.getElementById('nationalId').value||'').trim(),dob:document.getElementById('dob').value||'',gender:document.getElementById('gender').value||'Not specified',address:(document.getElementById('address').value||'').trim(),loanType:document.getElementById('loanType').value||'',loanAmount:la,repayPeriod:pv,interestRate:(rt*100).toFixed(0)+'%',totalRepayment:tr,employment:document.getElementById('employment').value||'',income:(document.getElementById('income').value||'').trim(),collateralItem:(document.getElementById('collateralItem').value||'').trim(),collateralValue:(document.getElementById('collateralValue').value||'').trim(),collateralDesc:(document.getElementById('collateralDesc').value||'').trim(),paymentMethod:selectedPayMethod,paymentInfo:pi,idPhotoBase64:idPhotoBase64||'',submittedAt:sat,status:'pending',latitude:selectedPlaceLat||'',longitude:selectedPlaceLng||''};
-    var params={applicant_name:app.firstName+' '+app.lastName,national_id:app.nationalId,phone:app.phone,email:app.email,dob:app.dob,gender:app.gender,address:app.address,loan_type:app.loanType,loan_amount:'MK '+la.toLocaleString(),repay_period:pv,interest_rate:app.interestRate,total_repayment:'MK '+tr.toLocaleString(),employment:app.employment,income:'MK '+(Number(app.income)||0).toLocaleString(),collateral_item:app.collateralItem,collateral_value:'MK '+(Number(app.collateralValue)||0).toLocaleString(),collateral_desc:app.collateralDesc,payment_method:pi,submitted_at:app.submittedAt,app_id:app.id};
-    try{var apps=getApps();apps.unshift(app);saveApps(apps);}catch(e){}
-    try{saveToSheets(app);}catch(e){}
-    try{emailjs.send(EMAILJS_SERVICE_ID,EMAILJS_TEMPLATE_ID,params).then(function(){}).catch(function(){});}catch(e){}
-    showToast('Application submitted! We will contact you within 24 hours.','success');
-    try{document.getElementById('loanForm').reset();idPhotoBase64=null;selectedPayMethod='';selectedPlaceLat='';selectedPlaceLng='';selectedPlaceFull='';document.getElementById('idPreview').style.display='none';document.getElementById('idUploadArea').classList.remove('has-file');document.querySelector('#idUploadArea .id-upload-label').innerHTML='<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB';document.getElementById('mapLinkBox').style.display='none';document.querySelectorAll('.pay-card').forEach(function(c){c.classList.remove('selected');});document.getElementById('payBox-mobile').classList.remove('show');document.getElementById('payBox-bank').classList.remove('show');updateCollateralHint();document.getElementById('inlineCalcBox').style.display='none';}catch(e){}
-  }catch(fatal){console.log('Submit error:',fatal);}
+function checkPw() {
+  if (document.getElementById("dashPwIn").value === ADMIN_PW) {
+    dashUnlocked = true;
+    document.getElementById("dashLoginOv").classList.remove("open");
+    loadFromSheets();
+  } else {
+    document.getElementById("dashPwErr").classList.add("show");
+    document.getElementById("dashPwIn").value = "";
+  }
+}
+function lockDash() {
+  dashUnlocked = false;
+  document.getElementById("dashLoginOv").classList.add("open");
+  document.getElementById("dashPwIn").value = "";
+  document.getElementById("dashPwErr").classList.remove("show");
+  showToast("Dashboard locked.", "info");
+}
+
+// ── PAYMENT METHOD ────────────────────────────────────────────
+function selPay(m) {
+  selPay_ = m;
+  document.querySelectorAll(".pay-card").forEach(function(c) { c.classList.remove("sel"); });
+  document.getElementById("pc-" + m).classList.add("sel");
+  document.getElementById("pd-mobile").classList.toggle("show", m === "mobile");
+  document.getElementById("pd-bank").classList.toggle("show", m === "bank");
+  document.getElementById("err-payMethod").classList.remove("show");
+}
+
+// ── CALCULATOR ────────────────────────────────────────────────
+function calcLoan() {
+  var a = Number(document.getElementById("calcAmt").value);
+  var p = document.getElementById("calcPer").value;
+  var res = document.getElementById("calcRes");
+  if (!a || !p || a <= 0) { res.classList.remove("show"); return; }
+  var rt = RATES[p], i = a * rt, t = a + i;
+  var lb = {"1week":"1 Week","2weeks":"2 Weeks","3weeks":"3 Weeks","1month":"1 Month","2months":"2 Months"};
+  document.getElementById("r-prin").textContent = "MK " + a.toLocaleString();
+  document.getElementById("r-int").textContent  = "MK " + i.toLocaleString();
+  document.getElementById("r-tot").textContent  = "MK " + t.toLocaleString();
+  document.getElementById("r-rate").textContent = (rt * 100).toFixed(0) + "%";
+  document.getElementById("r-sum").textContent  = "Borrow MK " + a.toLocaleString() + " for " + lb[p] + " and repay MK " + t.toLocaleString() + " total.";
+  document.querySelectorAll("#rateTbl tbody tr").forEach(function(tr) { tr.classList.toggle("ar", tr.getAttribute("data-k") === p); });
+  res.classList.add("show");
+}
+
+function autoCalc() {
+  var a = Number(document.getElementById("loanAmount").value);
+  var p = document.getElementById("repayPeriod").value;
+  var box = document.getElementById("calcInline");
+  var k = P2K[p];
+  if (a > 0 && k) {
+    var rt = RATES[k], t = a + a * rt;
+    document.getElementById("calcInlineTxt").textContent = "MK " + t.toLocaleString() + " total (MK " + (a * rt).toLocaleString() + " interest at " + (rt * 100).toFixed(0) + "%)";
+    // Due date
+    var days = DAYSMAP[p] || 30;
+    var due  = new Date();
+    due.setDate(due.getDate() + days);
+    document.getElementById("calcDueDate").textContent = DAYNAMES[due.getDay()] + ", " + String(due.getDate()).padStart(2,"0") + " " + MONTHS[due.getMonth()] + " " + due.getFullYear();
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+  }
+}
+
+function updateCollNote() {
+  var a = Number(document.getElementById("loanAmount").value);
+  document.getElementById("collNote").textContent = a > 0 ? "Your collateral must be worth MORE than MK " + a.toLocaleString() : "Collateral must be worth MORE than your loan amount.";
+}
+
+function checkColl() {
+  var l = Number(document.getElementById("loanAmount").value);
+  var c = Number(document.getElementById("collateralValue").value);
+  var err = document.getElementById("err-collateralValue");
+  var inp = document.getElementById("collateralValue");
+  if (l > 0 && c > 0 && c <= l) {
+    inp.classList.add("err");
+    err.textContent = "Collateral (MK " + c.toLocaleString() + ") must exceed loan (MK " + l.toLocaleString() + ")";
+    err.classList.add("show");
+  } else {
+    inp.classList.remove("err");
+    err.classList.remove("show");
+  }
+}
+
+function handleIdUpload(e) {
+  var f = e.target.files[0];
+  if (!f) return;
+  if (f.size > 5 * 1024 * 1024) { showToast("File too large. Max 5MB.", "error"); return; }
+  var r = new FileReader();
+  r.onload = function(ev) {
+    idPhotoB64 = ev.target.result;
+    var p = document.getElementById("idPrev");
+    p.src = idPhotoB64; p.style.display = "block";
+    document.getElementById("idArea").classList.add("has-file");
+    document.querySelector("#idArea .id-lbl").innerHTML = "<strong style='color:var(--ok)'>ID photo uploaded</strong>Click to change";
+    document.getElementById("err-idPhoto").classList.remove("show");
+  };
+  r.readAsDataURL(f);
+}
+
+// ── VALIDATE ──────────────────────────────────────────────────
+function validate() {
+  var req = ["firstName","lastName","phone","nationalId","dob","address","loanType","loanAmount","repayPeriod","employment","income","collateralItem","collateralValue","collateralDesc"];
+  var ok = true;
+  req.forEach(function(id) {
+    var el = document.getElementById(id), err = document.getElementById("err-" + id);
+    if (!el || !el.value.trim()) {
+      if (el) el.classList.add("err");
+      if (err && id !== "collateralValue") err.classList.add("show");
+      ok = false;
+    } else {
+      el.classList.remove("err");
+      if (err) err.classList.remove("show");
+    }
+  });
+  var isMob = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+  if (!idPhotoB64 && !isMob) { document.getElementById("err-idPhoto").classList.add("show"); ok = false; }
+  else if (idPhotoB64) { document.getElementById("err-idPhoto").classList.remove("show"); }
+  var l = Number(document.getElementById("loanAmount").value);
+  var c = Number(document.getElementById("collateralValue").value);
+  if (c > 0 && l > 0 && c <= l) {
+    document.getElementById("collateralValue").classList.add("err");
+    var e2 = document.getElementById("err-collateralValue");
+    e2.textContent = "Collateral (MK " + c.toLocaleString() + ") must exceed loan (MK " + l.toLocaleString() + ")";
+    e2.classList.add("show"); ok = false;
+  }
+  if (!selPay_) { document.getElementById("err-payMethod").classList.add("show"); ok = false; }
+  else { document.getElementById("err-payMethod").classList.remove("show"); }
+  if (selPay_ === "mobile") {
+    var mn = document.getElementById("mobileNetwork"), mnu = document.getElementById("mobileNumber"), ma = document.getElementById("mobileAccName");
+    if (!mn.value) { mn.classList.add("err"); document.getElementById("err-mobileNetwork").classList.add("show"); ok = false; }
+    if (!mnu.value.trim()) { mnu.classList.add("err"); document.getElementById("err-mobileNumber").classList.add("show"); ok = false; }
+    if (!ma.value.trim()) { ma.classList.add("err"); document.getElementById("err-mobileAccName").classList.add("show"); ok = false; }
+  }
+  if (selPay_ === "bank") {
+    var bn = document.getElementById("bankName"), ba = document.getElementById("bankAccount"), ban = document.getElementById("bankAccName");
+    if (!bn.value) { bn.classList.add("err"); document.getElementById("err-bankName").classList.add("show"); ok = false; }
+    if (!ba.value.trim()) { ba.classList.add("err"); document.getElementById("err-bankAccount").classList.add("show"); ok = false; }
+    if (!ban.value.trim()) { ban.classList.add("err"); document.getElementById("err-bankAccName").classList.add("show"); ok = false; }
+  }
+  return ok;
+}
+
+function showToast(msg, type) {
+  var t = document.getElementById("toast");
+  t.textContent = (type === "success" ? "OK: " : type === "info" ? "INFO: " : "ERROR: ") + msg;
+  t.className = "toast " + type + " show";
+  setTimeout(function() { t.classList.remove("show"); }, 5500);
+}
+
+function ts() {
+  var n = new Date();
+  return String(n.getDate()).padStart(2,"0") + "/" + String(n.getMonth()+1).padStart(2,"0") + "/" + n.getFullYear() + " " + String(n.getHours()).padStart(2,"0") + ":" + String(n.getMinutes()).padStart(2,"0");
+}
+
+function getApps() { try { return JSON.parse(localStorage.getItem("phindu_apps") || "[]"); } catch(e) { return []; } }
+function saveApps(a) { try { localStorage.setItem("phindu_apps", JSON.stringify(a)); } catch(e) {} }
+
+function resetBtn() {
+  var b = document.getElementById("subBtn"), s = document.getElementById("spin"), t = document.getElementById("subTxt");
+  if (b) b.disabled = false;
+  if (s) s.style.display = "none";
+  if (t) t.textContent = "Submit Application";
+  window._submitting = false;
+}
+
+// ── SUBMIT FORM ───────────────────────────────────────────────
+function submitForm() {
+  if (window._submitting) return;
+  if (!validate()) {
+    var fe = document.querySelector(".ferr.show");
+    if (fe) fe.scrollIntoView({behavior:"smooth", block:"center"});
+    return;
+  }
+  window._submitting = true;
+  var b = document.getElementById("subBtn"), s = document.getElementById("spin"), t = document.getElementById("subTxt");
+  b.disabled = true; s.style.display = "block"; t.textContent = "Submitting...";
+  try {
+    var la = Number(document.getElementById("loanAmount").value) || 0;
+    var pv = document.getElementById("repayPeriod").value || "";
+    var rt = RATES[P2K[pv]] || 0;
+    var tr = la + la * rt;
+    var sat = ts();
+    var pi = "";
+    if (selPay_ === "mobile") pi = "Mobile Wallet - " + (document.getElementById("mobileNetwork").value||"") + " - " + (document.getElementById("mobileNumber").value||"") + " - " + (document.getElementById("mobileAccName").value||"");
+    else if (selPay_ === "bank") pi = "Bank - " + (document.getElementById("bankName").value||"") + " - Acc: " + (document.getElementById("bankAccount").value||"") + " - " + (document.getElementById("bankAccName").value||"");
+    var app = {
+      id: "PL-" + Date.now(),
+      firstName: (document.getElementById("firstName").value||"").trim(),
+      lastName:  (document.getElementById("lastName").value||"").trim(),
+      phone:     (document.getElementById("phone").value||"").trim(),
+      email:     (document.getElementById("email").value||"").trim() || "Not provided",
+      nationalId:(document.getElementById("nationalId").value||"").trim(),
+      dob:       document.getElementById("dob").value || "",
+      gender:    document.getElementById("gender").value || "Not specified",
+      address:   (document.getElementById("address").value||"").trim(),
+      loanType:  document.getElementById("loanType").value || "",
+      loanAmount: la, repayPeriod: pv,
+      interestRate: (rt*100).toFixed(0) + "%",
+      totalRepayment: tr,
+      employment:(document.getElementById("employment").value||""),
+      income:    (document.getElementById("income").value||"").trim(),
+      collateralItem:  (document.getElementById("collateralItem").value||"").trim(),
+      collateralValue: (document.getElementById("collateralValue").value||"").trim(),
+      collateralDesc:  (document.getElementById("collateralDesc").value||"").trim(),
+      paymentMethod: selPay_, paymentInfo: pi,
+      idPhotoB64: idPhotoB64 || "",
+      submittedAt: sat, actionedAt: "", rejectionReason: "",
+      status: "pending",
+      latitude: selLat || "", longitude: selLng || ""
+    };
+    var prm = {
+      applicant_name: app.firstName + " " + app.lastName,
+      national_id: app.nationalId, phone: app.phone, email: app.email,
+      dob: app.dob, gender: app.gender, address: app.address,
+      loan_type: app.loanType, loan_amount: "MK " + la.toLocaleString(),
+      repay_period: pv, interest_rate: app.interestRate,
+      total_repayment: "MK " + tr.toLocaleString(),
+      employment: app.employment, income: "MK " + (Number(app.income)||0).toLocaleString(),
+      collateral_item: app.collateralItem,
+      collateral_value: "MK " + (Number(app.collateralValue)||0).toLocaleString(),
+      collateral_desc: app.collateralDesc, payment_method: pi,
+      submitted_at: app.submittedAt, app_id: app.id
+    };
+    try { var apps = getApps(); apps.unshift(app); saveApps(apps); } catch(e) {}
+    try { saveToSheets(app); } catch(e) {}
+    try { emailjs.send(EJS_SVC, EJS_TPL, prm).then(function(){}).catch(function(){}); } catch(e) {}
+    showToast("Application submitted! We will contact you within 24 hours.", "success");
+    try {
+      document.getElementById("loanForm").reset();
+      idPhotoB64 = null; selPay_ = ""; selLat = ""; selLng = "";
+      document.getElementById("idPrev").style.display = "none";
+      document.getElementById("idArea").classList.remove("has-file");
+      document.querySelector("#idArea .id-lbl").innerHTML = "<strong>Click or drag to upload your National ID</strong>Front page only - JPG or PNG - Max 5MB";
+      document.getElementById("mapBox").style.display = "none";
+      document.querySelectorAll(".pay-card").forEach(function(c) { c.classList.remove("sel"); });
+      document.getElementById("pd-mobile").classList.remove("show");
+      document.getElementById("pd-bank").classList.remove("show");
+      updateCollNote();
+      document.getElementById("calcInline").style.display = "none";
+    } catch(e) {}
+  } catch(fatal) { console.log("Submit error:", fatal); }
   resetBtn();
 }
-document.getElementById('submitBtn').addEventListener('click',function(e){e.preventDefault();submitForm();});
-function saveToSheets(app){var p=['app_id='+encodeURIComponent(app.id),'firstName='+encodeURIComponent(app.firstName),'lastName='+encodeURIComponent(app.lastName),'phone='+encodeURIComponent(app.phone),'email='+encodeURIComponent(app.email),'nationalId='+encodeURIComponent(app.nationalId),'dob='+encodeURIComponent(app.dob),'gender='+encodeURIComponent(app.gender),'address='+encodeURIComponent(app.address),'loanType='+encodeURIComponent(app.loanType),'loanAmount='+encodeURIComponent(app.loanAmount),'repayPeriod='+encodeURIComponent(app.repayPeriod),'interestRate='+encodeURIComponent(app.interestRate),'totalRepayment='+encodeURIComponent(app.totalRepayment),'employment='+encodeURIComponent(app.employment),'income='+encodeURIComponent(app.income),'collateralItem='+encodeURIComponent(app.collateralItem),'collateralValue='+encodeURIComponent(app.collateralValue),'collateralDesc='+encodeURIComponent(app.collateralDesc),'paymentMethod='+encodeURIComponent(app.paymentInfo||app.paymentMethod||''),'submittedAt='+encodeURIComponent(app.submittedAt)].join('&');var s=document.createElement('script'),cb='_sv_'+Date.now();window[cb]=function(){try{document.head.removeChild(s);}catch(e){}delete window[cb];};s.onerror=function(){try{document.head.removeChild(s);}catch(e){}delete window[cb];};s.src=SHEETS_URL+'?'+p+'&callback='+cb;document.head.appendChild(s);}
-function loadFromSheets(){var tb=document.getElementById('appsTableBody');if(tb)tb.innerHTML='<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-muted);">Loading from database...</td></tr>';var s=document.createElement('script');window._sheetsCallback=function(data){try{document.head.removeChild(s);}catch(e){}if(data&&data.rows){sheetsApps=data.rows.map(function(row){return{id:String(row[0]||''),firstName:String(row[1]||''),lastName:String(row[2]||''),phone:String(row[3]||''),email:String(row[4]||''),nationalId:String(row[5]||''),dob:String(row[6]||''),gender:String(row[7]||''),address:String(row[8]||''),loanType:String(row[9]||''),loanAmount:row[10]||0,repayPeriod:String(row[11]||''),interestRate:String(row[12]||''),totalRepayment:row[13]||0,employment:String(row[14]||''),income:row[15]||0,collateralItem:String(row[16]||''),collateralValue:row[17]||0,collateralDesc:String(row[18]||''),paymentInfo:String(row[19]||''),submittedAt:String(row[20]||''),status:String(row[21]||'pending').toLowerCase()};});sheetsLoaded=true;renderTable();updateStats();}else{sheetsLoaded=false;renderTable();}};s.onerror=function(){try{document.head.removeChild(s);}catch(e){}sheetsLoaded=false;renderTable();updateStats();};s.src=SHEETS_READ.replace('?action=getAll','?action=getAll&callback=_sheetsCallback')+'&t='+Date.now();document.head.appendChild(s);}
-function updateStats(){var apps=sheetsLoaded?sheetsApps:getApps();document.getElementById('stat-total').textContent=apps.length;document.getElementById('stat-pending').textContent=apps.filter(function(a){return(a.status||'pending').toLowerCase()==='pending';}).length;document.getElementById('stat-approved').textContent=apps.filter(function(a){return(a.status||'').toLowerCase()==='approved';}).length;document.getElementById('stat-rejected').textContent=apps.filter(function(a){return(a.status||'').toLowerCase()==='rejected';}).length;}
-function renderTable(){var apps=sheetsLoaded?sheetsApps:getApps(),s=(document.getElementById('dashSearch').value||'').toLowerCase(),tf=document.getElementById('filterType').value,sf=document.getElementById('filterStatus').value,df=document.getElementById('filterDate').value,now=new Date();var fil=apps.filter(function(a){var n=(a.firstName+' '+a.lastName).toLowerCase();if(s&&!n.includes(s)&&!(a.nationalId||'').toLowerCase().includes(s)&&!(a.phone||'').includes(s))return false;if(tf&&a.loanType!==tf)return false;if(sf&&a.status!==sf)return false;if(df){var d=new Date(a.submittedAt);if(df==='today'&&d.toDateString()!==now.toDateString())return false;if(df==='week'){var w=new Date(now);w.setDate(now.getDate()-7);if(d<w)return false;}if(df==='month'){var m=new Date(now);m.setMonth(now.getMonth()-1);if(d<m)return false;}}return true;});var tb=document.getElementById('appsTableBody');document.getElementById('noApps').style.display=fil.length===0?'block':'none';tb.innerHTML=fil.map(function(a,i){return'<tr><td style="color:var(--text-muted);font-size:0.76rem;">'+(i+1)+'</td><td><div style="font-weight:600;font-size:0.88rem;">'+a.firstName+' '+a.lastName+'</div><div style="font-size:0.74rem;color:var(--text-muted);">'+a.phone+'</div></td><td style="font-size:0.82rem;">'+a.loanType+'</td><td style="font-weight:600;color:var(--gold-light);">MK '+Number(a.loanAmount).toLocaleString()+'</td><td style="font-size:0.8rem;">'+(a.repayPeriod||'-')+'</td><td style="font-size:0.76rem;color:var(--text-muted);">'+a.submittedAt+'</td><td><span class="status-badge '+a.status+'"><span class="status-dot"></span>'+a.status.charAt(0).toUpperCase()+a.status.slice(1)+'</span></td><td style="display:flex;gap:4px;flex-wrap:wrap;"><button class="action-btn" onclick="openAppModal(\''+a.id+'\')">View</button><button class="action-btn approve" onclick="updateStatus(\''+a.id+'\',\'approved\')">Approve</button><button class="action-btn reject" onclick="updateStatus(\''+a.id+'\',\'rejected\')">Reject</button></td></tr>';}).join('');updateStats();}
-function updateStatus(id,status){var label=status.charAt(0).toUpperCase()+status.slice(1);if(sheetsLoaded){var sa=sheetsApps.find(function(a){return a.id===id;});if(sa)sa.status=status;}var apps=getApps(),app=apps.find(function(a){return a.id===id;});if(app){app.status=status;saveApps(apps);}renderTable();updateStats();showToast('Saving '+label+' status...','info');var s=document.createElement('script'),cb='_uc_'+Date.now(),url=SHEETS_URL+'?action=updateStatus&app_id='+encodeURIComponent(id)+'&status='+encodeURIComponent(status)+'&col=22&callback='+cb;window[cb]=function(data){try{document.head.removeChild(s);}catch(e){}delete window[cb];showToast('Application '+label+' and saved.',status==='approved'?'success':'error');};s.onerror=function(){try{document.head.removeChild(s);}catch(e){}delete window[cb];showToast('Status saved locally.','info');};s.src=url;document.head.appendChild(s);var allApps=sheetsLoaded?sheetsApps:getApps(),customer=allApps.find(function(a){return a.id===id;});if(customer&&customer.phone){var due=getDueDate(customer.submittedAt,customer.repayPeriod),dueStr=formatDate(due),msg=status==='approved'?'Phindu Micro Finance: Dear '+customer.firstName+', your loan of MK '+Number(customer.loanAmount).toLocaleString()+' has been APPROVED. Due date: '+dueStr+'. Contact: +265994016935':'Phindu Micro Finance: Dear '+customer.firstName+', your loan application of MK '+Number(customer.loanAmount).toLocaleString()+' has been REJECTED. Contact: +265994016935';sendSMS(customer.phone,msg);}}
-function openAppModal(id){setTimeout(function(){viewApp(id);},50);}
-function viewApp(id){var app=null;if(sheetsLoaded&&sheetsApps.length>0)app=sheetsApps.find(function(a){return a.id===id;});if(!app)app=getApps().find(function(a){return a.id===id;});if(!app){showToast('Not found. Please refresh.','error');return;}if(!app.idPhotoBase64){var lo=getApps().find(function(a){return a.id===id;});if(lo&&lo.idPhotoBase64)app.idPhotoBase64=lo.idPhotoBase64;}document.getElementById('modalTitle').textContent=app.firstName+' '+app.lastName+' - Application';function fMK(v){var n=Number(v);return(isNaN(n)||n===0)?'Not provided':'MK '+n.toLocaleString();}function fS(v){var s=String(v||'').trim();return(s&&s!=='undefined'&&s!=='null')?s:'Not provided';}function fD(v){var s=String(v||'');return s.includes('T')?s.split('T')[0]:s||'Not provided';}function fR(v){if(!v||v==='undefined')return'Not provided';var s=String(v);if(s.includes('%'))return s;var n=parseFloat(s);return isNaN(n)?s:(n<1?(n*100).toFixed(0)+'%':n.toFixed(0)+'%');}var sc=(app.status||'pending').toLowerCase(),sl=sc.charAt(0).toUpperCase()+sc.slice(1),ml=(app.latitude&&app.longitude)?'<br><a href="https://www.google.com/maps?q='+app.latitude+','+app.longitude+'" target="_blank" style="color:var(--gold-light);font-size:0.78rem;">View on Google Maps</a>':'',ph=app.idPhotoBase64?'<img src="'+app.idPhotoBase64+'" class="id-img-modal" alt="National ID"/>':'<div style="color:var(--text-muted);font-size:0.82rem;padding:0.8rem;background:rgba(255,255,255,0.03);border-radius:8px;border:1px dashed rgba(255,255,255,0.1);">Photo not available on this device.</div>',tr=app.totalRepayment||app.loanAmount||0;document.getElementById('modalBody').innerHTML='<div class="modal-field"><div class="modal-field-label">App ID</div><div class="modal-field-value" style="font-size:0.78rem;">'+fS(app.id)+'</div></div><div class="modal-field"><div class="modal-field-label">Status</div><div class="modal-field-value"><span class="status-badge '+sc+'"><span class="status-dot"></span>'+sl+'</span></div></div><div class="modal-field"><div class="modal-field-label">Full Name</div><div class="modal-field-value">'+fS(app.firstName)+' '+fS(app.lastName)+'</div></div><div class="modal-field"><div class="modal-field-label">National ID</div><div class="modal-field-value">'+fS(app.nationalId)+'</div></div><div class="modal-field"><div class="modal-field-label">Phone</div><div class="modal-field-value">'+fS(app.phone)+'</div></div><div class="modal-field"><div class="modal-field-label">Email</div><div class="modal-field-value">'+fS(app.email)+'</div></div><div class="modal-field"><div class="modal-field-label">Date of Birth</div><div class="modal-field-value">'+fD(app.dob)+'</div></div><div class="modal-field"><div class="modal-field-label">Gender</div><div class="modal-field-value">'+fS(app.gender)+'</div></div><div class="modal-field full"><div class="modal-field-label">Address</div><div class="modal-field-value">'+fS(app.address)+ml+'</div></div><div class="modal-field"><div class="modal-field-label">Loan Type</div><div class="modal-field-value">'+fS(app.loanType)+'</div></div><div class="modal-field"><div class="modal-field-label">Loan Amount</div><div class="modal-field-value" style="color:var(--gold-light);font-weight:700;">'+fMK(app.loanAmount)+'</div></div><div class="modal-field"><div class="modal-field-label">Repayment Period</div><div class="modal-field-value">'+fS(app.repayPeriod)+'</div></div><div class="modal-field"><div class="modal-field-label">Interest Rate</div><div class="modal-field-value">'+fR(app.interestRate)+'</div></div><div class="modal-field"><div class="modal-field-label">Total Repayment</div><div class="modal-field-value" style="color:var(--warning);font-weight:700;">'+fMK(tr)+'</div></div><div class="modal-field"><div class="modal-field-label">Employment</div><div class="modal-field-value">'+fS(app.employment)+'</div></div><div class="modal-field"><div class="modal-field-label">Monthly Income</div><div class="modal-field-value">'+fMK(app.income)+'</div></div><div class="modal-field"><div class="modal-field-label">Collateral Item</div><div class="modal-field-value">'+fS(app.collateralItem)+'</div></div><div class="modal-field"><div class="modal-field-label">Collateral Value</div><div class="modal-field-value" style="color:var(--success);font-weight:700;">'+fMK(app.collateralValue)+'</div></div><div class="modal-field full"><div class="modal-field-label">Collateral Description</div><div class="modal-field-value">'+fS(app.collateralDesc)+'</div></div><div class="modal-field full"><div class="modal-field-label">Payment Method</div><div class="modal-field-value">'+fS(app.paymentInfo||app.paymentMethod||'Not specified')+'</div></div><div class="modal-field full"><div class="modal-field-label">National ID Photo</div>'+ph+'</div><div class="modal-field full"><div class="modal-field-label">Submitted At</div><div class="modal-field-value">'+fS(app.submittedAt)+'</div></div>';document.getElementById('modalActions').innerHTML='<button class="action-btn approve" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'approved\');closeModal()">Approve</button><button class="action-btn reject" style="padding:0.5rem 1.2rem;" onclick="updateStatus(\''+app.id+'\',\'rejected\');closeModal()">Reject</button>';var ov=document.getElementById('appModal');ov.classList.add('open');ov.scrollTop=0;document.body.style.position='fixed';document.body.style.width='100%';}
-function closeModal(){document.getElementById('appModal').classList.remove('open');document.body.style.position='';document.body.style.width='';}
-function handleOverlayClick(e){var b=document.getElementById('appModalBox');if(b&&!b.contains(e.target))closeModal();}
-function exportCSV(){var apps=sheetsLoaded?sheetsApps:getApps();if(!apps.length){showToast('No applications to export.','error');return;}var h=['ID','First','Last','Phone','Email','NatID','DOB','Gender','Address','LoanType','Amount','Period','Rate','Total','Employment','Income','CollItem','CollValue','CollDesc','Payment','Submitted','Status'];var rows=apps.map(function(a){return[a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,'"'+a.address+'"',a.loanType,a.loanAmount,a.repayPeriod,a.interestRate,a.totalRepayment,a.employment,a.income,'"'+(a.collateralItem||'')+'"',a.collateralValue,'"'+(a.collateralDesc||'')+'"','"'+(a.paymentInfo||'')+'"',a.submittedAt,a.status].join(',');});var csv=[h.join(',')].concat(rows).join('\n');var blob=new Blob([csv],{type:'text/csv'});var url=URL.createObjectURL(blob);var a=document.createElement('a');a.href=url;a.download='phindu-loans-'+new Date().toISOString().slice(0,10)+'.csv';a.click();URL.revokeObjectURL(url);}
 
-// REPAYMENT TRACKER
-function getDueDate(submittedAt,period){if(!submittedAt||!period)return null;var p=String(submittedAt).split('/');if(p.length<3)return null;var yr=parseInt(p[2].split(' ')[0]),mo=parseInt(p[1])-1,dy=parseInt(p[0]);if(isNaN(yr)||isNaN(mo)||isNaN(dy))return null;var d=new Date(yr,mo,dy),dm={'1 Week':7,'2 Weeks':14,'3 Weeks':21,'1 Month':30,'2 Months':60},days=dm[period]||30;d.setDate(d.getDate()+days);return d;}
-function formatDate(d){if(!d)return'Unknown';return String(d.getDate()).padStart(2,'0')+'/'+String(d.getMonth()+1).padStart(2,'0')+'/'+d.getFullYear();}
-function getDaysLeft(d){if(!d)return null;var t=new Date();t.setHours(0,0,0,0);var du=new Date(d);du.setHours(0,0,0,0);return Math.round((du-t)/(1000*60*60*24));}
-function getLoanCat(dl,repaid,total){if(repaid>=total&&total>0)return'paid';if(dl===null)return'on-track';if(dl<0)return'overdue';if(dl<=5)return'due-soon';return'on-track';}
-function getCatLabel(cat,dl){if(cat==='paid')return'Fully Paid';if(cat==='overdue')return'Overdue by '+Math.abs(dl)+' day'+(Math.abs(dl)===1?'':'s');if(cat==='due-soon')return dl===0?'Due Today!':'Due in '+dl+' day'+(dl===1?'':'s');return'On Track';}
-function getRepaid(id){return Number(localStorage.getItem('repaid_'+id))||0;}
-function setRepaid(id,v){localStorage.setItem('repaid_'+id,v);}
-function getReminderLog(id){try{return JSON.parse(localStorage.getItem('remlog_'+id)||'[]');}catch(e){return[];}}
-function addReminderLog(id,msg){var log=getReminderLog(id),now=new Date(),ts=String(now.getDate()).padStart(2,'0')+'/'+String(now.getMonth()+1).padStart(2,'0')+'/'+now.getFullYear()+' '+String(now.getHours()).padStart(2,'0')+':'+String(now.getMinutes()).padStart(2,'0');log.unshift(ts+' - '+msg);if(log.length>10)log=log.slice(0,10);localStorage.setItem('remlog_'+id,JSON.stringify(log));}
-function sendSMS(phone,msg){try{var c=String(phone).replace(/\s/g,'').replace(/^\+/,'');if(!c.startsWith('265'))c='265'+c.replace(/^0/,'');var img=new Image();img.src='https://textbelt.com/text?phone=%2B'+c+'&message='+encodeURIComponent(msg)+'&key=textbelt';console.log('SMS to +'+c);}catch(e){console.log('SMS error:',e);}}
-function sendReminderSMS(appId,daysLeft){var apps=sheetsLoaded?sheetsApps:getApps(),a=apps.find(function(x){return x.id===appId;});if(!a)return;var due=getDueDate(a.submittedAt,a.repayPeriod),dueStr=formatDate(due),repaid=getRepaid(a.id),total=Number(a.totalRepayment)||0,rem=total-repaid,msg;if(daysLeft<0)msg='Phindu Micro Finance: Dear '+a.firstName+', your loan repayment of MK '+rem.toLocaleString()+' was due on '+dueStr+' and is OVERDUE. Please contact us urgently: +265994016935';else if(daysLeft===0)msg='Phindu Micro Finance: Dear '+a.firstName+', your loan repayment of MK '+rem.toLocaleString()+' is due TODAY ('+dueStr+'). Please make your payment. Contact: +265994016935';else msg='Phindu Micro Finance: Dear '+a.firstName+', your loan repayment of MK '+rem.toLocaleString()+' is due in '+daysLeft+' day'+(daysLeft===1?'':'s')+' ('+dueStr+'). Please prepare your payment. Contact: +265994016935';sendSMS(a.phone,msg);addReminderLog(a.id,'SMS sent: '+msg.substring(0,60)+'...');showToast('Reminder SMS sent to '+a.firstName+'.','success');loadTracker();}
-function sendAllReminders(){var apps=(sheetsLoaded?sheetsApps:getApps()).filter(function(a){return a.status==='approved';}),sent=0;apps.forEach(function(a){var due=getDueDate(a.submittedAt,a.repayPeriod),dl=getDaysLeft(due),rep=getRepaid(a.id),tot=Number(a.totalRepayment)||0,cat=getLoanCat(dl,rep,tot);if(cat==='due-soon'||cat==='overdue'){sendReminderSMS(a.id,dl);sent++;}});if(sent===0)showToast('No customers need reminders right now.','info');else showToast('Sent '+sent+' reminder SMS!','success');}
-function logPayment(id,total){var inp=document.getElementById('rp_'+id),amt=Number(inp.value)||0;if(!amt||amt<=0){showToast('Enter a valid payment amount.','error');return;}var prev=getRepaid(id),np=Math.min(total,prev+amt);setRepaid(id,np);addReminderLog(id,'Payment logged: MK '+amt.toLocaleString());inp.value='';showToast('Payment of MK '+amt.toLocaleString()+' logged!','success');loadTracker();}
-function switchTrackerTab(n,btn){document.querySelectorAll('.tracker-tab').forEach(function(t){t.classList.remove('active');});document.querySelectorAll('.tracker-panel').forEach(function(p){p.classList.remove('active');});btn.classList.add('active');document.getElementById('tp-'+n).classList.add('active');}
-function buildTrackerCard(a){var due=getDueDate(a.submittedAt,a.repayPeriod),dl=getDaysLeft(due),ds=formatDate(due),rep=getRepaid(a.id),tot=Number(a.totalRepayment)||0,la=Number(a.loanAmount)||0,cat=getLoanCat(dl,rep,tot),cl=getCatLabel(cat,dl),pct=tot>0?Math.min(100,Math.round(rep/tot*100)):0,rem=Math.max(0,tot-rep),log=getReminderLog(a.id),dc=cat==='overdue'?'var(--error)':cat==='due-soon'?'var(--warning)':cat==='paid'?'var(--text-muted)':'var(--success)',cr=(cat==='due-soon'||cat==='overdue')&&cat!=='paid';return'<div class="tracker-card '+cat+'"><div class="tracker-card-header"><div><div class="tracker-name">'+a.firstName+' '+a.lastName+'</div><div class="tracker-meta">'+a.phone+' | '+a.loanType+'</div><div class="tracker-meta">ID: '+a.id+'</div></div><div style="text-align:right;"><span class="tracker-badge '+cat+'">'+cl+'</span><div style="color:'+dc+';font-weight:700;font-size:0.9rem;margin-top:0.3rem;">Due: '+ds+'</div>'+(dl!==null?'<div style="font-size:0.75rem;color:var(--text-muted);">'+(dl>=0?dl+' days remaining':Math.abs(dl)+' days overdue')+'</div>':'')+'</div></div><div class="tracker-progress-bar"><div class="tracker-progress-fill '+cat+'" style="width:'+pct+'%"></div></div><div class="tracker-amounts"><div class="tracker-amount-item"><div class="tracker-amount-val">MK '+la.toLocaleString()+'</div><div class="tracker-amount-lbl">Loan</div></div><div class="tracker-amount-item"><div class="tracker-amount-val" style="color:var(--success);">MK '+rep.toLocaleString()+'</div><div class="tracker-amount-lbl">Paid ('+pct+'%)</div></div><div class="tracker-amount-item"><div class="tracker-amount-val" style="color:var(--warning);">MK '+rem.toLocaleString()+'</div><div class="tracker-amount-lbl">Remaining</div></div></div>'+(cat!=='paid'?'<div class="tracker-actions"><input type="number" class="tracker-input" id="rp_'+a.id+'" placeholder="Log payment (MK)" min="1"/><button class="btn-primary" style="padding:0.5rem 0.9rem;font-size:0.8rem;" onclick="logPayment(\''+a.id+'\','+tot+')">Log</button>'+(cr?'<button class="action-btn" style="border-color:var(--warning);color:var(--warning);padding:0.4rem 0.8rem;font-size:0.75rem;" onclick="sendReminderSMS(\''+a.id+'\','+dl+')">&#128241; Remind</button>':'')+'</div>':'<div style="font-size:0.82rem;color:var(--success);font-weight:600;margin-top:0.4rem;">Loan fully repaid</div>')+(log.length?'<div class="reminder-log">'+log.map(function(l){return'<div class="reminder-log-item">'+l+'</div>';}).join('')+'</div>':'')+'</div>';}
-function loadTracker(){var apps=(sheetsLoaded?sheetsApps:getApps()).filter(function(a){return a.status==='approved';}),all=[],ds=[],ov=[],ot=[],pd=[],ct=0,cds=0,cov=0,cot=0;apps.forEach(function(a){var due=getDueDate(a.submittedAt,a.repayPeriod),dl=getDaysLeft(due),rep=getRepaid(a.id),tot=Number(a.totalRepayment)||0,cat=getLoanCat(dl,rep,tot),card=buildTrackerCard(a);all.push(card);if(cat==='due-soon'){ds.push(card);cds++;}else if(cat==='overdue'){ov.push(card);cov++;}else if(cat==='on-track'){ot.push(card);cot++;}else if(cat==='paid'){pd.push(card);}if(cat!=='paid')ct++;});function rend(pid,cards,empty){var el=document.getElementById(pid);if(!el)return;el.innerHTML=cards.length?cards.join(''):'<div class="empty-state"><div style="font-size:2.5rem;margin-bottom:0.8rem;">&#128203;</div><p>'+empty+'</p></div>';}rend('tp-all',all,'No approved loans yet.');rend('tp-due-soon',ds,'No loans due within 5 days.');rend('tp-overdue',ov,'No overdue loans. Great!');rend('tp-on-track',ot,'No on-track loans.');rend('tp-paid',pd,'No fully paid loans yet.');var e1=document.getElementById('tr-total'),e2=document.getElementById('tr-ontrack'),e3=document.getElementById('tr-duesoon'),e4=document.getElementById('tr-overdue');if(e1)e1.textContent=ct;if(e2)e2.textContent=cot;if(e3)e3.textContent=cds;if(e4)e4.textContent=cov;if(cds>0)showToast(cds+' loan'+(cds===1?' is':' are')+' due within 5 days!','info');if(cov>0)showToast(cov+' loan'+(cov===1?' is':' are')+' overdue!','error');}
+document.getElementById("subBtn").addEventListener("click", function(e) { e.preventDefault(); submitForm(); });
 
-// ADDRESS AUTOCOMPLETE
-function initAddressAutocomplete(){var input=document.getElementById('address');if(!input)return;var dd=document.getElementById('addrDropdown');input.addEventListener('input',function(){var q=input.value.trim();selectedPlaceLat='';selectedPlaceLng='';selectedPlaceFull='';document.getElementById('mapLinkBox').style.display='none';clearTimeout(addrTimer);if(q.length<3){dd.style.display='none';return;}addrTimer=setTimeout(function(){searchAddress(q,dd,input);},400);});document.addEventListener('click',function(e){if(!input.parentNode.contains(e.target))dd.style.display='none';});}
-function searchAddress(q,dd,input){fetch('https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=mw&q='+encodeURIComponent(q),{headers:{'Accept-Language':'en'}}).then(function(r){return r.json();}).then(function(res){dd.innerHTML='';if(!res||!res.length){dd.innerHTML='<div class="addr-item">No results found.</div>';dd.style.display='block';return;}res.forEach(function(pl){var item=document.createElement('div');item.className='addr-item';var nm=pl.display_name.split(',')[0],rest=pl.display_name.split(',').slice(1).join(',').trim();item.innerHTML='<strong>'+nm+'</strong><br><span style="font-size:0.75rem;">'+rest+'</span>';item.addEventListener('click',function(){input.value=pl.display_name;selectedPlaceLat=pl.lat;selectedPlaceLng=pl.lon;selectedPlaceFull=pl.display_name;dd.style.display='none';var box=document.getElementById('mapLinkBox');box.style.display='flex';document.getElementById('mapLinkText').textContent=pl.display_name.split(',').slice(0,3).join(',');document.getElementById('mapLink').href='https://www.google.com/maps?q='+pl.lat+','+pl.lon;input.classList.remove('error');document.getElementById('err-address').classList.remove('show');});dd.appendChild(item);});dd.style.display='block';}).catch(function(){dd.style.display='none';});}
+// ── GOOGLE SHEETS ─────────────────────────────────────────────
+function saveToSheets(app) {
+  var p = ["app_id="+encodeURIComponent(app.id),"firstName="+encodeURIComponent(app.firstName),"lastName="+encodeURIComponent(app.lastName),"phone="+encodeURIComponent(app.phone),"email="+encodeURIComponent(app.email),"nationalId="+encodeURIComponent(app.nationalId),"dob="+encodeURIComponent(app.dob),"gender="+encodeURIComponent(app.gender),"address="+encodeURIComponent(app.address),"loanType="+encodeURIComponent(app.loanType),"loanAmount="+encodeURIComponent(app.loanAmount),"repayPeriod="+encodeURIComponent(app.repayPeriod),"interestRate="+encodeURIComponent(app.interestRate),"totalRepayment="+encodeURIComponent(app.totalRepayment),"employment="+encodeURIComponent(app.employment),"income="+encodeURIComponent(app.income),"collateralItem="+encodeURIComponent(app.collateralItem),"collateralValue="+encodeURIComponent(app.collateralValue),"collateralDesc="+encodeURIComponent(app.collateralDesc),"paymentMethod="+encodeURIComponent(app.paymentInfo||app.paymentMethod||""),"submittedAt="+encodeURIComponent(app.submittedAt)].join("&");
+  var sc = document.createElement("script");
+  var cb = "_sv_" + Date.now();
+  window[cb] = function() { try { document.head.removeChild(sc); } catch(e) {} delete window[cb]; };
+  sc.onerror = function() { try { document.head.removeChild(sc); } catch(e) {} delete window[cb]; };
+  sc.src = SH_URL + "?" + p + "&callback=" + cb;
+  document.head.appendChild(sc);
+}
 
-document.querySelectorAll('input,select,textarea').forEach(function(el){el.addEventListener('input',function(){el.classList.remove('error');var err=document.getElementById('err-'+el.id);if(err)err.classList.remove('show');});});
-initAddressAutocomplete();
-var globalObs=new IntersectionObserver(function(entries){entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('visible');});},{threshold:0.08});
-document.querySelectorAll('.fade-up').forEach(function(el){globalObs.observe(el);});
+function loadFromSheets() {
+  var tb = document.getElementById("appsTbody");
+  if (tb) tb.innerHTML = "<tr><td colspan='8' style='text-align:center;padding:2rem;color:var(--muted);'>Loading from database...</td></tr>";
+  var sc = document.createElement("script");
+  window._shCb = function(data) {
+    try { document.head.removeChild(sc); } catch(e) {}
+    if (data && data.rows) {
+      sheetsApps = data.rows.map(function(row) {
+        return {
+          id: String(row[0]||""), firstName: String(row[1]||""), lastName: String(row[2]||""),
+          phone: String(row[3]||""), email: String(row[4]||""), nationalId: String(row[5]||""),
+          dob: String(row[6]||""), gender: String(row[7]||""), address: String(row[8]||""),
+          loanType: String(row[9]||""), loanAmount: row[10]||0, repayPeriod: String(row[11]||""),
+          interestRate: String(row[12]||""), totalRepayment: row[13]||0,
+          employment: String(row[14]||""), income: row[15]||0,
+          collateralItem: String(row[16]||""), collateralValue: row[17]||0,
+          collateralDesc: String(row[18]||""), paymentInfo: String(row[19]||""),
+          submittedAt: String(row[20]||""), status: String(row[21]||"pending").toLowerCase(),
+          actionedAt: "", rejectionReason: ""
+        };
+      });
+      sheetsLoaded = true; renderTable(); updateStats();
+    } else { sheetsLoaded = false; renderTable(); }
+  };
+  sc.onerror = function() { try { document.head.removeChild(sc); } catch(e) {} sheetsLoaded = false; renderTable(); updateStats(); };
+  sc.src = SH_READ.replace("?action=getAll", "?action=getAll&callback=_shCb") + "&t=" + Date.now();
+  document.head.appendChild(sc);
+}
+
+function updateStats() {
+  var apps = sheetsLoaded ? sheetsApps : getApps();
+  document.getElementById("st-tot").textContent  = apps.length;
+  document.getElementById("st-pend").textContent = apps.filter(function(a){ return (a.status||"pending").toLowerCase() === "pending"; }).length;
+  document.getElementById("st-appr").textContent = apps.filter(function(a){ return (a.status||"").toLowerCase() === "approved"; }).length;
+  document.getElementById("st-rej").textContent  = apps.filter(function(a){ return (a.status||"").toLowerCase() === "rejected"; }).length;
+}
+
+function renderTable() {
+  var apps = sheetsLoaded ? sheetsApps : getApps();
+  var s = (document.getElementById("dashSrch").value||"").toLowerCase();
+  var tf = document.getElementById("fltType").value;
+  var sf = document.getElementById("fltStatus").value;
+  var df = document.getElementById("fltDate").value;
+  var now = new Date();
+  var fil = apps.filter(function(a) {
+    var n = (a.firstName + " " + a.lastName).toLowerCase();
+    if (s && !n.includes(s) && !(a.nationalId||"").toLowerCase().includes(s) && !(a.phone||"").includes(s)) return false;
+    if (tf && a.loanType !== tf) return false;
+    if (sf && a.status !== sf) return false;
+    if (df) {
+      var d = new Date(a.submittedAt);
+      if (df === "today" && d.toDateString() !== now.toDateString()) return false;
+      if (df === "week") { var w = new Date(now); w.setDate(now.getDate()-7); if (d<w) return false; }
+      if (df === "month") { var m = new Date(now); m.setMonth(now.getMonth()-1); if (d<m) return false; }
+    }
+    return true;
+  });
+  var tb = document.getElementById("appsTbody");
+  document.getElementById("noApps").style.display = fil.length === 0 ? "block" : "none";
+  tb.innerHTML = fil.map(function(a, i) {
+    var statusCell = '<span class="sbadge ' + a.status + '"><span class="sdot"></span>' + a.status.charAt(0).toUpperCase() + a.status.slice(1) + '</span>';
+    if (a.actionedAt) {
+      var color = a.status === "approved" ? "var(--ok)" : "var(--err)";
+      statusCell += '<div style="font-size:.7rem;color:' + color + ';margin-top:2px;">' + a.status.charAt(0).toUpperCase() + a.status.slice(1) + ': ' + a.actionedAt + '</div>';
+    }
+    return '<tr>' +
+      '<td style="color:var(--muted);font-size:.76rem;">' + (i+1) + '</td>' +
+      '<td><div style="font-weight:600;font-size:.88rem;">' + a.firstName + ' ' + a.lastName + '</div><div style="font-size:.74rem;color:var(--muted);">' + a.phone + '</div></td>' +
+      '<td style="font-size:.82rem;">' + a.loanType + '</td>' +
+      '<td style="font-weight:600;color:var(--gold-l);">MK ' + Number(a.loanAmount).toLocaleString() + '</td>' +
+      '<td style="font-size:.8rem;">' + (a.repayPeriod||"-") + '</td>' +
+      '<td style="font-size:.76rem;color:var(--muted);">' + (a.submittedAt||"—") + '</td>' +
+      '<td>' + statusCell + '</td>' +
+      '<td style="display:flex;gap:4px;flex-wrap:wrap;">' +
+        '<button class="act-btn" onclick="openModal(\'' + a.id + '\')">View</button>' +
+        '<button class="act-btn ap" onclick="doApprove(\'' + a.id + '\')">Approve</button>' +
+        '<button class="act-btn rj" onclick="doReject(\'' + a.id + '\')">Reject</button>' +
+      '</td></tr>';
+  }).join("");
+  updateStats();
+}
+
+// ── STATUS UPDATE ─────────────────────────────────────────────
+function doApprove(id) { updateStatus(id, "approved", ""); }
+
+function doReject(id) {
+  var reason = window.prompt("Please enter the reason for rejecting this application (optional):");
+  if (reason === null) return;
+  updateStatus(id, "rejected", reason || "");
+}
+
+function updateStatus(id, status, reason) {
+  var label = status.charAt(0).toUpperCase() + status.slice(1);
+  var now_ts = ts();
+  if (sheetsLoaded) {
+    var sa = sheetsApps.find(function(a) { return a.id === id; });
+    if (sa) { sa.status = status; sa.actionedAt = now_ts; if (reason) sa.rejectionReason = reason; }
+  }
+  var apps = getApps(), app = apps.find(function(a) { return a.id === id; });
+  if (app) { app.status = status; app.actionedAt = now_ts; if (reason) app.rejectionReason = reason; saveApps(apps); }
+  renderTable(); updateStats();
+  showToast("Saving " + label + " status...", "info");
+  var sc = document.createElement("script");
+  var cb = "_uc_" + Date.now();
+  var url = SH_URL + "?action=updateStatus&app_id=" + encodeURIComponent(id) + "&status=" + encodeURIComponent(status) + "&col=22&callback=" + cb;
+  window[cb] = function(data) {
+    try { document.head.removeChild(sc); } catch(e) {} delete window[cb];
+    showToast("Application " + label + " and saved.", status === "approved" ? "success" : "error");
+  };
+  sc.onerror = function() { try { document.head.removeChild(sc); } catch(e) {} delete window[cb]; showToast("Status saved locally.", "info"); };
+  sc.src = url; document.head.appendChild(sc);
+  // Auto SMS
+  var allApps = sheetsLoaded ? sheetsApps : getApps();
+  var cust = allApps.find(function(a) { return a.id === id; });
+  if (cust && cust.phone) {
+    var due = getDueDate(cust.submittedAt, cust.repayPeriod);
+    var dueStr = fmtDate(due);
+    var msg = status === "approved"
+      ? "Phindu Micro Finance: Dear " + cust.firstName + ", your loan of MK " + Number(cust.loanAmount).toLocaleString() + " has been APPROVED. Due: " + dueStr + ". Contact: +265994016935"
+      : "Phindu Micro Finance: Dear " + cust.firstName + ", your loan of MK " + Number(cust.loanAmount).toLocaleString() + " has been REJECTED." + (reason ? " Reason: " + reason : "") + " Contact: +265994016935";
+    sendSMS(cust.phone, msg);
+  }
+}
+
+// ── MODAL ─────────────────────────────────────────────────────
+function openModal(id) { setTimeout(function() { viewApp(id); }, 50); }
+
+function viewApp(id) {
+  var app = null;
+  if (sheetsLoaded && sheetsApps.length > 0) app = sheetsApps.find(function(a) { return a.id === id; });
+  if (!app) app = getApps().find(function(a) { return a.id === id; });
+  if (!app) { showToast("Not found. Please refresh.", "error"); return; }
+  if (!app.idPhotoB64) {
+    var lo = getApps().find(function(a) { return a.id === id; });
+    if (lo && lo.idPhotoB64) app.idPhotoB64 = lo.idPhotoB64;
+  }
+  document.getElementById("modalTitle").textContent = app.firstName + " " + app.lastName + " - Application";
+
+  function fMK(v) { var n = Number(v); return (isNaN(n) || n === 0) ? "Not provided" : "MK " + n.toLocaleString(); }
+  function fS(v) { var s = String(v||"").trim(); return (s && s !== "undefined" && s !== "null") ? s : "Not provided"; }
+  function fD(v) { var s = String(v||""); return s.includes("T") ? s.split("T")[0] : s || "Not provided"; }
+  function fR(v) {
+    if (!v || v === "undefined") return "Not provided";
+    var s = String(v);
+    if (s.includes("%")) return s;
+    var n = parseFloat(s);
+    return isNaN(n) ? s : (n < 1 ? (n*100).toFixed(0) + "%" : n.toFixed(0) + "%");
+  }
+
+  var sc  = (app.status||"pending").toLowerCase();
+  var sl  = sc.charAt(0).toUpperCase() + sc.slice(1);
+  var ml  = (app.latitude && app.longitude) ? '<br><a href="https://www.google.com/maps?q=' + app.latitude + ',' + app.longitude + '" target="_blank" style="color:var(--gold-l);font-size:.78rem;">View on Google Maps</a>' : "";
+  var ph  = app.idPhotoB64 ? '<img src="' + app.idPhotoB64 + '" style="max-width:100%;border-radius:8px;margin-top:.5rem;" alt="National ID"/>' : '<div style="color:var(--muted);font-size:.82rem;padding:.8rem;background:rgba(255,255,255,.03);border-radius:8px;border:1px dashed rgba(255,255,255,.1);">Photo not available on this device.</div>';
+  var tot = app.totalRepayment || app.loanAmount || 0;
+
+  // Build status field with actionedAt
+  var statusField = '<div class="mf"><div class="mf-lbl">Status</div><div class="mf-val"><span class="sbadge ' + sc + '"><span class="sdot"></span>' + sl + '</span>';
+  if (app.actionedAt) statusField += ' <span style="font-size:.71rem;color:var(--muted);">on ' + app.actionedAt + '</span>';
+  statusField += '</div></div>';
+
+  // Build rejection reason field if exists
+  var rejField = "";
+  if (app.rejectionReason) {
+    rejField = '<div class="mf full"><div class="mf-lbl" style="color:var(--err);">Rejection Reason</div><div class="mf-val" style="color:var(--err);">' + app.rejectionReason + '</div></div>';
+  }
+
+  document.getElementById("modalBody").innerHTML =
+    '<div class="mf"><div class="mf-lbl">App ID</div><div class="mf-val" style="font-size:.78rem;">' + fS(app.id) + '</div></div>' +
+    statusField + rejField +
+    '<div class="mf"><div class="mf-lbl">Full Name</div><div class="mf-val">' + fS(app.firstName) + ' ' + fS(app.lastName) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">National ID</div><div class="mf-val">' + fS(app.nationalId) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Phone</div><div class="mf-val">' + fS(app.phone) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Email</div><div class="mf-val">' + fS(app.email) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Date of Birth</div><div class="mf-val">' + fD(app.dob) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Gender</div><div class="mf-val">' + fS(app.gender) + '</div></div>' +
+    '<div class="mf full"><div class="mf-lbl">Address</div><div class="mf-val">' + fS(app.address) + ml + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Loan Type</div><div class="mf-val">' + fS(app.loanType) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Loan Amount</div><div class="mf-val" style="color:var(--gold-l);font-weight:700;">' + fMK(app.loanAmount) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Repayment Period</div><div class="mf-val">' + fS(app.repayPeriod) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Interest Rate</div><div class="mf-val">' + fR(app.interestRate) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Total Repayment</div><div class="mf-val" style="color:var(--warn);font-weight:700;">' + fMK(tot) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Employment</div><div class="mf-val">' + fS(app.employment) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Monthly Income</div><div class="mf-val">' + fMK(app.income) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Collateral Item</div><div class="mf-val">' + fS(app.collateralItem) + '</div></div>' +
+    '<div class="mf"><div class="mf-lbl">Collateral Value</div><div class="mf-val" style="color:var(--ok);font-weight:700;">' + fMK(app.collateralValue) + '</div></div>' +
+    '<div class="mf full"><div class="mf-lbl">Collateral Description</div><div class="mf-val">' + fS(app.collateralDesc) + '</div></div>' +
+    '<div class="mf full"><div class="mf-lbl">Payment Method</div><div class="mf-val">' + fS(app.paymentInfo || app.paymentMethod || "Not specified") + '</div></div>' +
+    '<div class="mf full"><div class="mf-lbl">National ID Photo</div>' + ph + '</div>' +
+    '<div class="mf full"><div class="mf-lbl">Submitted At</div><div class="mf-val">' + fS(app.submittedAt) + '</div></div>';
+
+  document.getElementById("modalActs").innerHTML =
+    '<button class="act-btn ap" style="padding:.5rem 1.2rem;" onclick="doApprove(\'' + app.id + '\');closeModal()">Approve</button>' +
+    '<button class="act-btn rj" style="padding:.5rem 1.2rem;" onclick="doReject(\'' + app.id + '\');closeModal()">Reject</button>';
+
+  var ov = document.getElementById("appModal");
+  ov.classList.add("open"); ov.scrollTop = 0;
+  document.body.style.position = "fixed"; document.body.style.width = "100%";
+}
+
+function closeModal() { document.getElementById("appModal").classList.remove("open"); document.body.style.position = ""; document.body.style.width = ""; }
+function handleOvClick(e) { var b = document.getElementById("appModalBox"); if (b && !b.contains(e.target)) closeModal(); }
+
+function exportCSV() {
+  var apps = sheetsLoaded ? sheetsApps : getApps();
+  if (!apps.length) { showToast("No applications to export.", "error"); return; }
+  var h = ["ID","First","Last","Phone","Email","NatID","DOB","Gender","Address","LoanType","Amount","Period","Rate","Total","Employment","Income","CollItem","CollValue","CollDesc","Payment","Submitted","Status"];
+  var rows = apps.map(function(a) { return [a.id,a.firstName,a.lastName,a.phone,a.email,a.nationalId,a.dob,a.gender,'"'+a.address+'"',a.loanType,a.loanAmount,a.repayPeriod,a.interestRate,a.totalRepayment,a.employment,a.income,'"'+(a.collateralItem||'')+'"',a.collateralValue,'"'+(a.collateralDesc||'')+'"','"'+(a.paymentInfo||'')+'"',a.submittedAt,a.status].join(","); });
+  var csv = [h.join(",")].concat(rows).join("\n");
+  var blob = new Blob([csv], {type:"text/csv"});
+  var url = URL.createObjectURL(blob);
+  var el = document.createElement("a"); el.href = url; el.download = "phindu-loans-" + new Date().toISOString().slice(0,10) + ".csv"; el.click(); URL.revokeObjectURL(url);
+}
+
+// ── REPAYMENT TRACKER ─────────────────────────────────────────
+function getDueDate(submittedAt, period) {
+  if (!submittedAt || !period) return null;
+  var s = String(submittedAt).trim();
+  if (!s || s === "undefined") return null;
+  var d = null;
+  // dd/mm/yyyy format
+  var p = s.split("/");
+  if (p.length >= 3) {
+    var yr = parseInt(p[2].split(" ")[0]), mo = parseInt(p[1])-1, dy = parseInt(p[0]);
+    if (!isNaN(yr) && yr > 2000 && !isNaN(mo) && !isNaN(dy)) d = new Date(yr, mo, dy);
+  }
+  // ISO format yyyy-mm-dd
+  if (!d) {
+    var iso = s.split("T")[0].split("-");
+    if (iso.length === 3) {
+      var yr2 = parseInt(iso[0]), mo2 = parseInt(iso[1])-1, dy2 = parseInt(iso[2]);
+      if (!isNaN(yr2) && yr2 > 2000) d = new Date(yr2, mo2, dy2);
+    }
+  }
+  // JS Date fallback
+  if (!d) { var t = Date.parse(s); if (!isNaN(t)) d = new Date(t); }
+  if (!d || isNaN(d.getTime())) return null;
+  var dm = {"1 Week":7,"2 Weeks":14,"3 Weeks":21,"1 Month":30,"2 Months":60};
+  var days = dm[period] || 30;
+  d.setDate(d.getDate() + days);
+  return d;
+}
+
+function fmtDate(d) {
+  if (!d) return "Unknown";
+  return String(d.getDate()).padStart(2,"0") + "/" + String(d.getMonth()+1).padStart(2,"0") + "/" + d.getFullYear();
+}
+
+function getDaysLeft(d) {
+  if (!d) return null;
+  var t = new Date(); t.setHours(0,0,0,0);
+  var du = new Date(d); du.setHours(0,0,0,0);
+  return Math.round((du - t) / (1000*60*60*24));
+}
+
+function getLoanCat(dl, repaid, total) {
+  if (repaid >= total && total > 0) return "paid";
+  if (dl === null) return "on-track";
+  if (dl < 0) return "overdue";
+  if (dl <= 5) return "due-soon";
+  return "on-track";
+}
+
+function getCatLabel(cat, dl) {
+  if (cat === "paid") return "Fully Paid";
+  if (cat === "overdue") return "Overdue by " + Math.abs(dl) + " day" + (Math.abs(dl)===1?"":"s");
+  if (cat === "due-soon") return dl === 0 ? "Due Today!" : "Due in " + dl + " day" + (dl===1?"":"s");
+  return "On Track";
+}
+
+function getRepaid(id) { return Number(localStorage.getItem("repaid_" + id)) || 0; }
+function setRepaid(id, v) { localStorage.setItem("repaid_" + id, v); }
+function getRemLog(id) { try { return JSON.parse(localStorage.getItem("remlog_" + id) || "[]"); } catch(e) { return []; } }
+function addRemLog(id, msg) {
+  var log = getRemLog(id);
+  log.unshift(ts() + " - " + msg);
+  if (log.length > 10) log = log.slice(0, 10);
+  localStorage.setItem("remlog_" + id, JSON.stringify(log));
+}
+
+function sendSMS(phone, msg) {
+  try {
+    var c = String(phone).replace(/\s/g,"").replace(/^\+/,"");
+    if (!c.startsWith("265")) c = "265" + c.replace(/^0/,"");
+    var img = new Image();
+    img.src = "https://textbelt.com/text?phone=%2B" + c + "&message=" + encodeURIComponent(msg) + "&key=textbelt";
+    console.log("SMS to +" + c);
+  } catch(e) { console.log("SMS error:", e); }
+}
+
+function sendReminderSMS(appId, daysLeft) {
+  var apps = sheetsLoaded ? sheetsApps : getApps();
+  var a = apps.find(function(x) { return x.id === appId; });
+  if (!a) return;
+  var due = getDueDate(a.submittedAt, a.repayPeriod);
+  var dueStr = fmtDate(due);
+  var repaid = getRepaid(a.id), total = Number(a.totalRepayment) || 0, rem = total - repaid;
+  var msg;
+  if (daysLeft < 0) msg = "Phindu Micro Finance: Dear " + a.firstName + ", your loan repayment of MK " + rem.toLocaleString() + " was due on " + dueStr + " and is OVERDUE. Contact: +265994016935";
+  else if (daysLeft === 0) msg = "Phindu Micro Finance: Dear " + a.firstName + ", your loan repayment of MK " + rem.toLocaleString() + " is due TODAY (" + dueStr + "). Contact: +265994016935";
+  else msg = "Phindu Micro Finance: Dear " + a.firstName + ", your loan repayment of MK " + rem.toLocaleString() + " is due in " + daysLeft + " day" + (daysLeft===1?"":"s") + " (" + dueStr + "). Contact: +265994016935";
+  sendSMS(a.phone, msg);
+  addRemLog(a.id, "SMS sent: " + msg.substring(0, 60) + "...");
+  showToast("Reminder SMS sent to " + a.firstName + ".", "success");
+  loadTracker();
+}
+
+function sendAllReminders() {
+  var apps = (sheetsLoaded ? sheetsApps : getApps()).filter(function(a) { return a.status === "approved"; });
+  var sent = 0;
+  apps.forEach(function(a) {
+    var due = getDueDate(a.submittedAt, a.repayPeriod);
+    var dl = getDaysLeft(due);
+    var rep = getRepaid(a.id), tot = Number(a.totalRepayment) || 0;
+    var cat = getLoanCat(dl, rep, tot);
+    if (cat === "due-soon" || cat === "overdue") { sendReminderSMS(a.id, dl); sent++; }
+  });
+  if (sent === 0) showToast("No customers need reminders right now.", "info");
+  else showToast("Sent " + sent + " reminder SMS!", "success");
+}
+
+function logPayment(id, total) {
+  var inp = document.getElementById("rp_" + id);
+  var amt = Number(inp.value) || 0;
+  if (!amt || amt <= 0) { showToast("Enter a valid payment amount.", "error"); return; }
+  var prev = getRepaid(id), np = Math.min(total, prev + amt);
+  setRepaid(id, np);
+  addRemLog(id, "Payment logged: MK " + amt.toLocaleString());
+  inp.value = "";
+  showToast("Payment of MK " + amt.toLocaleString() + " logged!", "success");
+  loadTracker();
+}
+
+function switchTrTab(n, btn) {
+  document.querySelectorAll(".tr-tab").forEach(function(t) { t.classList.remove("active"); });
+  document.querySelectorAll(".tr-panel").forEach(function(p) { p.classList.remove("active"); });
+  btn.classList.add("active");
+  document.getElementById("tp-" + n).classList.add("active");
+}
+
+function buildTrCard(a) {
+  var due = getDueDate(a.submittedAt, a.repayPeriod);
+  var dl  = getDaysLeft(due);
+  var ds  = fmtDate(due);
+  var rep = getRepaid(a.id), tot = Number(a.totalRepayment)||0, la = Number(a.loanAmount)||0;
+  var cat = getLoanCat(dl, rep, tot);
+  var cl  = getCatLabel(cat, dl);
+  var pct = tot > 0 ? Math.min(100, Math.round(rep/tot*100)) : 0;
+  var rem = Math.max(0, tot - rep);
+  var log = getRemLog(a.id);
+  var dc  = cat==="overdue"?"var(--err)":cat==="due-soon"?"var(--warn)":cat==="paid"?"var(--muted)":"var(--ok)";
+  var cr  = (cat === "due-soon" || cat === "overdue") && cat !== "paid";
+  var html = '<div class="tr-card ' + cat + '">';
+  html += '<div class="tr-hdr"><div>';
+  html += '<div class="tr-name">' + a.firstName + ' ' + a.lastName + '</div>';
+  html += '<div class="tr-meta">' + a.phone + ' | ' + a.loanType + '</div>';
+  html += '<div class="tr-meta">ID: ' + a.id + '</div>';
+  html += '</div><div style="text-align:right;">';
+  html += '<span class="tr-badge ' + cat + '">' + cl + '</span>';
+  html += '<div style="color:' + dc + ';font-weight:700;font-size:.9rem;margin-top:.3rem;">Due: ' + ds + '</div>';
+  if (dl !== null) html += '<div style="font-size:.75rem;color:var(--muted);">' + (dl >= 0 ? dl + ' days remaining' : Math.abs(dl) + ' days overdue') + '</div>';
+  html += '</div></div>';
+  html += '<div class="tr-prog"><div class="tr-fill ' + cat + '" style="width:' + pct + '%"></div></div>';
+  html += '<div class="tr-amts">';
+  html += '<div class="tr-amt"><div class="tr-amt-val">MK ' + la.toLocaleString() + '</div><div class="tr-amt-lbl">Loan</div></div>';
+  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--ok);">MK ' + rep.toLocaleString() + '</div><div class="tr-amt-lbl">Paid (' + pct + '%)</div></div>';
+  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--warn);">MK ' + rem.toLocaleString() + '</div><div class="tr-amt-lbl">Remaining</div></div>';
+  html += '</div>';
+  if (cat !== "paid") {
+    html += '<div class="tr-acts">';
+    html += '<input type="number" class="tr-inp" id="rp_' + a.id + '" placeholder="Log payment (MK)" min="1"/>';
+    html += '<button class="btn-p" style="padding:.5rem .9rem;font-size:.8rem;" onclick="logPayment(\'' + a.id + '\',' + tot + ')">Log</button>';
+    if (cr) html += '<button class="act-btn" style="border-color:var(--warn);color:var(--warn);padding:.4rem .8rem;font-size:.75rem;" onclick="sendReminderSMS(\'' + a.id + '\',' + dl + ')">&#128241; Remind</button>';
+    html += '</div>';
+  } else {
+    html += '<div style="font-size:.82rem;color:var(--ok);font-weight:600;margin-top:.4rem;">&#10003; Loan fully repaid</div>';
+  }
+  if (log.length) {
+    html += '<div class="rem-log">' + log.map(function(l) { return '<div class="rem-log-item">' + l + '</div>'; }).join("") + '</div>';
+  }
+  html += '</div>';
+  return html;
+}
+
+function loadTracker() {
+  var apps = (sheetsLoaded ? sheetsApps : getApps()).filter(function(a) { return a.status === "approved"; });
+  var all=[], ds=[], ov=[], ot=[], pd=[], ct=0, cds=0, cov=0, cot=0;
+  apps.forEach(function(a) {
+    var due = getDueDate(a.submittedAt, a.repayPeriod);
+    var dl  = getDaysLeft(due);
+    var rep = getRepaid(a.id), tot = Number(a.totalRepayment)||0;
+    var cat = getLoanCat(dl, rep, tot);
+    var card = buildTrCard(a);
+    all.push(card);
+    if (cat==="due-soon") { ds.push(card); cds++; }
+    else if (cat==="overdue") { ov.push(card); cov++; }
+    else if (cat==="on-track") { ot.push(card); cot++; }
+    else if (cat==="paid") pd.push(card);
+    if (cat !== "paid") ct++;
+  });
+  function rend(pid, cards, empty) {
+    var el = document.getElementById(pid);
+    if (!el) return;
+    el.innerHTML = cards.length ? cards.join("") : '<div class="empty-st"><div style="font-size:2.5rem;margin-bottom:.8rem;">&#128203;</div><p>' + empty + '</p></div>';
+  }
+  rend("tp-all",      all, "No approved loans yet.");
+  rend("tp-due-soon", ds,  "No loans due within 5 days.");
+  rend("tp-overdue",  ov,  "No overdue loans.");
+  rend("tp-on-track", ot,  "No on-track loans.");
+  rend("tp-paid",     pd,  "No fully paid loans yet.");
+  var e1=document.getElementById("tr-tot"), e2=document.getElementById("tr-ok"), e3=document.getElementById("tr-ds"), e4=document.getElementById("tr-ov");
+  if(e1)e1.textContent=ct; if(e2)e2.textContent=cot; if(e3)e3.textContent=cds; if(e4)e4.textContent=cov;
+  if (cds > 0) showToast(cds + " loan" + (cds===1?" is":" are") + " due within 5 days!", "info");
+  if (cov > 0) showToast(cov + " loan" + (cov===1?" is":" are") + " overdue!", "error");
+}
+
+// ── ADDRESS AUTOCOMPLETE ──────────────────────────────────────
+function initAddr() {
+  var inp = document.getElementById("address");
+  if (!inp) return;
+  var dd = document.getElementById("addrDD");
+  inp.addEventListener("input", function() {
+    var q = inp.value.trim();
+    selLat = ""; selLng = "";
+    document.getElementById("mapBox").style.display = "none";
+    clearTimeout(addrTimer);
+    if (q.length < 3) { dd.style.display = "none"; return; }
+    addrTimer = setTimeout(function() { searchAddr(q, dd, inp); }, 400);
+  });
+  document.addEventListener("click", function(e) { if (!inp.parentNode.contains(e.target)) dd.style.display = "none"; });
+}
+
+function searchAddr(q, dd, inp) {
+  fetch("https://nominatim.openstreetmap.org/search?format=json&limit=5&countrycodes=mw&q=" + encodeURIComponent(q), {headers:{"Accept-Language":"en"}})
+    .then(function(r) { return r.json(); })
+    .then(function(res) {
+      dd.innerHTML = "";
+      if (!res || !res.length) { dd.innerHTML = '<div class="addr-item">No results found.</div>'; dd.style.display = "block"; return; }
+      res.forEach(function(pl) {
+        var item = document.createElement("div"); item.className = "addr-item";
+        var nm = pl.display_name.split(",")[0], rest = pl.display_name.split(",").slice(1).join(",").trim();
+        item.innerHTML = "<strong>" + nm + "</strong><br><span style='font-size:.75rem;'>" + rest + "</span>";
+        item.addEventListener("click", function() {
+          inp.value = pl.display_name;
+          selLat = pl.lat; selLng = pl.lon;
+          dd.style.display = "none";
+          var box = document.getElementById("mapBox"); box.style.display = "flex";
+          document.getElementById("mapTxt").textContent = pl.display_name.split(",").slice(0,3).join(",");
+          document.getElementById("mapLink").href = "https://www.google.com/maps?q=" + pl.lat + "," + pl.lon;
+          inp.classList.remove("err");
+          document.getElementById("err-address").classList.remove("show");
+        });
+        dd.appendChild(item);
+      });
+      dd.style.display = "block";
+    })
+    .catch(function() { dd.style.display = "none"; });
+}
+
+// ── INIT ──────────────────────────────────────────────────────
+document.querySelectorAll("input,select,textarea").forEach(function(el) {
+  el.addEventListener("input", function() {
+    el.classList.remove("err");
+    var err = document.getElementById("err-" + el.id);
+    if (err) err.classList.remove("show");
+  });
+});
+
+initAddr();
+
+var obs = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("vis"); }); }, {threshold:0.08});
+document.querySelectorAll(".fu").forEach(function(el) { obs.observe(el); });
 </script>
 </body>
 </html>
