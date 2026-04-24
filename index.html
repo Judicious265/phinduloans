@@ -439,6 +439,7 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
                 <span>&#128205;</span><div><div style="color:var(--gold-l);font-weight:600;" id="mapTxt"></div><a id="mapLink" href="#" target="_blank" style="color:var(--muted);font-size:.72rem;text-decoration:none;">View on Google Maps &#8599;</a></div>
               </div>
             </div>
+            <button type="button" id="geoBtn" onclick="getMyLocation()" style="margin-top:6px;background:none;border:1px solid rgba(201,168,76,.4);border-radius:8px;color:var(--gold-l);font-family:'DM Sans',sans-serif;font-size:.78rem;padding:.4rem .9rem;cursor:pointer;display:flex;align-items:center;gap:5px;transition:all .2s;" onmouseover="this.style.background='rgba(201,168,76,.1)'" onmouseout="this.style.background='none'">&#128205; Use My Location</button>
             <div class="ferr" id="err-address">Please enter your address</div>
           </div>
           <div class="fsec">National ID Verification</div>
@@ -655,8 +656,8 @@ var EJS_KEY  = "LqW2mAfvnN9B_leO1";
 var EJS_SVC  = "service_zunei3e";
 var EJS_TPL  = "template_4m5wthi";
 var ADMIN_PW = "phindu2026";
-var SH_URL   = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec";
-var SH_READ  = "https://script.google.com/macros/s/AKfycbx-y7I7SZYypksORGAAPDttnInJyNldgW_DRBqZHAsjMgayNjY8r-DkIAjOX4Nb7AIB/exec?action=getAll";
+var SH_URL   = "https://script.google.com/macros/s/AKfycbw17se8NfE7m63Y3JnFngGm3kgRPvYQ6bWUD9IoV1tAsTQ8t3pFnQ-XrBJBkbSDsMZa/exec";
+var SH_READ  = "https://script.google.com/macros/s/AKfycbw17se8NfE7m63Y3JnFngGm3kgRPvYQ6bWUD9IoV1tAsTQ8t3pFnQ-XrBJBkbSDsMZa/exec?action=getAll";
 var RATES    = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var P2K      = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
 var DAYSMAP  = {"1 Week":7,"2 Weeks":14,"3 Weeks":21,"1 Month":30,"2 Months":60};
@@ -997,9 +998,12 @@ function loadFromSheets() {
   window._shCb = function(data) {
     try { document.head.removeChild(sc); } catch(e) {}
     if (data && data.rows) {
+      var localApps = getApps();
       sheetsApps = data.rows.map(function(row) {
+        var sid = String(row[0]||"");
+        var localApp = localApps.find(function(a){ return a.id === sid; }) || {};
         return {
-          id: String(row[0]||""), firstName: String(row[1]||""), lastName: String(row[2]||""),
+          id: sid, firstName: String(row[1]||""), lastName: String(row[2]||""),
           phone: String(row[3]||""), email: String(row[4]||""), nationalId: String(row[5]||""),
           dob: String(row[6]||""), gender: String(row[7]||""), address: String(row[8]||""),
           loanType: String(row[9]||""), loanAmount: row[10]||0, repayPeriod: String(row[11]||""),
@@ -1008,7 +1012,10 @@ function loadFromSheets() {
           collateralItem: String(row[16]||""), collateralValue: row[17]||0,
           collateralDesc: String(row[18]||""), paymentInfo: String(row[19]||""),
           submittedAt: String(row[20]||""), status: String(row[21]||"pending").toLowerCase(),
-          actionedAt: "", rejectionReason: ""
+          actionedAt: String(row[22]||localApp.actionedAt||""),
+          rejectionReason: String(row[23]||localApp.rejectionReason||""),
+          idPhotoB64: localApp.idPhotoB64||"",
+          latitude: localApp.latitude||"", longitude: localApp.longitude||""
         };
       });
       sheetsLoaded = true; renderTable(); updateStats();
@@ -1094,7 +1101,7 @@ function updateStatus(id, status, reason) {
   showToast("Saving " + label + " status...", "info");
   var sc = document.createElement("script");
   var cb = "_uc_" + Date.now();
-  var url = SH_URL + "?action=updateStatus&app_id=" + encodeURIComponent(id) + "&status=" + encodeURIComponent(status) + "&col=22&callback=" + cb;
+  var url = SH_URL + "?action=updateStatus&app_id=" + encodeURIComponent(id) + "&status=" + encodeURIComponent(status) + "&col=22&actionedAt=" + encodeURIComponent(now_ts) + "&reason=" + encodeURIComponent(reason||"") + "&callback=" + cb;
   window[cb] = function(data) {
     try { document.head.removeChild(sc); } catch(e) {} delete window[cb];
     showToast("Application " + label + " and saved.", status === "approved" ? "success" : "error");
@@ -1403,6 +1410,53 @@ function loadTracker() {
   if(e1)e1.textContent=ct; if(e2)e2.textContent=cot; if(e3)e3.textContent=cds; if(e4)e4.textContent=cov;
   if (cds > 0) showToast(cds + " loan" + (cds===1?" is":" are") + " due within 5 days!", "info");
   if (cov > 0) showToast(cov + " loan" + (cov===1?" is":" are") + " overdue!", "error");
+}
+
+// ── GEOLOCATION ──────────────────────────────────────────────
+function getMyLocation() {
+  var btn = document.getElementById("geoBtn");
+  if (btn) { btn.textContent = "&#128205; Detecting..."; btn.disabled = true; }
+  if (!navigator.geolocation) {
+    showToast("Geolocation is not supported by your browser.", "error");
+    if (btn) { btn.innerHTML = "&#128205; Use My Location"; btn.disabled = false; }
+    return;
+  }
+  navigator.geolocation.getCurrentPosition(
+    function(pos) {
+      var lat = pos.coords.latitude;
+      var lng = pos.coords.longitude;
+      selLat = String(lat);
+      selLng = String(lng);
+      fetch("https://nominatim.openstreetmap.org/reverse?format=json&lat=" + lat + "&lon=" + lng + "&zoom=16&addressdetails=1", {headers:{"Accept-Language":"en"}})
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data && data.display_name) {
+            var inp = document.getElementById("address");
+            if (inp) {
+              inp.value = data.display_name;
+              inp.classList.remove("err");
+              document.getElementById("err-address").classList.remove("show");
+            }
+            var box = document.getElementById("mapBox");
+            box.style.display = "flex";
+            document.getElementById("mapTxt").textContent = data.display_name.split(",").slice(0,3).join(",");
+            document.getElementById("mapLink").href = "https://www.google.com/maps?q=" + lat + "," + lng;
+            showToast("Location detected and filled!", "success");
+          }
+          if (btn) { btn.innerHTML = "&#128205; Use My Location"; btn.disabled = false; }
+        })
+        .catch(function() {
+          showToast("Could not get address. Please type manually.", "error");
+          if (btn) { btn.innerHTML = "&#128205; Use My Location"; btn.disabled = false; }
+        });
+    },
+    function(err) {
+      var msg = err.code === 1 ? "Location permission denied. Please type your address manually." : "Could not detect location. Please type your address manually.";
+      showToast(msg, "info");
+      if (btn) { btn.innerHTML = "&#128205; Use My Location"; btn.disabled = false; }
+    },
+    {enableHighAccuracy: true, timeout: 10000, maximumAge: 0}
+  );
 }
 
 // ── ADDRESS AUTOCOMPLETE ──────────────────────────────────────
