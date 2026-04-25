@@ -470,7 +470,13 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
               </select>
               <div class="ferr" id="err-repayPeriod">Please select a repayment period</div>
             </div>
-            <div class="field"><label>Employment Status <span class="req">*</span></label><select id="employment"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="ferr" id="err-employment">Please select employment status</div></div>
+            <div class="field"><label>Employment Status <span class="req">*</span></label><select id="employment" onchange="toggleEmployer()"><option value="">Select status</option><option>Employed (Formal)</option><option>Self Employed</option><option>Business Owner</option><option>Student</option><option>Other</option></select><div class="ferr" id="err-employment">Please select employment status</div></div>
+          </div>
+          <div id="employerBox" style="display:none;">
+            <div class="frow">
+              <div class="field"><label>Employer Name <span class="req">*</span></label><input type="text" id="employerName" placeholder="e.g. Malawi Government, Standard Bank"/><div class="ferr" id="err-employerName">Please enter your employer name</div></div>
+              <div class="field"><label>Employer Physical Address <span class="req">*</span></label><input type="text" id="employerAddress" placeholder="e.g. Capital Hill, Lilongwe"/><div class="ferr" id="err-employerAddress">Please enter employer address</div></div>
+            </div>
           </div>
           <div class="calc-inline" id="calcInline">
             <div style="display:flex;flex-wrap:wrap;gap:1rem;align-items:center;">
@@ -833,6 +839,23 @@ function handleIdUpload(e) {
   r.readAsDataURL(f);
 }
 
+// ── EMPLOYER TOGGLE ──────────────────────────────────────────
+function toggleEmployer() {
+  var emp = document.getElementById("employment").value;
+  var box = document.getElementById("employerBox");
+  if (emp === "Employed (Formal)") {
+    box.style.display = "block";
+  } else {
+    box.style.display = "none";
+    var en = document.getElementById("employerName");
+    var ea = document.getElementById("employerAddress");
+    if (en) { en.value = ""; en.classList.remove("err"); }
+    if (ea) { ea.value = ""; ea.classList.remove("err"); }
+    document.getElementById("err-employerName").classList.remove("show");
+    document.getElementById("err-employerAddress").classList.remove("show");
+  }
+}
+
 // ── VALIDATE ──────────────────────────────────────────────────
 function validate() {
   var req = ["firstName","lastName","phone","nationalId","dob","address","loanType","loanAmount","repayPeriod","employment","income","collateralItem","collateralValue","collateralDesc"];
@@ -858,6 +881,13 @@ function validate() {
     var e2 = document.getElementById("err-collateralValue");
     e2.textContent = "Collateral (MK " + c.toLocaleString() + ") must exceed loan (MK " + l.toLocaleString() + ")";
     e2.classList.add("show"); ok = false;
+  }
+  // Employer fields required if Employed (Formal)
+  if (document.getElementById("employment").value === "Employed (Formal)") {
+    var en = document.getElementById("employerName");
+    var ea = document.getElementById("employerAddress");
+    if (!en.value.trim()) { en.classList.add("err"); document.getElementById("err-employerName").classList.add("show"); ok = false; }
+    if (!ea.value.trim()) { ea.classList.add("err"); document.getElementById("err-employerAddress").classList.add("show"); ok = false; }
   }
   if (!selPay_) { document.getElementById("err-payMethod").classList.add("show"); ok = false; }
   else { document.getElementById("err-payMethod").classList.remove("show"); }
@@ -934,6 +964,8 @@ function submitForm() {
       interestRate: (rt*100).toFixed(0) + "%",
       totalRepayment: tr,
       employment:(document.getElementById("employment").value||""),
+      employerName:    document.getElementById("employment").value === "Employed (Formal)" ? (document.getElementById("employerName").value||"").trim() : "",
+      employerAddress: document.getElementById("employment").value === "Employed (Formal)" ? (document.getElementById("employerAddress").value||"").trim() : "",
       income:    (document.getElementById("income").value||"").trim(),
       collateralItem:  (document.getElementById("collateralItem").value||"").trim(),
       collateralValue: (document.getElementById("collateralValue").value||"").trim(),
@@ -951,7 +983,10 @@ function submitForm() {
       loan_type: app.loanType, loan_amount: "MK " + la.toLocaleString(),
       repay_period: pv, interest_rate: app.interestRate,
       total_repayment: "MK " + tr.toLocaleString(),
-      employment: app.employment, income: "MK " + (Number(app.income)||0).toLocaleString(),
+      employment: app.employment,
+      employer_name: app.employerName||"",
+      employer_address: app.employerAddress||"",
+      income: "MK " + (Number(app.income)||0).toLocaleString(),
       collateral_item: app.collateralItem,
       collateral_value: "MK " + (Number(app.collateralValue)||0).toLocaleString(),
       collateral_desc: app.collateralDesc, payment_method: pi,
@@ -973,6 +1008,7 @@ function submitForm() {
       document.getElementById("pd-bank").classList.remove("show");
       updateCollNote();
       document.getElementById("calcInline").style.display = "none";
+      document.getElementById("employerBox").style.display = "none";
     } catch(e) {}
   } catch(fatal) { console.log("Submit error:", fatal); }
   resetBtn();
@@ -982,7 +1018,7 @@ document.getElementById("subBtn").addEventListener("click", function(e) { e.prev
 
 // ── GOOGLE SHEETS ─────────────────────────────────────────────
 function saveToSheets(app) {
-  var p = ["app_id="+encodeURIComponent(app.id),"firstName="+encodeURIComponent(app.firstName),"lastName="+encodeURIComponent(app.lastName),"phone="+encodeURIComponent(app.phone),"email="+encodeURIComponent(app.email),"nationalId="+encodeURIComponent(app.nationalId),"dob="+encodeURIComponent(app.dob),"gender="+encodeURIComponent(app.gender),"address="+encodeURIComponent(app.address),"loanType="+encodeURIComponent(app.loanType),"loanAmount="+encodeURIComponent(app.loanAmount),"repayPeriod="+encodeURIComponent(app.repayPeriod),"interestRate="+encodeURIComponent(app.interestRate),"totalRepayment="+encodeURIComponent(app.totalRepayment),"employment="+encodeURIComponent(app.employment),"income="+encodeURIComponent(app.income),"collateralItem="+encodeURIComponent(app.collateralItem),"collateralValue="+encodeURIComponent(app.collateralValue),"collateralDesc="+encodeURIComponent(app.collateralDesc),"paymentMethod="+encodeURIComponent(app.paymentInfo||app.paymentMethod||""),"submittedAt="+encodeURIComponent(app.submittedAt)].join("&");
+  var p = ["app_id="+encodeURIComponent(app.id),"firstName="+encodeURIComponent(app.firstName),"lastName="+encodeURIComponent(app.lastName),"phone="+encodeURIComponent(app.phone),"email="+encodeURIComponent(app.email),"nationalId="+encodeURIComponent(app.nationalId),"dob="+encodeURIComponent(app.dob),"gender="+encodeURIComponent(app.gender),"address="+encodeURIComponent(app.address),"loanType="+encodeURIComponent(app.loanType),"loanAmount="+encodeURIComponent(app.loanAmount),"repayPeriod="+encodeURIComponent(app.repayPeriod),"interestRate="+encodeURIComponent(app.interestRate),"totalRepayment="+encodeURIComponent(app.totalRepayment),"employment="+encodeURIComponent(app.employment),"income="+encodeURIComponent(app.income),"collateralItem="+encodeURIComponent(app.collateralItem),"collateralValue="+encodeURIComponent(app.collateralValue),"collateralDesc="+encodeURIComponent(app.collateralDesc),"paymentMethod="+encodeURIComponent(app.paymentInfo||app.paymentMethod||""),"submittedAt="+encodeURIComponent(app.submittedAt),"employerName="+encodeURIComponent(app.employerName||""),"employerAddress="+encodeURIComponent(app.employerAddress||"")].join("&");
   var sc = document.createElement("script");
   var cb = "_sv_" + Date.now();
   window[cb] = function() { try { document.head.removeChild(sc); } catch(e) {} delete window[cb]; };
@@ -1179,6 +1215,8 @@ function viewApp(id) {
     '<div class="mf"><div class="mf-lbl">Interest Rate</div><div class="mf-val">' + fR(app.interestRate) + '</div></div>' +
     '<div class="mf"><div class="mf-lbl">Total Repayment</div><div class="mf-val" style="color:var(--warn);font-weight:700;">' + fMK(tot) + '</div></div>' +
     '<div class="mf"><div class="mf-lbl">Employment</div><div class="mf-val">' + fS(app.employment) + '</div></div>' +
+    (app.employerName ? '<div class="mf"><div class="mf-lbl">Employer Name</div><div class="mf-val">' + fS(app.employerName) + '</div></div>' : '') +
+    (app.employerAddress ? '<div class="mf"><div class="mf-lbl">Employer Address</div><div class="mf-val">' + fS(app.employerAddress) + '</div></div>' : '') +
     '<div class="mf"><div class="mf-lbl">Monthly Income</div><div class="mf-val">' + fMK(app.income) + '</div></div>' +
     '<div class="mf"><div class="mf-lbl">Collateral Item</div><div class="mf-val">' + fS(app.collateralItem) + '</div></div>' +
     '<div class="mf"><div class="mf-lbl">Collateral Value</div><div class="mf-val" style="color:var(--ok);font-weight:700;">' + fMK(app.collateralValue) + '</div></div>' +
