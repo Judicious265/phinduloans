@@ -32,8 +32,15 @@ nav{position:fixed;top:0;left:0;right:0;z-index:200;display:flex;align-items:cen
 .back-btn:hover{border-color:var(--gold);color:var(--gold);}
 /* Hero */
 .hero-wrap{min-height:calc(100vh - 72px);display:flex;align-items:center;padding:4rem 5% 5rem;position:relative;overflow:hidden;}
+
+
+.hero-content{position:relative;z-index:2;}
 .hero-bg{position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 60% 40%,rgba(201,168,76,.08) 0%,transparent 70%),linear-gradient(180deg,var(--deep) 0%,var(--deep2) 100%);}
 .hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(201,168,76,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(201,168,76,.04) 1px,transparent 1px);background-size:60px 60px;}
+
+
+@media(max-width:960px){}
+@media(max-width:600px){}
 .hero-content{position:relative;z-index:1;max-width:620px;}
 .hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(201,168,76,.12);border:1px solid rgba(201,168,76,.3);padding:.4rem 1rem;border-radius:50px;font-size:.8rem;color:var(--gold-l);margin-bottom:1.5rem;}
 .bdot{width:6px;height:6px;background:var(--gold);border-radius:50%;animation:pulse 2s infinite;}
@@ -661,9 +668,9 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
 var EJS_KEY  = "LqW2mAfvnN9B_leO1";
 var EJS_SVC  = "service_zunei3e";
 var EJS_TPL  = "template_4m5wthi";
-var ADMIN_PW = "Mandela1945!!";
-var SH_URL   = "https://script.google.com/macros/s/AKfycbw17se8NfE7m63Y3JnFngGm3kgRPvYQ6bWUD9IoV1tAsTQ8t3pFnQ-XrBJBkbSDsMZa/exec";
-var SH_READ  = "https://script.google.com/macros/s/AKfycbw17se8NfE7m63Y3JnFngGm3kgRPvYQ6bWUD9IoV1tAsTQ8t3pFnQ-XrBJBkbSDsMZa/exec?action=getAll";
+var ADMIN_PW = "phindu2026";
+var SH_URL   = "https://script.google.com/macros/s/AKfycbyChjXzg-85k0jvQTwqVbcDt5xE932Y24RGfETb5bItlkbaP2wUKe29lUAWqYkhSGhY/exec";
+var SH_READ  = "https://script.google.com/macros/s/AKfycbyChjXzg-85k0jvQTwqVbcDt5xE932Y24RGfETb5bItlkbaP2wUKe29lUAWqYkhSGhY/exec?action=getAll";
 var RATES    = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var P2K      = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
 var DAYSMAP  = {"1 Week":7,"2 Weeks":14,"3 Weeks":21,"1 Month":30,"2 Months":60};
@@ -1151,8 +1158,8 @@ function updateStatus(id, status, reason) {
     var due = getDueDate(cust.submittedAt, cust.repayPeriod);
     var dueStr = fmtDate(due);
     var msg = status === "approved"
-      ? "Phindu Micro Finance: Dear " + cust.firstName + ", your loan of MK " + Number(cust.loanAmount).toLocaleString() + " has been APPROVED. Due: " + dueStr + ". Contact: +265994016935"
-      : "Phindu Micro Finance: Dear " + cust.firstName + ", your loan of MK " + Number(cust.loanAmount).toLocaleString() + " has been REJECTED." + (reason ? " Reason: " + reason : "") + " Contact: +265994016935";
+      ? "PHINDU MICRO FINANCE: Dear " + cust.firstName + " " + cust.lastName + ", your loan of MK " + Number(cust.loanAmount).toLocaleString() + " has been APPROVED! Repayment due: " + dueStr + ". Pay to Acct No: 1006344794 (National Bank of Malawi). Enquiries: +265994016935"
+      : "PHINDU MICRO FINANCE: Dear " + cust.firstName + " " + cust.lastName + ", your loan application of MK " + Number(cust.loanAmount).toLocaleString() + " has been REJECTED." + (reason ? " Reason: " + reason + "." : "") + " Enquiries: +265994016935";
     sendSMS(cust.phone, msg);
   }
 }
@@ -1314,13 +1321,36 @@ function addRemLog(id, msg) {
   localStorage.setItem("remlog_" + id, JSON.stringify(log));
 }
 
+// Africa's Talking SMS via Google Apps Script proxy
+var AT_PROXY = SH_URL; // reuse same Apps Script - add sendSMS action
+
 function sendSMS(phone, msg) {
   try {
-    var c = String(phone).replace(/\s/g,"").replace(/^\+/,"");
-    if (!c.startsWith("265")) c = "265" + c.replace(/^0/,"");
-    var img = new Image();
-    img.src = "https://textbelt.com/text?phone=%2B" + c + "&message=" + encodeURIComponent(msg) + "&key=textbelt";
-    console.log("SMS to +" + c);
+    var clean = String(phone).replace(/\s/g,"").replace(/^\+/,"");
+    if (!clean.startsWith("265")) clean = "265" + clean.replace(/^0/,"");
+    var fullPhone = "+" + clean;
+    console.log("Sending SMS to:", fullPhone);
+    console.log("Message:", msg);
+    // Call Google Apps Script which calls Africa's Talking
+    var sc = document.createElement("script");
+    var cb = "_sms_" + Date.now();
+    var url = SH_URL + "?action=sendSMS&phone=" + encodeURIComponent(fullPhone) + "&message=" + encodeURIComponent(msg) + "&callback=" + cb;
+    window[cb] = function(data) {
+      try { document.head.removeChild(sc); } catch(e) {}
+      delete window[cb];
+      if (data && data.status === "success") {
+        console.log("SMS sent successfully to:", fullPhone);
+      } else {
+        console.log("SMS response:", JSON.stringify(data));
+      }
+    };
+    sc.onerror = function() {
+      try { document.head.removeChild(sc); } catch(e) {}
+      delete window[cb];
+      console.log("SMS script error");
+    };
+    sc.src = url;
+    document.head.appendChild(sc);
   } catch(e) { console.log("SMS error:", e); }
 }
 
@@ -1331,28 +1361,47 @@ function sendReminderSMS(appId, daysLeft) {
   var due = getDueDate(a.submittedAt, a.repayPeriod);
   var dueStr = fmtDate(due);
   var repaid = getRepaid(a.id), total = Number(a.totalRepayment) || 0, rem = total - repaid;
+  var acct = "Acct No: 1006344794 (National Bank of Malawi)";
+  var contact = "Enquiries: +265994016935";
   var msg;
-  if (daysLeft < 0) msg = "Phindu Micro Finance: Dear " + a.firstName + ", your loan repayment of MK " + rem.toLocaleString() + " was due on " + dueStr + " and is OVERDUE. Contact: +265994016935";
-  else if (daysLeft === 0) msg = "Phindu Micro Finance: Dear " + a.firstName + ", your loan repayment of MK " + rem.toLocaleString() + " is due TODAY (" + dueStr + "). Contact: +265994016935";
-  else msg = "Phindu Micro Finance: Dear " + a.firstName + ", your loan repayment of MK " + rem.toLocaleString() + " is due in " + daysLeft + " day" + (daysLeft===1?"":"s") + " (" + dueStr + "). Contact: +265994016935";
+  if (daysLeft < 0) {
+    msg = "PHINDU MICRO FINANCE: Dear " + a.firstName + " " + a.lastName + ", your loan repayment of MK " + rem.toLocaleString() + " was due on " + dueStr + " and is now OVERDUE. Please pay urgently. " + acct + ". " + contact;
+  } else if (daysLeft === 0) {
+    msg = "PHINDU MICRO FINANCE: Dear " + a.firstName + " " + a.lastName + ", your loan repayment of MK " + rem.toLocaleString() + " is due TODAY (" + dueStr + "). Please make payment now. " + acct + ". " + contact;
+  } else {
+    msg = "PHINDU MICRO FINANCE: Dear " + a.firstName + " " + a.lastName + ", your loan repayment of MK " + rem.toLocaleString() + " is due in " + daysLeft + " day" + (daysLeft===1?"":"s") + " on " + dueStr + ". Please prepare payment. " + acct + ". " + contact;
+  }
+  showToast("Sending SMS to " + a.firstName + " (" + a.phone + ")...", "info");
   sendSMS(a.phone, msg);
-  addRemLog(a.id, "SMS sent: " + msg.substring(0, 60) + "...");
-  showToast("Reminder SMS sent to " + a.firstName + ".", "success");
-  loadTracker();
+  addRemLog(a.id, "SMS sent (" + (daysLeft < 0 ? "OVERDUE" : daysLeft === 0 ? "DUE TODAY" : daysLeft + "d left") + "): MK " + rem.toLocaleString() + " due " + dueStr);
+  setTimeout(function() {
+    showToast("Reminder SMS sent to " + a.firstName + " " + a.lastName + "!", "success");
+    loadTracker();
+  }, 1500);
 }
 
 function sendAllReminders() {
   var apps = (sheetsLoaded ? sheetsApps : getApps()).filter(function(a) { return a.status === "approved"; });
   var sent = 0;
+  var names = [];
   apps.forEach(function(a) {
     var due = getDueDate(a.submittedAt, a.repayPeriod);
     var dl = getDaysLeft(due);
     var rep = getRepaid(a.id), tot = Number(a.totalRepayment) || 0;
     var cat = getLoanCat(dl, rep, tot);
-    if (cat === "due-soon" || cat === "overdue") { sendReminderSMS(a.id, dl); sent++; }
+    if ((cat === "due-soon" || cat === "overdue") && cat !== "paid") {
+      sendReminderSMS(a.id, dl);
+      names.push(a.firstName);
+      sent++;
+    }
   });
-  if (sent === 0) showToast("No customers need reminders right now.", "info");
-  else showToast("Sent " + sent + " reminder SMS!", "success");
+  if (sent === 0) {
+    showToast("No customers due within 5 days or overdue.", "info");
+  } else {
+    setTimeout(function() {
+      showToast("Sent " + sent + " SMS reminder" + (sent===1?"":"s") + " to: " + names.join(", "), "success");
+    }, 2000);
+  }
 }
 
 function logPayment(id, total) {
