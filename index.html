@@ -1475,7 +1475,7 @@ function buildTrCard(a) {
   html += '</div>';
   if (cat !== "paid") {
     html += '<div class="tr-acts">';
-    html += '<input type="text" inputmode="numeric" class="tr-inp" id="rp_' + a.id + '" placeholder="e.g. 50,000" oninput="fmtComma(this)" onkeydown="if(event.key==='Enter '){logPayment(''+a.id+'','+tot+')}" style="font-weight:600;"/>';
+    html += '<input type="text" inputmode="numeric" class="tr-inp" id="rp_' + a.id + '" placeholder="e.g. 50,000" oninput="fmtComma(this)"  style="font-weight:600;"/>';
     html += '<button class="btn-p" style="padding:.5rem .9rem;font-size:.8rem;" onclick="logPayment(\'' + a.id + '\',' + tot + ')">Log</button>';
     if (cr) html += '<button class="act-btn" style="border-color:var(--warn);color:var(--warn);padding:.4rem .8rem;font-size:.75rem;" onclick="sendReminderSMS(\'' + a.id + '\',' + dl + ')">&#128241; Remind</button>';
     html += '</div>';
