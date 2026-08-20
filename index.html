@@ -668,8 +668,8 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
 var EJS_KEY  = "LqW2mAfvnN9B_leO1";
 var EJS_SVC  = "service_zunei3e";
 var EJS_TPL  = "template_4m5wthi";
-var ADMIN_PW = "Mandela1945!!";
-var SH_URL   = "https://script.google.com/macros/s/AKfycbwfAwEq_GylBSv6ouiOc4zNFV6-iAnvUiMEMEH2HzafuTaC8gZuzR1TX83MKZKhT_7g/exec";
+var ADMIN_PW = "phindu2026";
+var SH_URL   = "https://script.google.com/macros/s/AKfycbxrAFFbG8ZvJ0sq2h6uycNjrxth89ClvX6MKrtU6Wt3ytuUk0Y5-nwJRsIKQqsFV3Ww/exec";
 var SH_READ  = "https://script.google.com/macros/s/AKfycbxrAFFbG8ZvJ0sq2h6uycNjrxth89ClvX6MKrtU6Wt3ytuUk0Y5-nwJRsIKQqsFV3Ww/exec?action=getAll";
 var RATES    = {"1week":0.10,"2weeks":0.20,"3weeks":0.30,"1month":0.35,"2months":0.50};
 var P2K      = {"1 Week":"1week","2 Weeks":"2weeks","3 Weeks":"3weeks","1 Month":"1month","2 Months":"2months"};
@@ -1362,7 +1362,7 @@ function sendReminderSMS(appId, daysLeft) {
   var dueStr = fmtDate(due);
   var repaid = getRepaid(a.id), total = Number(a.totalRepayment) || 0, rem = total - repaid;
   var acct = "Acct No: 1006344794 (National Bank of Malawi)";
-  var contact = "Enquiries: +265998337818";
+  var contact = "Enquiries: +265994016935";
   var msg;
   if (daysLeft < 0) {
     msg = "PHINDU MICRO FINANCE: Dear " + a.firstName + " " + a.lastName + ", your loan repayment of MK " + rem.toLocaleString() + " was due on " + dueStr + " and is now OVERDUE. Please pay urgently. " + acct + ". " + contact;
@@ -1406,14 +1406,36 @@ function sendAllReminders() {
 
 function logPayment(id, total) {
   var inp = document.getElementById("rp_" + id);
-  var amt = Number(inp.value) || 0;
-  if (!amt || amt <= 0) { showToast("Enter a valid payment amount.", "error"); return; }
-  var prev = getRepaid(id), np = Math.min(total, prev + amt);
+  if (!inp) { showToast("Input field not found. Please refresh.", "error"); return; }
+  // Strip commas, spaces, any non-numeric chars
+  var raw = String(inp.value).replace(/,/g, "").replace(/\s/g, "").replace(/[^0-9.]/g, "").trim();
+  var amt = parseFloat(raw);
+  if (!raw || isNaN(amt) || amt <= 0) {
+    showToast("Please enter a valid amount e.g. 50,000", "error");
+    inp.style.borderColor = "var(--err)";
+    inp.focus();
+    setTimeout(function(){ inp.style.borderColor = ""; }, 2000);
+    return;
+  }
+  var tot  = Number(total) || 0;
+  var prev = getRepaid(id);
+  var np   = Math.min(tot, prev + amt);
   setRepaid(id, np);
-  addRemLog(id, "Payment logged: MK " + amt.toLocaleString());
+  var rem  = Math.max(0, tot - np);
+  addRemLog(id, "Payment: MK " + amt.toLocaleString() + " | Paid: MK " + np.toLocaleString() + " | Remaining: MK " + rem.toLocaleString());
   inp.value = "";
-  showToast("Payment of MK " + amt.toLocaleString() + " logged!", "success");
+  if (np >= tot && tot > 0) {
+    showToast("Loan FULLY REPAID! MK " + tot.toLocaleString() + " received.", "success");
+  } else {
+    showToast("MK " + amt.toLocaleString() + " logged. MK " + rem.toLocaleString() + " remaining.", "success");
+  }
   loadTracker();
+}
+
+function fmtComma(inp) {
+  var raw = String(inp.value).replace(/,/g, "").replace(/[^0-9]/g, "");
+  if (raw === "") { inp.value = ""; return; }
+  inp.value = Number(raw).toLocaleString();
 }
 
 function switchTrTab(n, btn) {
@@ -1447,13 +1469,13 @@ function buildTrCard(a) {
   html += '</div></div>';
   html += '<div class="tr-prog"><div class="tr-fill ' + cat + '" style="width:' + pct + '%"></div></div>';
   html += '<div class="tr-amts">';
-  html += '<div class="tr-amt"><div class="tr-amt-val">MK ' + la.toLocaleString() + '</div><div class="tr-amt-lbl">Loan</div></div>';
-  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--ok);">MK ' + rep.toLocaleString() + '</div><div class="tr-amt-lbl">Paid (' + pct + '%)</div></div>';
-  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--warn);">MK ' + rem.toLocaleString() + '</div><div class="tr-amt-lbl">Remaining</div></div>';
+  html += '<div class="tr-amt"><div class="tr-amt-val">MK ' + Number(la).toLocaleString('en-US') + '</div><div class="tr-amt-lbl">Loan</div></div>';
+  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--ok);">MK ' + Number(rep).toLocaleString('en-US') + '</div><div class="tr-amt-lbl">Paid (' + pct + '%)</div></div>';
+  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--warn);">MK ' + Number(rem).toLocaleString('en-US') + '</div><div class="tr-amt-lbl">Remaining</div></div>';
   html += '</div>';
   if (cat !== "paid") {
     html += '<div class="tr-acts">';
-    html += '<input type="number" class="tr-inp" id="rp_' + a.id + '" placeholder="Log payment (MK)" min="1"/>';
+    html += '<input type="text" inputmode="numeric" class="tr-inp" id="rp_' + a.id + '" placeholder="e.g. 50,000" oninput="fmtComma(this)" onkeydown="if(event.key==='Enter '){logPayment(''+a.id+'','+tot+')}" style="font-weight:600;"/>';
     html += '<button class="btn-p" style="padding:.5rem .9rem;font-size:.8rem;" onclick="logPayment(\'' + a.id + '\',' + tot + ')">Log</button>';
     if (cr) html += '<button class="act-btn" style="border-color:var(--warn);color:var(--warn);padding:.4rem .8rem;font-size:.75rem;" onclick="sendReminderSMS(\'' + a.id + '\',' + dl + ')">&#128241; Remind</button>';
     html += '</div>';
