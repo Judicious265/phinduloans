@@ -259,6 +259,43 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
 .ft-copy{font-size:.8rem;color:var(--muted);}
 .ft-links button{font-size:.8rem;color:var(--muted);background:none;border:none;cursor:pointer;font-family:'DM Sans',sans-serif;margin-right:1rem;}
 .ft-links button:hover{color:var(--gold);}
+.cl-overlay{position:fixed;inset:0;background:rgba(10,15,30,.97);z-index:500;display:none;align-items:center;justify-content:center;padding:1rem;}
+.cl-overlay.open{display:flex;}
+.cl-box{background:var(--surf);border:1px solid rgba(201,168,76,.2);border-radius:20px;padding:2.5rem;width:100%;max-width:420px;text-align:center;}
+.cl-icon{font-size:2.5rem;margin-bottom:1rem;}
+.cl-title{font-family:"Playfair Display",serif;font-size:1.4rem;font-weight:700;margin-bottom:.3rem;}
+.cl-sub{font-size:.85rem;color:var(--muted);margin-bottom:1.8rem;line-height:1.6;}
+.cl-inp{width:100%;background:var(--surf2);border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:.8rem 1rem;color:var(--text);font-family:"DM Sans",sans-serif;font-size:.95rem;outline:none;margin-bottom:1rem;text-align:left;}
+.cl-inp:focus{border-color:var(--gold);box-shadow:0 0 0 3px rgba(201,168,76,.1);}
+.cl-btn{width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-d));color:var(--deep);border:none;border-radius:50px;padding:.9rem;font-family:"DM Sans",sans-serif;font-size:.95rem;font-weight:700;cursor:pointer;margin-bottom:.8rem;}
+.cl-err{color:var(--err);font-size:.82rem;margin-bottom:.8rem;display:none;padding:.5rem;background:rgba(239,68,68,.1);border-radius:8px;}
+.cl-err.show{display:block;}
+.cl-loading{color:var(--muted);font-size:.85rem;margin-bottom:.8rem;display:none;}
+.cl-loading.show{display:block;}
+/* Client dashboard */
+.cdash-header{background:linear-gradient(135deg,var(--surf) 0%,var(--surf2) 100%);border:1px solid rgba(201,168,76,.15);border-radius:16px;padding:1.5rem;margin-bottom:1.5rem;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:1rem;}
+.cdash-welcome{font-family:"Playfair Display",serif;font-size:1.2rem;font-weight:700;color:var(--gold);}
+.cdash-sub{font-size:.82rem;color:var(--muted);margin-top:3px;}
+.cl-logout{background:none;border:1px solid rgba(255,255,255,.15);border-radius:8px;color:var(--muted);padding:.4rem .9rem;font-size:.8rem;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .2s;}
+.cl-logout:hover{border-color:var(--err);color:var(--err);}
+.app-card{background:var(--surf);border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:1.3rem;margin-bottom:1rem;position:relative;overflow:hidden;}
+.app-card::before{content:"";position:absolute;top:0;left:0;width:4px;height:100%;}
+.app-card.pending::before{background:var(--warn);}
+.app-card.approved::before{background:var(--ok);}
+.app-card.rejected::before{background:var(--err);}
+.app-card-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem;gap:.5rem;flex-wrap:wrap;}
+.app-card-id{font-size:.72rem;color:var(--muted);margin-bottom:4px;}
+.app-card-type{font-weight:700;font-size:1rem;}
+.app-card-date{font-size:.75rem;color:var(--muted);text-align:right;}
+.app-card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.7rem;margin-bottom:.8rem;}
+.acg-item{background:var(--surf2);border-radius:8px;padding:.7rem;text-align:center;}
+.acg-val{font-size:.9rem;font-weight:700;color:var(--gold-l);}
+.acg-lbl{font-size:.68rem;color:var(--muted);margin-top:2px;}
+.app-status-row{display:flex;align-items:center;gap:.8rem;flex-wrap:wrap;}
+.rej-reason{background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.2);border-radius:8px;padding:.6rem .9rem;font-size:.82rem;color:#fca5a5;margin-top:.7rem;}
+.rej-reason-lbl{font-size:.7rem;font-weight:600;color:var(--err);text-transform:uppercase;letter-spacing:.08em;margin-bottom:3px;}
+.due-pill{display:inline-flex;align-items:center;gap:5px;background:rgba(201,168,76,.1);border:1px solid rgba(201,168,76,.2);border-radius:50px;padding:.25rem .75rem;font-size:.75rem;color:var(--gold-l);}
+.no-apps-cl{text-align:center;padding:3rem;color:var(--muted);}
 @keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
 .fu{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease;}
 .fu.vis{opacity:1;transform:translateY(0);}
@@ -287,7 +324,7 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
     <li><button onclick="showPage('calculator')" id="nav-calculator">Calculator</button></li>
     <li><button onclick="showPage('apply')" id="nav-apply">Apply</button></li>
     <li><button onclick="showPage('contact')" id="nav-contact">Contact</button></li>
-    <li><button onclick="openDashboard()" id="nav-dashboard">Dashboard</button></li>
+    <li><button onclick="openClientLogin()" id="nav-myaccount">My Account</button></li>
     <li><button onclick="showPage('apply')" class="nav-cta">Apply Now</button></li>
   </ul>
   <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
@@ -296,9 +333,9 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
   <button onclick="showPage('home');toggleMenu()">Home</button>
   <button onclick="showPage('loans');toggleMenu()">Loan Types</button>
   <button onclick="showPage('calculator');toggleMenu()">Calculator</button>
+  <button onclick="openClientLogin();toggleMenu()">My Account</button>
   <button onclick="showPage('apply');toggleMenu()">Apply Now</button>
   <button onclick="showPage('contact');toggleMenu()">Contact</button>
-  <button onclick="openDashboard();toggleMenu()">Dashboard</button>
 </div>
 
 <!-- HOME -->
@@ -595,6 +632,42 @@ footer{background:var(--deep2);border-top:1px solid rgba(255,255,255,.06);paddin
     <div class="tr-panel" id="tp-paid"></div>
   </div>
   <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="openDashboard()">Dashboard</button></div></footer>
+</div>
+
+<!-- CLIENT LOGIN OVERLAY -->
+<div class="cl-overlay" id="clLoginOv">
+  <div class="cl-box">
+    <div class="cl-icon">&#128100;</div>
+    <div class="cl-title">My Account</div>
+    <div class="cl-sub">Enter your National ID and Phone Number to view your loan applications</div>
+    <input type="text" class="cl-inp" id="clNatId" placeholder="National ID e.g. MW-1234-5678-9012" autocomplete="off"/>
+    <input type="tel" class="cl-inp" id="clPhone" placeholder="Phone Number e.g. +265 999 123 456"/>
+    <div class="cl-err" id="clErr">National ID or Phone number not found. Please check and try again.</div>
+    <div class="cl-loading" id="clLoading">&#128269; Searching for your account...</div>
+    <button class="cl-btn" onclick="clientLogin()">View My Applications</button>
+    <button onclick="document.getElementById('clLoginOv').classList.remove('open')" style="background:none;border:none;color:var(--muted);font-family:'DM Sans',sans-serif;font-size:.85rem;cursor:pointer;text-decoration:underline;">Cancel</button>
+  </div>
+</div>
+
+<!-- CLIENT DASHBOARD PAGE -->
+<div class="page" id="page-clientdash">
+  <div class="sec">
+    <div class="cdash-header">
+      <div>
+        <div class="cdash-welcome" id="cdWelcome">Welcome back!</div>
+        <div class="cdash-sub" id="cdSub">Here are your loan applications</div>
+      </div>
+      <button class="cl-logout" onclick="clientLogout()">&#128274; Sign Out</button>
+    </div>
+    <div class="dash-stats" style="margin-bottom:1.5rem;">
+      <div class="ds tot"><div class="ds-num" id="cd-tot">0</div><div class="ds-lbl">Applications</div></div>
+      <div class="ds pend"><div class="ds-num" id="cd-pend">0</div><div class="ds-lbl">Pending</div></div>
+      <div class="ds appr"><div class="ds-num" id="cd-appr">0</div><div class="ds-lbl">Approved</div></div>
+      <div class="ds rej"><div class="ds-num" id="cd-rej">0</div><div class="ds-lbl">Rejected</div></div>
+    </div>
+    <div id="cdAppsList"></div>
+  </div>
+  <footer><div class="ft-logo">Phindu Micro Finance</div><div class="ft-copy">&copy; 2026 Phindu Micro Finance. All rights reserved.</div><div class="ft-links"><button onclick="showPage('home')">Home</button><button onclick="showPage('apply')">Apply Again</button></div></footer>
 </div>
 
 <!-- DASHBOARD LOGIN -->
@@ -1578,6 +1651,205 @@ function loadTracker() {
   if (cov > 0) showToast(cov + " loan" + (cov===1?" is":" are") + " overdue!", "error");
 }
 
+// ── CLIENT LOGIN ─────────────────────────────────────────────
+var clientUser = null;
+
+function openClientLogin() {
+  if (clientUser) {
+    showPage('clientdash');
+    return;
+  }
+  document.getElementById('clLoginOv').classList.add('open');
+  document.getElementById('clNatId').value = '';
+  document.getElementById('clPhone').value = '';
+  document.getElementById('clErr').classList.remove('show');
+  document.getElementById('clLoading').classList.remove('show');
+  setTimeout(function() { document.getElementById('clNatId').focus(); }, 150);
+}
+
+function clientLogin() {
+  var natId = document.getElementById('clNatId').value.trim();
+  var phone = document.getElementById('clPhone').value.trim().replace(/\s/g, '');
+  var errEl = document.getElementById('clErr');
+  var loadEl = document.getElementById('clLoading');
+
+  if (!natId || !phone) {
+    errEl.textContent = 'Please enter both your National ID and Phone Number.';
+    errEl.classList.add('show');
+    return;
+  }
+  errEl.classList.remove('show');
+  loadEl.classList.add('show');
+
+  // Load from sheets and match
+  var sc = document.createElement('script');
+  var cb = '_clLogin_' + Date.now();
+  window[cb] = function(data) {
+    try { document.head.removeChild(sc); } catch(e) {}
+    delete window[cb];
+    loadEl.classList.remove('show');
+
+    if (!data || !data.rows) {
+      errEl.textContent = 'Unable to connect. Please try again.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    // Match National ID and Phone (flexible matching)
+    var cleanPhone = phone.replace(/^\+265/, '0').replace(/^265/, '0');
+    var found = [];
+    data.rows.forEach(function(row) {
+      var rowNatId = String(row[5] || '').trim().toLowerCase();
+      var rowPhone = String(row[3] || '').trim().replace(/\s/g, '').replace(/^\+265/, '0').replace(/^265/, '0');
+      var inputNatId = natId.toLowerCase().trim();
+      var inputPhone = cleanPhone;
+      if (rowNatId === inputNatId && rowPhone === inputPhone) {
+        found.push({
+          id:              String(row[0]  || ''),
+          firstName:       String(row[1]  || ''),
+          lastName:        String(row[2]  || ''),
+          phone:           String(row[3]  || ''),
+          loanType:        String(row[9]  || ''),
+          loanAmount:      row[10] || 0,
+          repayPeriod:     String(row[11] || ''),
+          interestRate:    String(row[12] || ''),
+          totalRepayment:  row[13] || 0,
+          submittedAt:     String(row[20] || ''),
+          status:          String(row[21] || 'Pending').toLowerCase(),
+          actionedAt:      String(row[22] || ''),
+          rejectionReason: String(row[23] || '')
+        });
+      }
+    });
+
+    if (found.length === 0) {
+      errEl.textContent = 'No account found with that National ID and Phone Number. Please check your details.';
+      errEl.classList.add('show');
+      return;
+    }
+
+    // Login successful
+    clientUser = { firstName: found[0].firstName, lastName: found[0].lastName, apps: found };
+    document.getElementById('clLoginOv').classList.remove('open');
+    renderClientDash();
+    showPage('clientdash');
+  };
+
+  sc.onerror = function() {
+    try { document.head.removeChild(sc); } catch(e) {}
+    delete window[cb];
+    loadEl.classList.remove('show');
+    errEl.textContent = 'Connection error. Please try again.';
+    errEl.classList.add('show');
+  };
+  sc.src = SH_READ.replace('?action=getAll', '?action=getAll&callback=' + cb) + '&t=' + Date.now();
+  document.head.appendChild(sc);
+}
+
+function clientLogout() {
+  clientUser = null;
+  showPage('home');
+}
+
+function renderClientDash() {
+  if (!clientUser) return;
+  var apps  = clientUser.apps;
+  var fname = clientUser.firstName;
+  var lname = clientUser.lastName;
+
+  document.getElementById('cdWelcome').textContent = 'Welcome, ' + fname + ' ' + lname + '!';
+  document.getElementById('cdSub').textContent = 'You have ' + apps.length + ' loan application' + (apps.length === 1 ? '' : 's') + ' with us.';
+
+  // Stats
+  document.getElementById('cd-tot').textContent  = apps.length;
+  document.getElementById('cd-pend').textContent = apps.filter(function(a){ return a.status === 'pending'; }).length;
+  document.getElementById('cd-appr').textContent = apps.filter(function(a){ return a.status === 'approved'; }).length;
+  document.getElementById('cd-rej').textContent  = apps.filter(function(a){ return a.status === 'rejected'; }).length;
+
+  var list = document.getElementById('cdAppsList');
+  if (apps.length === 0) {
+    list.innerHTML = '<div class="no-apps-cl"><div style="font-size:3rem;margin-bottom:1rem;">&#128203;</div><p>No applications found.</p><button class="btn-p" onclick="showPage(&quot;apply&quot;)" style="margin-top:1rem;">Apply Now</button></div>';
+    return;
+  }
+
+  list.innerHTML = apps.map(function(a) {
+    var sc   = (a.status || 'pending').toLowerCase();
+    var sl   = sc.charAt(0).toUpperCase() + sc.slice(1);
+    var due  = getDueDate(a.submittedAt, a.repayPeriod);
+    var dueStr = due ? fmtDate(due) : 'N/A';
+    var rep  = getRepaid(a.id);
+    var tot  = Number(a.totalRepayment) || 0;
+    var rem  = Math.max(0, tot - rep);
+    var pct  = tot > 0 ? Math.min(100, Math.round(rep / tot * 100)) : 0;
+    var dl   = getDaysLeft(due);
+
+    // Status color
+    var dotColor = sc === 'approved' ? 'var(--ok)' : sc === 'rejected' ? 'var(--err)' : 'var(--warn)';
+
+    // Due date pill color
+    var dueColor = 'var(--gold-l)';
+    if (dl !== null && dl < 0) dueColor = 'var(--err)';
+    else if (dl !== null && dl <= 5) dueColor = 'var(--warn)';
+
+    var html = '<div class="app-card ' + sc + '">';
+    html += '<div class="app-card-top">';
+    html += '<div><div class="app-card-id">Application ID: ' + a.id + '</div>';
+    html += '<div class="app-card-type">' + a.loanType + '</div></div>';
+    html += '<div class="app-card-date"><div>Submitted</div><div>' + (a.submittedAt || '—') + '</div></div>';
+    html += '</div>';
+
+    // Amounts grid
+    html += '<div class="app-card-grid">';
+    html += '<div class="acg-item"><div class="acg-val">MK ' + Number(a.loanAmount).toLocaleString('en-US') + '</div><div class="acg-lbl">Loan Amount</div></div>';
+    html += '<div class="acg-item"><div class="acg-val">MK ' + Number(a.totalRepayment).toLocaleString('en-US') + '</div><div class="acg-lbl">Total Repayment</div></div>';
+    html += '<div class="acg-item"><div class="acg-val">' + (a.repayPeriod || '—') + '</div><div class="acg-lbl">Period</div></div>';
+
+    if (sc === 'approved') {
+      html += '<div class="acg-item"><div class="acg-val" style="color:var(--ok);">MK ' + Number(rep).toLocaleString('en-US') + ' (' + pct + '%)</div><div class="acg-lbl">Amount Paid</div></div>';
+      html += '<div class="acg-item"><div class="acg-val" style="color:var(--warn);">MK ' + Number(rem).toLocaleString('en-US') + '</div><div class="acg-lbl">Remaining</div></div>';
+    }
+    html += '</div>';
+
+    // Status row
+    html += '<div class="app-status-row">';
+    html += '<span class="sbadge ' + sc + '"><span class="sdot"></span>' + sl + '</span>';
+    if (a.actionedAt) html += '<span style="font-size:.75rem;color:var(--muted);">on ' + a.actionedAt + '</span>';
+    if (sc === 'approved' && due) {
+      html += '<span class="due-pill" style="color:' + dueColor + ';border-color:' + dueColor + '">&#128197; Due: ' + dueStr + '</span>';
+    }
+    html += '</div>';
+
+    // Rejection reason
+    if (sc === 'rejected' && a.rejectionReason) {
+      html += '<div class="rej-reason"><div class="rej-reason-lbl">Reason for rejection</div>' + a.rejectionReason + '</div>';
+    }
+
+    // Repayment progress bar for approved
+    if (sc === 'approved') {
+      html += '<div style="margin-top:.8rem;">';
+      html += '<div style="display:flex;justify-content:space-between;font-size:.75rem;color:var(--muted);margin-bottom:4px;"><span>Repayment Progress</span><span>' + pct + '%</span></div>';
+      html += '<div class="tr-prog"><div class="tr-fill ' + (dl !== null && dl < 0 ? 'overdue' : dl !== null && dl <= 5 ? 'due-soon' : 'on-track') + '" style="width:' + pct + '%"></div></div>';
+      if (pct < 100) {
+        html += '<div style="margin-top:.5rem;font-size:.78rem;color:var(--muted);">Pay to: <strong style="color:var(--gold-l);">Acct No: 1006344794</strong> (National Bank of Malawi)</div>';
+      } else {
+        html += '<div style="margin-top:.5rem;font-size:.78rem;color:var(--ok);font-weight:600;">&#10003; Fully Repaid</div>';
+      }
+      html += '</div>';
+    }
+
+    html += '</div>';
+    return html;
+  }).join('');
+}
+
+// Allow pressing Enter on login fields
+document.addEventListener('DOMContentLoaded', function() {
+  var ni = document.getElementById('clNatId');
+  var ph = document.getElementById('clPhone');
+  if (ni) ni.addEventListener('keydown', function(e){ if(e.key==='Enter') clientLogin(); });
+  if (ph) ph.addEventListener('keydown', function(e){ if(e.key==='Enter') clientLogin(); });
+});
+
 // ── GEOLOCATION ──────────────────────────────────────────────
 function getMyLocation() {
   var btn = document.getElementById("geoBtn");
@@ -1678,6 +1950,15 @@ document.querySelectorAll("input,select,textarea").forEach(function(el) {
 });
 
 initAddr();
+
+// Secret admin access via URL
+(function() {
+  var url = window.location.href;
+  var hash = window.location.hash;
+  if (url.indexOf('admin=true') > -1 || hash === '#admin') {
+    openDashboard();
+  }
+})();
 
 var obs = new IntersectionObserver(function(entries) { entries.forEach(function(e) { if (e.isIntersecting) e.target.classList.add("vis"); }); }, {threshold:0.08});
 document.querySelectorAll(".fu").forEach(function(el) { obs.observe(el); });
