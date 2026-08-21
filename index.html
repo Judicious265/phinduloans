@@ -1405,32 +1405,18 @@ function sendAllReminders() {
 }
 
 function logPayment(id, total) {
-  var inp = document.getElementById('rp_' + id);
-  if (!inp) {
-    showToast('Input not found. Please refresh.', 'error');
-    return;
-  }
+  // Legacy - kept for compatibility
+  var inp = document.getElementById("rp_" + id);
+  if (!inp) return;
   var raw = String(inp.value).trim();
   var amt = parseFloat(raw);
-  if (!raw || isNaN(amt) || amt <= 0) {
-    showToast('Please enter a valid amount e.g. 50000', 'error');
-    inp.style.borderColor = 'var(--err)';
-    inp.focus();
-    setTimeout(function() { inp.style.borderColor = ''; }, 2000);
-    return;
-  }
-  var tot  = Number(total) || 0;
+  if (!raw || isNaN(amt) || amt <= 0) { showToast("Please enter a valid amount.", "error"); return; }
   var prev = getRepaid(id);
-  var np   = Math.min(tot, prev + amt);
+  var np   = Math.min(Number(total)||0, prev + amt);
   setRepaid(id, np);
-  var rem  = Math.max(0, tot - np);
-  addRemLog(id, 'Payment: MK ' + Number(amt).toLocaleString('en-US') + ' | Total Paid: MK ' + Number(np).toLocaleString('en-US') + ' | Remaining: MK ' + Number(rem).toLocaleString('en-US'));
-  inp.value = '';
-  if (np >= tot && tot > 0) {
-    showToast('Loan FULLY REPAID! MK ' + Number(tot).toLocaleString('en-US') + ' received.', 'success');
-  } else {
-    showToast('MK ' + Number(amt).toLocaleString('en-US') + ' logged. MK ' + Number(rem).toLocaleString('en-US') + ' remaining.', 'success');
-  }
+  addRemLog(id, "Payment: MK " + Number(amt).toLocaleString("en-US"));
+  inp.value = "";
+  showToast("MK " + Number(amt).toLocaleString("en-US") + " logged.", "success");
   loadTracker();
 }
 
@@ -1463,58 +1449,100 @@ function buildTrCard(a) {
   var dc  = cat==="overdue" ? "var(--err)" : cat==="due-soon" ? "var(--warn)" : cat==="paid" ? "var(--muted)" : "var(--ok)";
   var cr  = (cat === "due-soon" || cat === "overdue");
 
-  var html = '<div class="tr-card ' + cat + '">';
+  // Use data attributes to avoid any string escaping in onclick
+  var safeId  = String(a.id).replace(/"/g, "");
+  var safeTot = Number(tot);
+  var safeDl  = Number(dl) || 0;
+
+  var html = "";
+  html += "<div class=\"tr-card " + cat + "\">";
 
   // Header
-  html += '<div class="tr-hdr">';
-  html += '<div>';
-  html += '<div class="tr-name">' + a.firstName + ' ' + a.lastName + '</div>';
-  html += '<div class="tr-meta">' + a.phone + ' | ' + a.loanType + '</div>';
-  html += '<div class="tr-meta">Loan ID: ' + a.id + '</div>';
-  html += '</div>';
-  html += '<div style="text-align:right;">';
-  html += '<span class="tr-badge ' + cat + '">' + cl + '</span>';
-  html += '<div style="color:' + dc + ';font-weight:700;font-size:.9rem;margin-top:.3rem;">Due: ' + ds + '</div>';
+  html += "<div class=\"tr-hdr\">";
+  html += "<div>";
+  html += "<div class=\"tr-name\">" + a.firstName + " " + a.lastName + "</div>";
+  html += "<div class=\"tr-meta\">" + a.phone + " | " + a.loanType + "</div>";
+  html += "<div class=\"tr-meta\">ID: " + a.id + "</div>";
+  html += "</div>";
+  html += "<div style=\"text-align:right;\">";
+  html += "<span class=\"tr-badge " + cat + "\">" + cl + "</span>";
+  html += "<div style=\"color:" + dc + ";font-weight:700;font-size:.9rem;margin-top:.3rem;\">Due: " + ds + "</div>";
   if (dl !== null) {
-    html += '<div style="font-size:.75rem;color:var(--muted);">' + (dl >= 0 ? dl + ' days remaining' : Math.abs(dl) + ' days overdue') + '</div>';
+    var dlTxt = dl >= 0 ? dl + " days remaining" : Math.abs(dl) + " days overdue";
+    html += "<div style=\"font-size:.75rem;color:var(--muted);\"> " + dlTxt + "</div>";
   }
-  html += '</div>';
-  html += '</div>';
+  html += "</div></div>";
 
-  // Progress bar
-  html += '<div class="tr-prog"><div class="tr-fill ' + cat + '" style="width:' + pct + '%"></div></div>';
+  // Progress
+  html += "<div class=\"tr-prog\"><div class=\"tr-fill " + cat + "\" style=\"width:" + pct + "%\"></div></div>";
 
   // Amounts
-  html += '<div class="tr-amts">';
-  html += '<div class="tr-amt"><div class="tr-amt-val">MK ' + Number(la).toLocaleString('en-US') + '</div><div class="tr-amt-lbl">Loan</div></div>';
-  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--ok);">MK ' + Number(rep).toLocaleString('en-US') + '</div><div class="tr-amt-lbl">Paid (' + pct + '%)</div></div>';
-  html += '<div class="tr-amt"><div class="tr-amt-val" style="color:var(--warn);">MK ' + Number(rem).toLocaleString('en-US') + '</div><div class="tr-amt-lbl">Remaining</div></div>';
-  html += '</div>';
+  html += "<div class=\"tr-amts\">";
+  html += "<div class=\"tr-amt\"><div class=\"tr-amt-val\">MK " + Number(la).toLocaleString("en-US") + "</div><div class=\"tr-amt-lbl\">Loan</div></div>";
+  html += "<div class=\"tr-amt\"><div class=\"tr-amt-val\" style=\"color:var(--ok);\">MK " + Number(rep).toLocaleString("en-US") + "</div><div class=\"tr-amt-lbl\">Paid (" + pct + "%)</div></div>";
+  html += "<div class=\"tr-amt\"><div class=\"tr-amt-val\" style=\"color:var(--warn);\">MK " + Number(rem).toLocaleString("en-US") + "</div><div class=\"tr-amt-lbl\">Remaining</div></div>";
+  html += "</div>";
 
-  // Actions
-  if (cat !== 'paid') {
-    html += '<div class="tr-acts">';
-    html += '<input type="number" inputmode="numeric" class="tr-inp" id="rp_' + a.id + '" placeholder="Enter amount e.g. 50000" min="1" style="font-weight:600;"/>';
-    html += '<button class="btn-p" style="padding:.5rem .9rem;font-size:.8rem;" onclick="logPayment(\'' + a.id + '\',' + tot + ')">Log</button>';
+  if (cat !== "paid") {
+    html += "<div class=\"tr-acts\">";
+    // Use data attributes - NO onclick string building
+    html += "<input type=\"number\" inputmode=\"numeric\" class=\"tr-inp\" data-id=\"" + safeId + "\" data-tot=\"" + safeTot + "\" placeholder=\"Amount e.g. 50000\" min=\"1\" style=\"font-weight:600;\"/>";
+    html += "<button class=\"btn-p\" data-id=\"" + safeId + "\" data-tot=\"" + safeTot + "\" style=\"padding:.5rem .9rem;font-size:.8rem;\" onclick=\"trLog(this)\">Log</button>";
     if (cr) {
-      html += '<button class="act-btn" style="border-color:var(--warn);color:var(--warn);padding:.4rem .8rem;font-size:.75rem;" onclick="sendReminderSMS(\'' + a.id + '\',' + dl + ')">&#128241; Remind</button>';
+      html += "<button class=\"act-btn\" data-id=\"" + safeId + "\" data-dl=\"" + safeDl + "\" style=\"border-color:var(--warn);color:var(--warn);padding:.4rem .8rem;font-size:.75rem;\" onclick=\"trRemind(this)\">&#128241; Remind</button>";
     }
-    html += '</div>';
+    html += "</div>";
   } else {
-    html += '<div style="font-size:.82rem;color:var(--ok);font-weight:600;margin-top:.4rem;">&#10003; Loan fully repaid</div>';
+    html += "<div style=\"font-size:.82rem;color:var(--ok);font-weight:600;margin-top:.4rem;\">&#10003; Loan fully repaid</div>";
   }
 
-  // Reminder log
+  // Log entries
   if (log.length) {
-    html += '<div class="rem-log">';
+    html += "<div class=\"rem-log\">";
     for (var i = 0; i < log.length; i++) {
-      html += '<div class="rem-log-item">' + log[i] + '</div>';
+      html += "<div class=\"rem-log-item\">" + log[i] + "</div>";
     }
-    html += '</div>';
+    html += "</div>";
   }
 
-  html += '</div>';
+  html += "</div>";
   return html;
+}
+
+// Global handlers using data attributes - no ID passing in onclick needed
+function trLog(btn) {
+  var id  = btn.getAttribute("data-id");
+  var tot = Number(btn.getAttribute("data-tot")) || 0;
+  // Find the input in the same tr-acts container
+  var inp = btn.parentNode.querySelector("input[data-id]");
+  if (!inp) { showToast("Input not found. Please refresh.", "error"); return; }
+  var raw = String(inp.value).trim();
+  var amt = parseFloat(raw);
+  if (!raw || isNaN(amt) || amt <= 0) {
+    showToast("Please enter a valid amount e.g. 50000", "error");
+    inp.style.borderColor = "var(--err)";
+    inp.focus();
+    setTimeout(function() { inp.style.borderColor = ""; }, 2000);
+    return;
+  }
+  var prev = getRepaid(id);
+  var np   = Math.min(tot, prev + amt);
+  setRepaid(id, np);
+  var rem  = Math.max(0, tot - np);
+  addRemLog(id, "Payment: MK " + Number(amt).toLocaleString("en-US") + " | Total Paid: MK " + Number(np).toLocaleString("en-US") + " | Remaining: MK " + Number(rem).toLocaleString("en-US"));
+  inp.value = "";
+  if (np >= tot && tot > 0) {
+    showToast("Loan FULLY REPAID! MK " + Number(tot).toLocaleString("en-US") + " received.", "success");
+  } else {
+    showToast("MK " + Number(amt).toLocaleString("en-US") + " logged. MK " + Number(rem).toLocaleString("en-US") + " remaining.", "success");
+  }
+  loadTracker();
+}
+
+function trRemind(btn) {
+  var id = btn.getAttribute("data-id");
+  var dl = Number(btn.getAttribute("data-dl")) || 0;
+  sendReminderSMS(id, dl);
 }
 
 
